@@ -442,14 +442,21 @@ function switchTab(t) {
 }
 
 async function doLogin() {
-  const email = document.getElementById('li-email').value.trim();
+  const email = document.getElementById('li-email').value.trim().toLowerCase();
   const pw = document.getElementById('li-pw').value;
   if(!email||!pw){ showErr('Wypełnij wszystkie pola.'); return; }
   const btn = document.getElementById('btn-login');
   btn.disabled=true; btn.textContent='Logowanie...';
+  hideMsg();
   const { data, error } = await sb.auth.signInWithPassword({ email, password: pw });
   btn.disabled=false; btn.textContent='Zaloguj się →';
-  if(error){ showErr('Nieprawidłowy email lub hasło.'); return; }
+  if(error){
+    // Pokaż dokładny błąd z Supabase zamiast generycznego
+    if(error.message.includes('Email not confirmed')) showErr('Potwierdź email — sprawdź skrzynkę pocztową.');
+    else if(error.message.includes('Invalid login')) showErr('Nieprawidłowy email lub hasło.');
+    else showErr('Błąd: ' + error.message);
+    return;
+  }
   USER = data.user;
   await loadProfile();
   await loadAllData();
@@ -458,7 +465,7 @@ async function doLogin() {
 
 async function doRegister() {
   const name = document.getElementById('ri-name').value.trim();
-  const email = document.getElementById('ri-email').value.trim();
+  const email = document.getElementById('ri-email').value.trim().toLowerCase();
   const pw = document.getElementById('ri-pw').value;
   const pw2 = document.getElementById('ri-pw2').value;
   if(!name||!email||!pw||!pw2){ showErr('Wypełnij wszystkie pola.'); return; }
@@ -467,12 +474,19 @@ async function doRegister() {
   if(pw!==pw2){ showErr('Hasła nie są identyczne.'); return; }
   const btn = document.getElementById('btn-reg');
   btn.disabled=true; btn.textContent='Tworzenie konta...';
+  hideMsg();
   const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { name } } });
   btn.disabled=false; btn.textContent='Utwórz konto →';
-  if(error){ showErr(error.message); return; }
+  if(error){ showErr('Błąd: ' + error.message); return; }
+  // Jeśli email confirmation jest włączony — poinformuj użytkownika
+  if(!data.session) {
+    showOk('Konto utworzone! Sprawdź email i kliknij link potwierdzający, a następnie się zaloguj.');
+    switchTab('login');
+    document.getElementById('li-email').value = email;
+    return;
+  }
   USER = data.user;
-  // czekamy chwilę na trigger tworzący profil
-  await new Promise(r=>setTimeout(r,800));
+  await new Promise(r=>setTimeout(r,1000));
   await loadProfile();
   await loadAllData();
   showApp();
@@ -482,6 +496,9 @@ async function doLogout() {
   await sb.auth.signOut();
   USER=null; PROFILE=null;
   CACHE = { transactions:[], goals:[], tasks:[], habits:[], habitLogs:[], budgetLimits:[], events:[] };
+  // Wyczyść pola logowania
+  document.getElementById('li-email').value='';
+  document.getElementById('li-pw').value='';
   document.getElementById('app').style.display='none';
   document.getElementById('auth').style.display='flex';
   hideMsg();
