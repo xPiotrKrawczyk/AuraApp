@@ -385,7 +385,8 @@ select.inp option{background:var(--surf2)}
 .rp-btn{padding:7px 13px;background:var(--surf2);border:1px solid var(--bord);border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text);font-family:'DM Sans',sans-serif;transition:.15s}
 .rp-btn:hover,.rp-btn.on{background:var(--acc);color:#fff;border-color:transparent}
 .steps-ring-c{display:flex;justify-content:center;margin:10px 0}
-</style>
+
+.meal-type-btn.on{background:linear-gradient(135deg,var(--acc),var(--acc2))!important;color:#fff!important;border-color:transparent!important;}</style>
 </head>
 <body>
 
@@ -925,48 +926,75 @@ select.inp option{background:var(--surf2)}
       <!-- ── NUTRITION ── -->
       <div class="fit-sec" id="fs-nutrition" style="display:none">
         <div class="g2" style="gap:14px">
+
+          <!-- LEFT: Add meal -->
           <div>
             <div class="card mb14">
               <div class="sh mb14">
-                <div class="st">Wyszukaj produkt</div>
+                <div class="st">Dodaj posiłek</div>
                 <input class="inp" type="date" id="nutr-date" oninput="renderNutrition()" style="font-size:12px;width:135px">
               </div>
-              <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
-                <select class="inp" id="meal-type-sel" style="width:130px">
-                  <option value="sniadanie">🌅 Śniadanie</option>
-                  <option value="ii_sniadanie">🥪 II Śniadanie</option>
-                  <option value="obiad">🍽 Obiad</option>
-                  <option value="przekaska">🍎 Przekąska</option>
-                  <option value="kolacja">🌙 Kolacja</option>
-                  <option value="inne">📦 Inne</option>
-                </select>
-                <div style="flex:1;font-size:12px;color:var(--muted);display:flex;align-items:center">Wybierz posiłek przed dodaniem produktu</div>
+
+              <!-- Meal type selector -->
+              <div style="margin-bottom:12px">
+                <label style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;display:block;margin-bottom:6px">Typ posiłku</label>
+                <div style="display:flex;gap:5px;flex-wrap:wrap" id="meal-type-btns">
+                  <button class="btn btn-g meal-type-btn on" data-mt="sniadanie" onclick="setMealType('sniadanie')" style="font-size:12px;padding:6px 12px">🌅 Śniadanie</button>
+                  <button class="btn btn-g meal-type-btn" data-mt="ii_sniadanie" onclick="setMealType('ii_sniadanie')" style="font-size:12px;padding:6px 12px">🥪 II Śniadanie</button>
+                  <button class="btn btn-g meal-type-btn" data-mt="obiad" onclick="setMealType('obiad')" style="font-size:12px;padding:6px 12px">🍽 Obiad</button>
+                  <button class="btn btn-g meal-type-btn" data-mt="przekaska" onclick="setMealType('przekaska')" style="font-size:12px;padding:6px 12px">🍎 Przekąska</button>
+                  <button class="btn btn-g meal-type-btn" data-mt="kolacja" onclick="setMealType('kolacja')" style="font-size:12px;padding:6px 12px">🌙 Kolacja</button>
+                  <button class="btn btn-g meal-type-btn" data-mt="inne" onclick="setMealType('inne')" style="font-size:12px;padding:6px 12px">📦 Inne</button>
+                </div>
+                <input type="hidden" id="meal-type-sel" value="sniadanie">
               </div>
-              <div class="nutr-search">
-                <input type="text" id="food-q" placeholder="Szukaj w Open Food Facts... np. kurczak, ryż, jajka" oninput="searchFood(this.value)" autocomplete="off">
+
+              <!-- Search bar -->
+              <div style="position:relative;margin-bottom:8px">
+                <input class="inp" type="text" id="food-q" placeholder="🔍 Szukaj produktu... (kurczak, ryż, mleko...)" oninput="searchFood(this.value)" autocomplete="off" style="width:100%;padding-left:12px">
               </div>
-              <div id="food-search-status" style="font-size:12px;color:var(--muted);padding:4px 0;display:none">🔍 Szukam w bazie...</div>
+              <!-- Search results dropdown -->
               <div class="food-drop" id="food-drop"></div>
-              <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bord)">
-                <div style="font-size:12px;font-weight:600;margin-bottom:8px">Wpisz ręcznie / szybki wybór:</div>
-                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-                  <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Kurczak pierś 150g',248,46,0,5)">🍗 Kurczak</button>
-                  <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Ryż gotowany 200g',260,5,56,1)">🍚 Ryż</button>
-                  <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Jajka x2',156,12,1,11)">🥚 Jajka x2</button>
-                  <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Owsianka 60g',220,7,38,4)">🥣 Owsianka</button>
-                  <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Banan',89,1,23,0)">🍌 Banan</button>
-                  <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Bialko serwatkowe',120,24,3,2)">💪 Whey</button>
+
+              <!-- Quick picks -->
+              <div style="display:flex;gap:5px;flex-wrap:wrap;margin:8px 0 12px">
+                <button class="btn btn-g" style="font-size:11px;padding:4px 9px" onclick="quickMeal('Kurczak pierś 150g',248,46,0,5)">🍗 Kurczak</button>
+                <button class="btn btn-g" style="font-size:11px;padding:4px 9px" onclick="quickMeal('Ryż gotowany 200g',260,5,56,1)">🍚 Ryż</button>
+                <button class="btn btn-g" style="font-size:11px;padding:4px 9px" onclick="quickMeal('Jajka x2',156,12,1,11)">🥚 Jajka</button>
+                <button class="btn btn-g" style="font-size:11px;padding:4px 9px" onclick="quickMeal('Owsianka 60g',220,7,38,4)">🥣 Owsianka</button>
+                <button class="btn btn-g" style="font-size:11px;padding:4px 9px" onclick="quickMeal('Banan',89,1,23,0)">🍌 Banan</button>
+                <button class="btn btn-g" style="font-size:11px;padding:4px 9px" onclick="quickMeal('Białko whey',120,24,3,2)">💪 Whey</button>
+              </div>
+
+              <!-- Manual entry - always visible -->
+              <div style="border-top:1px solid var(--bord);padding-top:12px">
+                <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px">Wpisz własny produkt</div>
+                <div class="fg" style="margin-bottom:8px">
+                  <input class="inp" id="fm-name" placeholder="Nazwa posiłku / produktu" style="width:100%">
                 </div>
-                <div class="if">
-                  <div class="ifg" style="flex:1"><label>Nazwa</label><input class="inp" id="fm-name" placeholder="Nazwa produktu" style="width:100%"></div>
-                  <div class="ifg"><label>kcal</label><input class="inp" type="number" id="fm-kcal" placeholder="0" style="width:65px"></div>
-                  <div class="ifg"><label>Białko g</label><input class="inp" type="number" id="fm-p" placeholder="0" style="width:65px"></div>
-                  <div class="ifg"><label>Węgl. g</label><input class="inp" type="number" id="fm-c" placeholder="0" style="width:65px"></div>
-                  <div class="ifg"><label>Tłuszcz g</label><input class="inp" type="number" id="fm-f" placeholder="0" style="width:65px"></div>
-                  <div class="ifg" style="justify-content:flex-end"><button class="btn btn-a" onclick="addMealManual()">+ Dodaj</button></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:10px">
+                  <div>
+                    <label style="font-size:10px;color:var(--yellow);font-weight:600;display:block;margin-bottom:4px">kcal</label>
+                    <input class="inp" type="number" id="fm-kcal" placeholder="0" min="0" style="width:100%;text-align:center">
+                  </div>
+                  <div>
+                    <label style="font-size:10px;color:var(--acc2);font-weight:600;display:block;margin-bottom:4px">Białko g</label>
+                    <input class="inp" type="number" id="fm-p" placeholder="0" min="0" step="0.1" style="width:100%;text-align:center">
+                  </div>
+                  <div>
+                    <label style="font-size:10px;color:var(--green);font-weight:600;display:block;margin-bottom:4px">Węgl. g</label>
+                    <input class="inp" type="number" id="fm-c" placeholder="0" min="0" step="0.1" style="width:100%;text-align:center">
+                  </div>
+                  <div>
+                    <label style="font-size:10px;color:var(--red);font-weight:600;display:block;margin-bottom:4px">Tłuszcz g</label>
+                    <input class="inp" type="number" id="fm-f" placeholder="0" min="0" step="0.1" style="width:100%;text-align:center">
+                  </div>
                 </div>
+                <button class="btn btn-a" style="width:100%;justify-content:center;padding:11px" onclick="addMealManual()">+ Dodaj posiłek</button>
               </div>
             </div>
+
+            <!-- Today meals list -->
             <div class="card">
               <div class="sh mb14">
                 <div class="st">Dzisiaj zjadłem</div>
@@ -975,13 +1003,15 @@ select.inp option{background:var(--surf2)}
               <div id="meals-list"><div class="empty">Brak posiłków</div></div>
             </div>
           </div>
+
+          <!-- RIGHT: Macro summary -->
           <div>
             <div class="card mb14">
               <div class="sh mb14">
-                <div class="st">Dzisiejsze makro</div>
+                <div class="st">Kalorie dziś</div>
                 <div style="display:flex;align-items:center;gap:6px">
                   <span style="font-size:12px;color:var(--muted)">Cel:</span>
-                  <input class="inp" type="number" id="kcal-goal" value="2000" oninput="renderNutrition()" style="width:75px;font-size:12px">
+                  <input class="inp" type="number" id="kcal-goal" value="2000" oninput="renderNutrition()" style="width:70px;font-size:13px;text-align:center">
                   <span style="font-size:12px;color:var(--muted)">kcal</span>
                 </div>
               </div>
@@ -994,22 +1024,22 @@ select.inp option{background:var(--surf2)}
               <div class="macro-progress">
                 <div class="macro-prog-row">
                   <div class="macro-prog-lbl" style="color:var(--yellow)">Kalorie</div>
-                  <div class="macro-prog-bar"><div class="macro-prog-fill" id="bar-kcal" style="background:linear-gradient(90deg,var(--yellow),#f97316)"></div></div>
+                  <div class="macro-prog-bar"><div class="macro-prog-fill" id="bar-kcal" style="background:linear-gradient(90deg,var(--yellow),#f97316);width:0%"></div></div>
                   <div class="macro-prog-val" id="pv-kcal">0%</div>
                 </div>
                 <div class="macro-prog-row">
                   <div class="macro-prog-lbl" style="color:var(--acc2)">Białko</div>
-                  <div class="macro-prog-bar"><div class="macro-prog-fill" id="bar-p" style="background:var(--acc2)"></div></div>
+                  <div class="macro-prog-bar"><div class="macro-prog-fill" id="bar-p" style="background:var(--acc2);width:0%"></div></div>
                   <div class="macro-prog-val" id="pv-p">0g</div>
                 </div>
                 <div class="macro-prog-row">
-                  <div class="macro-prog-lbl" style="color:var(--green)">Węglow.</div>
-                  <div class="macro-prog-bar"><div class="macro-prog-fill" id="bar-c" style="background:var(--green)"></div></div>
+                  <div class="macro-prog-lbl" style="color:var(--green)">Węglowodany</div>
+                  <div class="macro-prog-bar"><div class="macro-prog-fill" id="bar-c" style="background:var(--green);width:0%"></div></div>
                   <div class="macro-prog-val" id="pv-c">0g</div>
                 </div>
                 <div class="macro-prog-row">
                   <div class="macro-prog-lbl" style="color:var(--red)">Tłuszcze</div>
-                  <div class="macro-prog-bar"><div class="macro-prog-fill" id="bar-f" style="background:var(--red)"></div></div>
+                  <div class="macro-prog-bar"><div class="macro-prog-fill" id="bar-f" style="background:var(--red);width:0%"></div></div>
                   <div class="macro-prog-val" id="pv-f">0g</div>
                 </div>
               </div>
@@ -1019,9 +1049,9 @@ select.inp option{background:var(--surf2)}
               <div style="position:relative;height:130px"><canvas id="chart-nutr"></canvas></div>
             </div>
           </div>
+
         </div>
       </div>
-
       <!-- ── TOOLS ── -->
       <div class="fit-sec" id="fs-tools" style="display:none">
         <div class="fit-nav" style="margin-bottom:18px">
@@ -1761,7 +1791,7 @@ function fitSec(s){
   if(s==='plans')renderFitPlans();
   if(s==='history')renderFitHistory();
   if(s==='body'){renderBodyMeasures();renderPhotos();}
-  if(s==='nutrition'){if(!document.getElementById('nutr-date').value)document.getElementById('nutr-date').value=td();renderNutrition();}
+  if(s==='nutrition'){const nd=document.getElementById('nutr-date');if(nd&&!nd.value)nd.value=td();renderNutrition();}
   if(s==='tools')toolTab('bmi');
 }
 
@@ -2115,7 +2145,6 @@ async function deactivatePlan(){
 }
 
 async function deletePlan(id){
-  if(!confirm('Usunąć plan?'))return;
   try{await SB.from('fit_plans').delete().eq('id',id);}catch(e){}
   FIT.plans=FIT.plans.filter(p=>p.id!==id);if(FIT.activePlanId===id)FIT.activePlanId=null;ss();renderFitPlans();
 }
@@ -2214,81 +2243,122 @@ function addPhoto(side){const input=document.createElement('input');input.type='
 function renderPhotos(){const sides=['front','side','back'],labels=['Przód','Bok','Tył'];const el=document.getElementById('photo-grid');if(!el)return;el.innerHTML=sides.map((s,i)=>{const img=localStorage.getItem('aura_ph_'+s);return`<div onclick="addPhoto('${s}')" style="aspect-ratio:1;border-radius:10px;border:2px dashed var(--bord);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;overflow:hidden;background:var(--surf2)">${img?`<img src="${img}" style="width:100%;height:100%;object-fit:cover">`:`<div style="font-size:12px;color:var(--muted);text-align:center">+ ${labels[i]}</div>`}</div>`;}).join('');}
 
 // ── NUTRITION ──
+function setMealType(t){
+  document.getElementById('meal-type-sel').value=t;
+  document.querySelectorAll('.meal-type-btn').forEach(b=>b.classList.toggle('on',b.dataset.mt===t));
+}
+
 let _foodTimer=null;
 function searchFood(q){
   const drop=document.getElementById('food-drop');if(!drop)return;
   clearTimeout(_foodTimer);
   if(!q||q.length<2){drop.classList.remove('on');drop.innerHTML='';return;}
-  // First search local DB immediately
+  // Immediate local search
   const local=FOOD_DB.filter(f=>f.n.toLowerCase().includes(q.toLowerCase())).slice(0,5);
-  window._foodRes=local;
-  if(local.length){
-    drop.classList.add('on');
-    drop.innerHTML=`<div class="food-drop-hd">📦 Lokalna baza (${local.length})</div>`+
-      local.map((f,i)=>`<div class="food-item" onclick="pickFood(${i})">
-        <div><div class="food-item-name">${f.n}</div><div class="food-item-meta">${f.cat} · B:${f.p}g W:${f.c}g T:${f.f}g / 100g</div></div>
-        <div class="food-item-kcal">${f.k} kcal</div>
-      </div>`).join('') + `<div class="food-drop-hd" style="margin-top:4px">🌐 Szukam w Open Food Facts...</div>`;
-  }
-  // Then search Open Food Facts after debounce
-  _foodTimer=setTimeout(()=>searchOFF(q),600);
+  window._foodRes=[...local];
+  showFoodResults(local,[],q);
+  // Debounced OFF search
+  _foodTimer=setTimeout(()=>searchOFF(q,local),700);
 }
 
-async function searchOFF(q){
+function showFoodResults(local,off,q){
   const drop=document.getElementById('food-drop');if(!drop)return;
+  const all=[...local,...off];
+  if(!all.length){drop.classList.remove('on');return;}
+  window._foodRes=all;
+  let html='';
+  if(local.length) html+=`<div class="food-drop-hd">📦 Lokalna baza</div>`+
+    local.map((_,i)=>foodItemHTML(i,local[i])).join('');
+  if(off.length) html+=`<div class="food-drop-hd">🌐 Open Food Facts</div>`+
+    off.map((_,i)=>foodItemHTML(local.length+i,off[i])).join('');
+  drop.classList.add('on');
+  drop.innerHTML=html;
+}
+
+function foodItemHTML(i,f){
+  return`<div class="food-item" onclick="pickFood(${i})"><div><div class="food-item-name">${f.n}</div><div class="food-item-meta">${f.cat||''} · B:${f.p}g · W:${f.c}g · T:${f.f}g / 100g</div></div><div class="food-item-kcal">${f.k} kcal</div></div>`;
+}
+
+async function searchOFF(q,local){
   try{
-    const url=`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=8&fields=product_name,nutriments,quantity,brands&lc=pl&cc=pl`;
-    const res=await fetch(url);
+    const url='https://world.openfoodfacts.org/cgi/search.pl?search_terms='+encodeURIComponent(q)+'&search_simple=1&action=process&json=1&page_size=8&fields=product_name,nutriments,brands&lc=pl';
+    const res=await fetch(url,{signal:AbortSignal.timeout(5000)});
     if(!res.ok)return;
     const data=await res.json();
-    const products=(data.products||[]).filter(p=>{
+    const off=(data.products||[]).filter(p=>{
       const n=p.nutriments;
-      return p.product_name&&n&&(n['energy-kcal_100g']||n['energy-kcal']);
-    }).slice(0,8);
-    if(!products.length)return;
-    // Merge with local results
-    const local=window._foodRes||[];
-    const offItems=products.map((p,i)=>{
+      return p.product_name&&n&&n['energy-kcal_100g']>0;
+    }).slice(0,6).map(p=>{
       const n=p.nutriments;
-      return{
-        n:p.product_name+(p.brands?' ('+p.brands.split(',')[0]+')':''),
-        k:Math.round(n['energy-kcal_100g']||n['energy-kcal']||0),
+      return{n:p.product_name+(p.brands?' ('+p.brands.split(',')[0]+')':''),
+        k:Math.round(n['energy-kcal_100g']||0),
         p:parseFloat((n['proteins_100g']||0).toFixed(1)),
         c:parseFloat((n['carbohydrates_100g']||0).toFixed(1)),
-        f:parseFloat((n['fat_100g']||0).toFixed(1)),
-        cat:'OFF',qty:p.quantity||'100g'
-      };
+        f:parseFloat((n['fat_100g']||0).toFixed(1)),cat:'OFF'};
     });
-    const allItems=[...local,...offItems];
-    window._foodRes=allItems;
-    drop.classList.add('on');
-    drop.innerHTML=
-      (local.length?`<div class="food-drop-hd">📦 Lokalna baza (${local.length})</div>`+
-        local.map((f,i)=>`<div class="food-item" onclick="pickFood(${i})">
-          <div><div class="food-item-name">${f.n}</div><div class="food-item-meta">${f.cat} · B:${f.p}g W:${f.c}g T:${f.f}g / 100g</div></div>
-          <div class="food-item-kcal">${f.k} kcal</div>
-        </div>`).join(''):'') +
-      (offItems.length?`<div class="food-drop-hd">🌐 Open Food Facts (${offItems.length})</div>`+
-        offItems.map((f,i)=>`<div class="food-item" onclick="pickFood(${local.length+i})">
-          <div><div class="food-item-name">${f.n}</div><div class="food-item-meta">B:${f.p}g W:${f.c}g T:${f.f}g / 100g · ${f.qty}</div></div>
-          <div class="food-item-kcal">${f.k} kcal</div>
-        </div>`).join(''):'');
-  }catch(e){console.log('OFF search error:',e);}
+    showFoodResults(local,off,q);
+  }catch(e){/* timeout or network error - local results already shown */}
 }
 
 function pickFood(i){
   const f=(window._foodRes||[])[i];if(!f)return;
-  const portion=parseFloat(prompt(`Ile gramów/ml "${f.n}"?
-(Wartości dla 100g)`,'100'))||100;
-  const r=portion/100;
-  addMealEntry(f.n+' '+portion+'g',Math.round(f.k*r),+(f.p*r).toFixed(1),+(f.c*r).toFixed(1),+(f.f*r).toFixed(1));
-  const inp=document.getElementById('food-q');if(inp)inp.value='';
+  const drop=document.getElementById('food-drop');if(!drop)return;
+  drop.classList.add('on');
+  // Build portion selector without nested backticks
+  const btns=[30,50,100,150,200,250,300].map(g=>`<button class="btn btn-g" style="font-size:11px;padding:4px 9px" onclick="setPortion(${g},${i})">${g}g</button>`).join('');
+  drop.innerHTML='<div style="padding:14px">'
+    +'<div style="font-size:13px;font-weight:600;margin-bottom:3px">'+f.n+'</div>'
+    +'<div style="font-size:11px;color:var(--muted);margin-bottom:12px">B:'+f.p+'g · W:'+f.c+'g · T:'+f.f+'g · '+f.k+' kcal per 100g</div>'
+    +'<div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:10px">'
+    +'<div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Porcja (g)</label>'
+    +'<input class="inp" type="number" id="portion-inp" value="100" min="1" style="width:80px;text-align:center;font-size:16px" oninput="updatePortionPreview('+i+')">'
+    +'</div><div style="flex:1;padding-bottom:4px"><div id="portion-preview" style="font-size:13px;font-weight:600;color:var(--yellow)">'+f.k+' kcal</div>'
+    +'<div style="font-size:11px;color:var(--muted)">B:'+f.p+'g W:'+f.c+'g T:'+f.f+'g</div></div></div>'
+    +'<div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px">'+btns+'</div>'
+    +'<div style="display:flex;gap:8px">'
+    +'<button class="btn btn-a" style="flex:1;justify-content:center;padding:11px" onclick="confirmPortionAdd('+i+')">+ Dodaj do posiłku</button>'
+    +'<button class="btn btn-g" style="padding:11px 14px" onclick="cancelFoodPick()">✕</button>'
+    +'</div></div>';
+  window._currentFoodIdx=i;
+  setTimeout(()=>document.getElementById('portion-inp')?.focus(),30);
+}
+
+function setPortion(g,i){
+  const inp=document.getElementById('portion-inp');if(inp)inp.value=g;
+  updatePortionPreview(i);
+}
+
+function updatePortionPreview(i){
+  const f=(window._foodRes||[])[i];if(!f)return;
+  const g=parseFloat(document.getElementById('portion-inp')?.value||100);
+  const r=g/100;
+  const prev=document.getElementById('portion-preview');
+  if(prev)prev.innerHTML='<span style="font-size:15px;font-weight:700;color:var(--yellow)">'+Math.round(f.k*r)+' kcal</span>';
+  const prev2=prev?.nextElementSibling;
+  if(prev2)prev2.textContent='B:'+(f.p*r).toFixed(1)+'g W:'+(f.c*r).toFixed(1)+'g T:'+(f.f*r).toFixed(1)+'g';
+}
+
+function confirmPortionAdd(i){
+  const f=(window._foodRes||[])[i];if(!f)return;
+  const g=parseFloat(document.getElementById('portion-inp')?.value||100);
+  const r=g/100;
+  addMealEntry(f.n+' '+g+'g',Math.round(f.k*r),+(f.p*r).toFixed(1),+(f.c*r).toFixed(1),+(f.f*r).toFixed(1));
+  cancelFoodPick();
+}
+
+function cancelFoodPick(){
+  const q=document.getElementById('food-q');if(q)q.value='';
   const drop=document.getElementById('food-drop');if(drop){drop.classList.remove('on');drop.innerHTML='';}
 }
 
 async function addMealManual(){
-  const name=(document.getElementById('fm-name')?.value||'').trim();if(!name)return;
-  await addMealEntry(name,parseFloat(document.getElementById('fm-kcal')?.value||0),parseFloat(document.getElementById('fm-p')?.value||0),parseFloat(document.getElementById('fm-c')?.value||0),parseFloat(document.getElementById('fm-f')?.value||0));
+  const name=(document.getElementById('fm-name')?.value||'').trim();
+  if(!name){document.getElementById('fm-name')?.focus();return;}
+  const kcal=parseFloat(document.getElementById('fm-kcal')?.value||0);
+  const p=parseFloat(document.getElementById('fm-p')?.value||0);
+  const c=parseFloat(document.getElementById('fm-c')?.value||0);
+  const f=parseFloat(document.getElementById('fm-f')?.value||0);
+  await addMealEntry(name,kcal,p,c,f);
   ['fm-name','fm-kcal','fm-p','fm-c','fm-f'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
 }
 
@@ -2300,58 +2370,74 @@ async function addMealEntry(name,kcal,p,c,f){
   const entry={user_id:U.id,name,kcal,protein_g:p,carbs_g:c,fat_g:f,date,meal_type:mealType};
   try{const{data}=await SB.from('fit_meals').insert(entry).select().single();FIT.meals.unshift(data);}
   catch(e){FIT.meals.unshift({...entry,id:Date.now()});}
-  ss();renderNutrition();
+  ss();notif('🍽','Dodano: '+name+' ('+Math.round(kcal)+' kcal)');renderNutrition();
 }
 
-async function delMeal(id){try{await SB.from('fit_meals').delete().eq('id',id);}catch(e){}FIT.meals=FIT.meals.filter(m=>m.id!==id);ss();renderNutrition();}
-function clearDayMeals(){if(!confirm('Wyczyścić posiłki z dziś?'))return;FIT.meals=FIT.meals.filter(m=>m.date!==td());renderNutrition();}
+async function delMeal(id){
+  try{await SB.from('fit_meals').delete().eq('id',id);}catch(e){}
+  FIT.meals=FIT.meals.filter(m=>m.id!==id);ss();renderNutrition();
+}
+
+async function clearDayMeals(){
+  const date=document.getElementById('nutr-date')?.value||td();
+  FIT.meals=FIT.meals.filter(m=>m.date!==date);renderNutrition();
+}
 
 function renderNutrition(){
   const date=document.getElementById('nutr-date')?.value||td();
-  const meals=FIT.meals.filter(m=>m.date===date);
+  if(!date){const el=document.getElementById('nutr-date');if(el)el.value=td();}
+  const meals=FIT.meals.filter(m=>m.date===(document.getElementById('nutr-date')?.value||td()));
   const totK=meals.reduce((s,m)=>s+parseFloat(m.kcal||0),0);
   const totP=meals.reduce((s,m)=>s+parseFloat(m.protein_g||0),0);
   const totC=meals.reduce((s,m)=>s+parseFloat(m.carbs_g||0),0);
   const totF=meals.reduce((s,m)=>s+parseFloat(m.fat_g||0),0);
   const goal=parseInt(document.getElementById('kcal-goal')?.value||2000);
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  set('mn-kcal',Math.round(totK));
-  set('mn-p',Math.round(totP)+'g');set('mn-c',Math.round(totC)+'g');
+  // Update summary cards
+  const sv=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  sv('mn-kcal',Math.round(totK));
+  sv('mn-p',Math.round(totP)+'g');
+  sv('mn-c',Math.round(totC)+'g');
   const left=goal-Math.round(totK);
-  const leftEl=document.getElementById('mn-left');if(leftEl){leftEl.textContent=Math.max(0,left);leftEl.style.color=left<0?'var(--red)':'var(--green)';}
-  const setBar=(bid,pid,pct,val)=>{const b=document.getElementById(bid);if(b)b.style.width=Math.min(100,pct)+'%';const p=document.getElementById(pid);if(p)p.textContent=val;};
+  const leftEl=document.getElementById('mn-left');
+  if(leftEl){leftEl.textContent=Math.max(0,left);leftEl.style.color=left<0?'var(--red)':'var(--green)';}
+  // Bars
+  const setBar=(bid,pid,pct,val)=>{
+    const b=document.getElementById(bid);if(b)b.style.width=Math.min(100,Math.max(0,pct))+'%';
+    const p=document.getElementById(pid);if(p)p.textContent=val;
+  };
   setBar('bar-kcal','pv-kcal',totK/goal*100,Math.round(totK/goal*100)+'%');
-  const gP=Math.round(goal*0.3/4),gC=Math.round(goal*0.4/4),gF=Math.round(goal*0.3/9);
+  const gP=Math.round(goal*0.3/4)||1,gC=Math.round(goal*0.4/4)||1,gF=Math.round(goal*0.3/9)||1;
   setBar('bar-p','pv-p',totP/gP*100,Math.round(totP)+'g');
   setBar('bar-c','pv-c',totC/gC*100,Math.round(totC)+'g');
   setBar('bar-f','pv-f',totF/gF*100,Math.round(totF)+'g');
+  // Meals list grouped by type
   const lEl=document.getElementById('meals-list');
-  if(lEl){
-    if(!meals.length){lEl.innerHTML='<div class="empty">Brak posiłków</div>';}
-    else{
-      const MEAL_LABELS={sniadanie:'🌅 Śniadanie',ii_sniadanie:'🥪 II Śniadanie',obiad:'🍽 Obiad',przekaska:'🍎 Przekąska',kolacja:'🌙 Kolacja',inne:'📦 Inne'};
-      const MEAL_ORDER=['sniadanie','ii_sniadanie','obiad','przekaska','kolacja','inne'];
-      const byType={};meals.forEach(m=>{const t=m.meal_type||'inne';if(!byType[t])byType[t]=[];byType[t].push(m);});
-      lEl.innerHTML=MEAL_ORDER.filter(t=>byType[t]).map(t=>{
-        const tMeals=byType[t];
-        const tKcal=tMeals.reduce((s,m)=>s+parseFloat(m.kcal||0),0);
-        return`<div style="margin-bottom:14px">
-          <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between">
-            <span>${MEAL_LABELS[t]||t}</span>
-            <span style="color:var(--yellow)">${Math.round(tKcal)} kcal</span>
-          </div>
-          ${tMeals.map(m=>`<div class="meal-row">
-            <div class="meal-ic">🍽️</div>
-            <div style="flex:1;min-width:0"><div class="meal-name">${m.name}</div><div class="meal-macros">B:${m.protein_g}g W:${m.carbs_g}g T:${m.fat_g}g</div></div>
-            <div class="meal-kcal-val">${Math.round(m.kcal)} kcal</div>
-            <button class="btn btn-d" style="margin-left:8px;padding:5px 8px;font-size:11px" onclick="delMeal(${m.id})">✕</button>
-          </div>`).join('')}
-        </div>`;
-      }).join('');
-    }
-  }
-  // weekly chart
-  const now=new Date();const days7=Array.from({length:7},(_,i)=>{const d=new Date(now);d.setDate(now.getDate()-6+i);return d.toISOString().split('T')[0];});
+  if(!lEl)return;
+  if(!meals.length){lEl.innerHTML='<div class="empty">Brak posiłków dziś — dodaj pierwszy!</div>';return;}
+  const LABELS={sniadanie:'🌅 Śniadanie',ii_sniadanie:'🥪 II Śniadanie',obiad:'🍽 Obiad',przekaska:'🍎 Przekąska',kolacja:'🌙 Kolacja',inne:'📦 Inne'};
+  const ORDER=['sniadanie','ii_sniadanie','obiad','przekaska','kolacja','inne'];
+  const byType={};meals.forEach(m=>{const t=m.meal_type||'inne';if(!byType[t])byType[t]=[];byType[t].push(m);});
+  lEl.innerHTML=ORDER.filter(t=>byType[t]).map(t=>{
+    const tm=byType[t];
+    const tK=tm.reduce((s,m)=>s+parseFloat(m.kcal||0),0);
+    const rows=tm.map(m=>`<div class="meal-row">
+      <div class="meal-ic">🍽️</div>
+      <div style="flex:1;min-width:0">
+        <div class="meal-name">${m.name}</div>
+        <div class="meal-macros">B:${m.protein_g||0}g · W:${m.carbs_g||0}g · T:${m.fat_g||0}g</div>
+      </div>
+      <div class="meal-kcal-val">${Math.round(m.kcal||0)} kcal</div>
+      <button class="btn btn-d" style="margin-left:8px;padding:5px 8px;font-size:11px" onclick="delMeal(${m.id})">✕</button>
+    </div>`).join('');
+    return`<div style="margin-bottom:12px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <div style="font-size:12px;font-weight:600">${LABELS[t]||t}</div>
+        <div style="font-size:12px;color:var(--yellow)">${Math.round(tK)} kcal</div>
+      </div>${rows}</div>`;
+  }).join('');
+  // Weekly chart
+  const now=new Date();
+  const days7=Array.from({length:7},(_,i)=>{const d=new Date(now);d.setDate(now.getDate()-6+i);return d.toISOString().split('T')[0];});
   const kcals=days7.map(d=>FIT.meals.filter(m=>m.date===d).reduce((s,m)=>s+parseFloat(m.kcal||0),0));
   mkC('chart-nutr','bar',{labels:days7.map(d=>d.slice(5)),datasets:[{label:'kcal',data:kcals,backgroundColor:kcals.map(k=>k>=goal?'rgba(34,201,138,.7)':'rgba(251,191,36,.6)'),borderRadius:4}]});
 }
