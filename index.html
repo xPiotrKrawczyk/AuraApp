@@ -1236,6 +1236,10 @@ html, body {
 }
 /* Fix inline forms on mobile - stack vertically */
 @media(max-width:768px) {
+  /* Extra bottom padding so content isn't hidden behind nav bar */
+  .page {
+    padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 24px) !important;
+  }
   .if {
     flex-direction: column;
     gap: 10px;
