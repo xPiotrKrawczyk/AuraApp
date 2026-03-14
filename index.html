@@ -843,9 +843,10 @@ function updateSettingsUI(){
   document.getElementById('sett-theme-ic').textContent=dark?'🌙':'☀️';
   document.getElementById('sett-theme-sub').textContent=dark?'Ciemny':'Jasny';
   document.getElementById('sett-theme-toggle').classList.toggle('on',dark);
-  document.getElementById('sett-currency-sub').textContent={zł:'Polski złoty (zł)',€:'Euro (€)','$':'Dolar ($)',£:'Funt (£)',CHF:'Frank (CHF)'}[CUR()]||CUR();
-  document.getElementById('sett-email-sub').textContent='Na adres: '+(U?.email||'—');
-  document.getElementById('sett-profile-sub').textContent=P?.name||'—';
+  const curLabels={'zł':'Polski złoty (zł)','€':'Euro (€)','$':'Dolar ($)','£':'Funt (£)','CHF':'Frank (CHF)'};
+  document.getElementById('sett-currency-sub').textContent=curLabels[CUR()]||CUR();
+  document.getElementById('sett-email-sub').textContent='Na adres: '+(U?.email||'-');
+  document.getElementById('sett-profile-sub').textContent=P?.name||'-';
   ['notif-budget','notif-events','notif-tasks'].forEach(k=>{const el=document.getElementById('toggle-'+k);if(el)el.classList.toggle('on',!!SETTINGS[k])});
 }
 function saveCurrency(){SETTINGS.currency=document.getElementById('currency-sel').value;saveSettings();closeMod('mod-currency');updateSettingsUI();ss();renderBudget();renderDash()}
@@ -1142,10 +1143,11 @@ async function saveNote(){
   ss();renderNotes();
 }
 async function delNote(){if(!NOTES_EDITING||!confirm('Usunąć notatkę?'))return;await SB.from('notes').delete().eq('id',NOTES_EDITING);C.notes=C.notes.filter(n=>n.id!==NOTES_EDITING);NOTES_EDITING=null;document.getElementById('note-editor-wrap').innerHTML='<div style="color:var(--muted);font-size:13px;padding:16px 0">Wybierz notatkę lub utwórz nową.</div>';document.getElementById('note-save-btn').style.display='none';document.getElementById('note-del-btn').style.display='none';document.getElementById('note-edit-title').textContent='Wybierz notatkę';ss();renderNotes()}
+function openNote(id){const n=C.notes.find(x=>x.id===id);if(n)showNoteEditor(n)}
 function renderNotes(){
   const el=document.getElementById('notes-list');
   if(!C.notes.length){el.innerHTML='<div class="empty">Brak notatek</div>';return}
-  el.innerHTML=C.notes.map(n=>`<div class="note-item" onclick="showNoteEditor(${JSON.stringify(n).replace(/"/g,"'")})"><div class="note-title">${n.title||'Bez tytułu'}</div><div class="note-preview">${(n.content||'').substring(0,80)}</div><div class="note-date">${fd(n.updated_at?.split('T')[0]||n.created_at?.split('T')[0])}</div></div>`).join('')
+  el.innerHTML=C.notes.map(n=>`<div class="note-item" onclick="openNote(${n.id})"><div class="note-title">${(n.title||'Bez tytulu').replace(/</g,'&lt;')}</div><div class="note-preview">${(n.content||'').replace(/</g,'&lt;').substring(0,80)}</div><div class="note-date">${fd(n.updated_at?.split('T')[0]||n.created_at?.split('T')[0])}</div></div>`).join('')
 }
 
 // CALCULATOR
