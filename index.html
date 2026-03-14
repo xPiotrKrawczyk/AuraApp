@@ -928,41 +928,49 @@ select.inp option{background:var(--surf2)}
           <div>
             <div class="card mb14">
               <div class="sh mb14">
-                <div class="st">Dodaj posiłek</div>
+                <div class="st">Wyszukaj produkt</div>
                 <input class="inp" type="date" id="nutr-date" oninput="renderNutrition()" style="font-size:12px;width:135px">
               </div>
+              <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+                <select class="inp" id="meal-type-sel" style="width:130px">
+                  <option value="sniadanie">🌅 Śniadanie</option>
+                  <option value="ii_sniadanie">🥪 II Śniadanie</option>
+                  <option value="obiad">🍽 Obiad</option>
+                  <option value="przekaska">🍎 Przekąska</option>
+                  <option value="kolacja">🌙 Kolacja</option>
+                  <option value="inne">📦 Inne</option>
+                </select>
+                <div style="flex:1;font-size:12px;color:var(--muted);display:flex;align-items:center">Wybierz posiłek przed dodaniem produktu</div>
+              </div>
               <div class="nutr-search">
-                <input type="text" id="food-q" placeholder="Szukaj produktu... np. kurczak, ryż, jajka" oninput="searchFood(this.value)" autocomplete="off">
+                <input type="text" id="food-q" placeholder="Szukaj w Open Food Facts... np. kurczak, ryż, jajka" oninput="searchFood(this.value)" autocomplete="off">
               </div>
+              <div id="food-search-status" style="font-size:12px;color:var(--muted);padding:4px 0;display:none">🔍 Szukam w bazie...</div>
               <div class="food-drop" id="food-drop"></div>
-              <div id="food-manual" style="display:none">
-                <div style="font-size:12px;color:var(--muted);margin-bottom:8px;padding:8px 0;border-top:1px solid var(--bord)">Wpisz ręcznie:</div>
-                <div class="if">
-                  <div class="ifg" style="flex:1"><label>Nazwa</label><input class="inp" id="fm-name" placeholder="Nazwa produktu" style="width:100%"></div>
-                  <div class="ifg"><label>kcal</label><input class="inp" type="number" id="fm-kcal" placeholder="0" style="width:65px"></div>
-                  <div class="ifg"><label>Białko g</label><input class="inp" type="number" id="fm-p" placeholder="0" style="width:65px"></div>
-                  <div class="ifg"><label>Węglow. g</label><input class="inp" type="number" id="fm-c" placeholder="0" style="width:65px"></div>
-                  <div class="ifg"><label>Tłuszcz g</label><input class="inp" type="number" id="fm-f" placeholder="0" style="width:65px"></div>
-                  <div class="ifg" style="justify-content:flex-end"><button class="btn btn-a" onclick="addMealManual()">+ Dodaj</button></div>
-                </div>
-              </div>
-              <button class="btn btn-g" style="font-size:12px;margin-top:8px;width:100%;justify-content:center" onclick="toggleFoodManual()">✏ Wpisz ręcznie</button>
-              <div style="margin-top:10px">
-                <div style="font-size:12px;color:var(--muted);margin-bottom:6px">Szybki wybór:</div>
-                <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bord)">
+                <div style="font-size:12px;font-weight:600;margin-bottom:8px">Wpisz ręcznie / szybki wybór:</div>
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
                   <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Kurczak pierś 150g',248,46,0,5)">🍗 Kurczak</button>
                   <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Ryż gotowany 200g',260,5,56,1)">🍚 Ryż</button>
                   <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Jajka x2',156,12,1,11)">🥚 Jajka x2</button>
                   <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Owsianka 60g',220,7,38,4)">🥣 Owsianka</button>
                   <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Banan',89,1,23,0)">🍌 Banan</button>
-                  <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Białko serwatkowe',120,24,3,2)">💪 Whey</button>
+                  <button class="btn btn-g" style="font-size:11px;padding:5px 10px" onclick="quickMeal('Bialko serwatkowe',120,24,3,2)">💪 Whey</button>
+                </div>
+                <div class="if">
+                  <div class="ifg" style="flex:1"><label>Nazwa</label><input class="inp" id="fm-name" placeholder="Nazwa produktu" style="width:100%"></div>
+                  <div class="ifg"><label>kcal</label><input class="inp" type="number" id="fm-kcal" placeholder="0" style="width:65px"></div>
+                  <div class="ifg"><label>Białko g</label><input class="inp" type="number" id="fm-p" placeholder="0" style="width:65px"></div>
+                  <div class="ifg"><label>Węgl. g</label><input class="inp" type="number" id="fm-c" placeholder="0" style="width:65px"></div>
+                  <div class="ifg"><label>Tłuszcz g</label><input class="inp" type="number" id="fm-f" placeholder="0" style="width:65px"></div>
+                  <div class="ifg" style="justify-content:flex-end"><button class="btn btn-a" onclick="addMealManual()">+ Dodaj</button></div>
                 </div>
               </div>
             </div>
             <div class="card">
               <div class="sh mb14">
                 <div class="st">Dzisiaj zjadłem</div>
-                <button class="btn btn-d" style="font-size:11px;padding:5px 10px" onclick="clearDayMeals()">Wyczyść</button>
+                <button class="btn btn-d" style="font-size:11px;padding:5px 10px" onclick="clearDayMeals()">Wyczyść dzień</button>
               </div>
               <div id="meals-list"><div class="empty">Brak posiłków</div></div>
             </div>
@@ -1172,10 +1180,10 @@ select.inp option{background:var(--surf2)}
   <!-- MOBILE BOTTOM NAV -->
   <nav class="mob-nav" id="mob-nav">
     <div class="mob-nav-inner">
-      <button class="mn-item on" id="mn-dashboard" onclick="nav('dashboard')"><span class="mn-ic">⊞</span>Pulpit</button>
-      <button class="mn-item" id="mn-transactions" onclick="nav('transactions')"><span class="mn-ic">⇄</span>Finanse</button>
-      <button class="mn-item" id="mn-tasks" onclick="nav('tasks')"><span class="mn-ic">✓</span>Zadania</button>
-      <button class="mn-item" id="mn-habits" onclick="nav('habits')"><span class="mn-ic">◈</span>Nawyki</button>
+      <button class="mn-item on" id="mn-main" onclick="toggleMobGroup('main')"><span class="mn-ic">⊞</span>Główne</button>
+      <button class="mn-item" id="mn-fin" onclick="toggleMobGroup('fin')"><span class="mn-ic">◉</span>Finanse</button>
+      <button class="mn-item" id="mn-fit" onclick="toggleMobGroup('fit')"><span class="mn-ic">⊕</span>Fitness</button>
+      <button class="mn-item" id="mn-acc" onclick="toggleMobGroup('acc')"><span class="mn-ic">◈</span>Konto</button>
       <button class="mn-item" id="mn-more" onclick="toggleMore()"><span class="mn-ic">⋯</span>Więcej</button>
     </div>
   </nav>
@@ -1185,15 +1193,23 @@ select.inp option{background:var(--surf2)}
   <div class="more-drawer" id="more-drawer">
     <div class="more-drawer-grip"></div>
     <div class="more-grid">
-      <button class="more-item" onclick="nav('fitness');fitSec('plans');closeMore()"><span class="more-ic">⊕</span>Trening</button>
-      <button class="more-item" onclick="nav('fitness');fitSec('body');closeMore()"><span class="more-ic">○</span>Pomiary</button>
-      <button class="more-item" onclick="nav('fitness');fitSec('nutrition');closeMore()"><span class="more-ic">◍</span>Żywienie</button>
-      <button class="more-item" onclick="nav('fitness');fitSec('tools');closeMore()"><span class="more-ic">⚙</span>Narzędzia</button>
+      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:2px">Główne</div>
+      <button class="more-item" onclick="nav('dashboard');closeMore()"><span class="more-ic">⊞</span>Pulpit</button>
       <button class="more-item" onclick="nav('calendar');closeMore()"><span class="more-ic">◷</span>Kalendarz</button>
-      <button class="more-item" onclick="nav('stats');closeMore()"><span class="more-ic">▲</span>Statystyki</button>
+      <button class="more-item" onclick="nav('tasks');closeMore()"><span class="more-ic">✓</span>Zadania</button>
       <button class="more-item" onclick="nav('notes');closeMore()"><span class="more-ic">≡</span>Notatki</button>
+      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;margin-bottom:2px">Finanse</div>
+      <button class="more-item" onclick="nav('transactions');closeMore()"><span class="more-ic">⇄</span>Transakcje</button>
       <button class="more-item" onclick="nav('budget');closeMore()"><span class="more-ic">◉</span>Budżet</button>
       <button class="more-item" onclick="nav('goals');closeMore()"><span class="more-ic">◎</span>Cele</button>
+      <button class="more-item" onclick="nav('stats');closeMore()"><span class="more-ic">▲</span>Statystyki</button>
+      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;margin-bottom:2px">Fitness</div>
+      <button class="more-item" onclick="nav('fitness');fitSec('plans');closeMore()"><span class="more-ic">⊕</span>Treningi</button>
+      <button class="more-item" onclick="nav('fitness');fitSec('nutrition');closeMore()"><span class="more-ic">◍</span>Żywienie</button>
+      <button class="more-item" onclick="nav('fitness');fitSec('body');closeMore()"><span class="more-ic">○</span>Pomiary</button>
+      <button class="more-item" onclick="nav('fitness');fitSec('tools');closeMore()"><span class="more-ic">⚙</span>Narzędzia</button>
+      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;margin-bottom:2px">Konto</div>
+      <button class="more-item" onclick="nav('habits');closeMore()"><span class="more-ic">◈</span>Nawyki</button>
       <button class="more-item" onclick="nav('settings');closeMore()"><span class="more-ic">⚙</span>Ustawienia</button>
     </div>
   </div>
@@ -1342,11 +1358,24 @@ function fillTags(){const e=document.getElementById('t-tag');if(e)e.innerHTML='<
 function fillStatsYear(){const e=document.getElementById('stats-year');if(!e)return;const ys=new Set(C.tx.map(t=>new Date(t.date).getFullYear()));ys.add(new Date().getFullYear());e.innerHTML=[...ys].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('')}
 
 // NAV
-const MOB_NAV_PAGES={'dashboard':'mn-dashboard','transactions':'mn-transactions','tasks':'mn-tasks','habits':'mn-habits'};
+const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','rule503020':'mn-fin','calculator':'mn-fin','tasks':'mn-main','habits':'mn-acc','calendar':'mn-main','notes':'mn-main','fitness':'mn-fit','settings':'mn-acc'};
+const MOB_GROUPS={
+  main:['dashboard','calendar','tasks','notes'],
+  fin:['transactions','budget','goals','stats','recurring','rule503020','calculator'],
+  fit:['fitness'],
+  acc:['habits','settings']
+};
+function toggleMobGroup(g){
+  const pages=MOB_GROUPS[g]||[];
+  if(pages.length===1){nav(pages[0]);return;}
+  // Show a mini-menu or just nav to first
+  nav(pages[0]);
+}
 function nav(p){
   document.querySelectorAll('.page').forEach(pg=>pg.classList.remove('on'));
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
   document.querySelectorAll('.mn-item').forEach(n=>n.classList.remove('on'));
+  const mobId=MOB_NAV_PAGES[p];if(mobId)document.getElementById(mobId)?.classList.add('on');
   document.getElementById('page-'+p).classList.add('on');
   document.querySelectorAll('.ni').forEach(n=>{if(n.getAttribute('onclick')?.includes("'"+p+"'"))n.classList.add('on')});
   const mnId=MOB_NAV_PAGES[p];if(mnId)document.getElementById(mnId)?.classList.add('on');
@@ -1773,19 +1802,24 @@ function renderFitPlans(){
       </div>`;
     }).join('');
   }
-  html+=`<div style="font-size:14px;font-weight:600;margin:20px 0 12px;color:var(--muted)">Gotowe plany do załadowania</div>`;
-  html+=PRESETS.map((p,i)=>`<div class="plan-card" onclick="loadPreset(${i})">
-    <div class="plan-emoji">${p.emoji}</div>
-    <div class="plan-body">
-      <div class="plan-name">${p.name}</div>
-      <div class="plan-desc">${p.desc}</div>
-      <div class="plan-meta">${p.days.map(d=>`<span class="plan-pill">${d.name}</span>`).join('')}</div>
+  html+=`<div style="margin-top:20px">
+    <button class="btn btn-g" style="width:100%;justify-content:center;padding:12px" onclick="togglePresetsView()">📋 Pokaż/ukryj gotowe plany startowe</button>
+    <div id="presets-panel" style="display:none;margin-top:12px">
+      ${PRESETS.map((p,i)=>`<div class="plan-card" onclick="loadPreset(${i})">
+        <div class="plan-emoji">${p.emoji}</div>
+        <div class="plan-body">
+          <div class="plan-name">${p.name}</div>
+          <div class="plan-desc">${p.desc}</div>
+          <div class="plan-meta">${p.days.map(d=>`<span class="plan-pill">${d.name}</span>`).join('')}</div>
+        </div>
+        <div style="color:var(--muted);font-size:20px;flex-shrink:0">+</div>
+      </div>`).join('')}
     </div>
-    <div style="color:var(--muted);font-size:20px;flex-shrink:0">+</div>
-  </div>`).join('');
+  </div>`;
   plansEl.innerHTML=html;
 }
 
+function togglePresetsView(){const el=document.getElementById('presets-panel');if(el)el.style.display=el.style.display==='none'?'block':'none';}
 function parseDays(plan){try{return JSON.parse(plan.plan_data||'[]');}catch(e){return[];}}
 
 function showPlanDetail(id){
@@ -1965,40 +1999,52 @@ function renderPlanEditor(){
 }
 
 function renderDayEditor(day,di){
+  const exHtml=(day.exercises||[]).map((ex,ei)=>`
+    <div style="background:var(--surf3);border-radius:10px;padding:11px 13px;margin-bottom:7px;border:1px solid var(--bord)">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span style="font-size:18px">${WL_IC[ex.t]||'💪'}</span>
+        <span style="flex:1;font-size:13px;font-weight:600">${ex.n}</span>
+        <select class="inp" style="font-size:11px;width:80px;padding:4px 6px" onchange="editingPlan.days[${di}].exercises[${ei}].t=this.value;reRenderDay(${di})">
+          ${Object.entries(WL_LABELS).map(([k,v])=>`<option value="${k}"${ex.t===k?' selected':''}>${v}</option>`).join('')}
+        </select>
+        <button class="btn btn-d" onclick="editingPlan.days[${di}].exercises.splice(${ei},1);reRenderDay(${di})" style="padding:4px 8px;font-size:11px">✕</button>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <label style="font-size:11px;color:var(--muted)">Serie:</label>
+        <input class="inp" type="number" value="${ex.s||3}" min="1" max="20" style="width:52px;text-align:center" onchange="editingPlan.days[${di}].exercises[${ei}].s=+this.value">
+        <label style="font-size:11px;color:var(--muted)">Powt.:</label>
+        <input class="inp" type="number" value="${ex.r||12}" min="1" max="200" style="width:52px;text-align:center" onchange="editingPlan.days[${di}].exercises[${ei}].r=+this.value">
+        <label style="font-size:11px;color:var(--muted)">Ciężar (kg):</label>
+        <input class="inp" type="number" value="${ex.w||0}" min="0" step="0.5" style="width:60px;text-align:center" onchange="editingPlan.days[${di}].exercises[${ei}].w=+this.value">
+        ${ex.t==='cardio'?`<label style="font-size:11px;color:var(--muted)">Czas (min):</label><input class="inp" type="number" value="${ex.dur||30}" min="1" style="width:52px;text-align:center" onchange="editingPlan.days[${di}].exercises[${ei}].dur=+this.value">`:''}
+      </div>
+    </div>`).join('');
   return`<div class="card mb14" id="ep-day-${di}">
-    <div class="sh mb14">
-      <input class="inp" value="${day.name||'Dzień '+(di+1)}" oninput="editingPlan.days[${di}].name=this.value" style="font-size:14px;font-weight:600;flex:1;max-width:280px">
-      <button class="btn btn-d" style="font-size:11px;padding:6px 10px" onclick="removePlanDay(${di})">Usuń dzień</button>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
+      <input class="inp" value="${day.name||'Dzień '+(di+1)}" oninput="editingPlan.days[${di}].name=this.value" style="font-size:14px;font-weight:600;flex:1">
+      <button class="btn btn-d" style="font-size:11px;padding:6px 10px;flex-shrink:0" onclick="removePlanDay(${di})">Usuń dzień</button>
     </div>
-    ${(day.exercises||[]).map((ex,ei)=>`
-      <div style="background:var(--surf2);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:1px solid var(--bord)">
-        <div style="width:30px;height:30px;border-radius:8px;background:rgba(124,92,252,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">${WL_IC[ex.t]||'💪'}</div>
-        <span style="flex:1;font-size:13px;font-weight:600;min-width:100px">${ex.n}</span>
-        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-          <select class="inp" style="font-size:11px;padding:5px 8px;width:80px" onchange="editingPlan.days[${di}].exercises[${ei}].t=this.value">
-            ${Object.entries(WL_LABELS).map(([k,v])=>`<option value="${k}"${ex.t===k?' selected':''}>${v}</option>`).join('')}
-          </select>
-          <input class="inp" type="number" value="${ex.s||3}" min="1" style="width:44px;text-align:center;padding:5px" onchange="editingPlan.days[${di}].exercises[${ei}].s=+this.value" title="Serie">
-          <span style="font-size:11px;color:var(--muted)">×</span>
-          <input class="inp" type="number" value="${ex.r||12}" min="1" style="width:44px;text-align:center;padding:5px" onchange="editingPlan.days[${di}].exercises[${ei}].r=+this.value" title="Powtórzenia">
-          <span style="font-size:11px;color:var(--muted)">@</span>
-          <input class="inp" type="number" value="${ex.w||0}" min="0" step="0.5" style="width:50px;text-align:center;padding:5px" onchange="editingPlan.days[${di}].exercises[${ei}].w=+this.value" title="kg">
-          <span style="font-size:11px;color:var(--muted)">kg</span>
-        </div>
-        <button class="btn btn-d" onclick="editingPlan.days[${di}].exercises.splice(${ei},1);updateDayEditor(${di})" style="padding:5px 8px;font-size:11px">✕</button>
-      </div>`).join('')}
-    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
-      <input class="inp" id="ep-ex-name-${di}" placeholder="Nazwa ćwiczenia..." style="flex:1;min-width:140px">
-      <select class="inp" id="ep-ex-type-${di}" style="width:85px">${Object.entries(WL_LABELS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select>
-      <button class="btn btn-g" style="font-size:12px" onclick="addExToDay(${di})">+ Dodaj ćwiczenie</button>
+    <div id="ep-exs-${di}">${exHtml||'<div style="color:var(--muted);font-size:13px;padding:8px 0">Brak ćwiczeń — dodaj poniżej</div>'}</div>
+    <div style="background:var(--surf2);border-radius:10px;padding:12px;border:1px dashed var(--bord);margin-top:8px">
+      <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px">+ Dodaj ćwiczenie</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+        <div style="flex:1;min-width:160px"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Nazwa</label><input class="inp" id="ep-en-${di}" placeholder="np. Wyciskanie sztangi" style="width:100%"></div>
+        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Typ</label><select class="inp" id="ep-et-${di}" style="width:90px">${Object.entries(WL_LABELS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Serie</label><input class="inp" type="number" id="ep-es-${di}" value="3" min="1" style="width:52px;text-align:center"></div>
+        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Powt.</label><input class="inp" type="number" id="ep-er-${di}" value="12" min="1" style="width:52px;text-align:center"></div>
+        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">kg</label><input class="inp" type="number" id="ep-ew-${di}" value="0" min="0" step="0.5" style="width:60px;text-align:center"></div>
+        <button class="btn btn-a" onclick="addExToDay(${di})" style="padding:9px 16px">+ Dodaj</button>
+      </div>
     </div>
   </div>`;
 }
 
-function updateDayEditor(di){
-  const el=document.getElementById(`ep-day-${di}`);
-  if(el)el.outerHTML=renderDayEditor(editingPlan.days[di],di);
+function reRenderDay(di){
+  const el=document.getElementById('ep-day-'+di);
+  if(el) el.outerHTML=renderDayEditor(editingPlan.days[di],di);
 }
+
+
 
 function addPlanDay(){
   editingPlan.days.push({name:'Dzień '+(editingPlan.days.length+1),exercises:[]});
@@ -2013,12 +2059,17 @@ function removePlanDay(di){
 }
 
 function addExToDay(di){
-  const name=document.getElementById(`ep-ex-name-${di}`)?.value.trim();
-  const type=document.getElementById(`ep-ex-type-${di}`)?.value||'strength';
-  if(!name)return;
-  editingPlan.days[di].exercises.push({n:name,t:type,s:3,r:12,w:0});
-  document.getElementById(`ep-ex-name-${di}`).value='';
-  updateDayEditor(di);
+  const nameEl=document.getElementById('ep-en-'+di);
+  const name=(nameEl?.value||'').trim();
+  if(!name){nameEl?.focus();return;}
+  const type=document.getElementById('ep-et-'+di)?.value||'strength';
+  const s=parseInt(document.getElementById('ep-es-'+di)?.value||3);
+  const r=parseInt(document.getElementById('ep-er-'+di)?.value||12);
+  const w=parseFloat(document.getElementById('ep-ew-'+di)?.value||0);
+  if(!editingPlan.days[di])return;
+  editingPlan.days[di].exercises.push({n:name,t:type,s,r,w});
+  nameEl.value='';
+  reRenderDay(di);
 }
 
 async function savePlan(){
@@ -2163,30 +2214,77 @@ function addPhoto(side){const input=document.createElement('input');input.type='
 function renderPhotos(){const sides=['front','side','back'],labels=['Przód','Bok','Tył'];const el=document.getElementById('photo-grid');if(!el)return;el.innerHTML=sides.map((s,i)=>{const img=localStorage.getItem('aura_ph_'+s);return`<div onclick="addPhoto('${s}')" style="aspect-ratio:1;border-radius:10px;border:2px dashed var(--bord);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;overflow:hidden;background:var(--surf2)">${img?`<img src="${img}" style="width:100%;height:100%;object-fit:cover">`:`<div style="font-size:12px;color:var(--muted);text-align:center">+ ${labels[i]}</div>`}</div>`;}).join('');}
 
 // ── NUTRITION ──
+let _foodTimer=null;
 function searchFood(q){
-  const el=document.getElementById('food-drop');if(!el)return;
-  if(!q||q.length<2){el.classList.remove('on');el.innerHTML='';return;}
-  const res=FOOD_DB.filter(f=>f.n.toLowerCase().includes(q.toLowerCase())).slice(0,10);
-  if(!res.length){el.classList.remove('on');return;}
-  window._foodRes=res;
-  el.classList.add('on');
-  el.innerHTML=`<div class="food-drop-hd">${res.length} wyników dla "${q}"</div>`+
-    res.map((f,i)=>`<div class="food-item" onclick="pickFood(${i})">
-      <div><div class="food-item-name">${f.n}</div><div class="food-item-meta">${f.cat} · B:${f.p}g W:${f.c}g T:${f.f}g / 100g</div></div>
-      <div class="food-item-kcal">${f.k} kcal</div>
-    </div>`).join('');
+  const drop=document.getElementById('food-drop');if(!drop)return;
+  clearTimeout(_foodTimer);
+  if(!q||q.length<2){drop.classList.remove('on');drop.innerHTML='';return;}
+  // First search local DB immediately
+  const local=FOOD_DB.filter(f=>f.n.toLowerCase().includes(q.toLowerCase())).slice(0,5);
+  window._foodRes=local;
+  if(local.length){
+    drop.classList.add('on');
+    drop.innerHTML=`<div class="food-drop-hd">📦 Lokalna baza (${local.length})</div>`+
+      local.map((f,i)=>`<div class="food-item" onclick="pickFood(${i})">
+        <div><div class="food-item-name">${f.n}</div><div class="food-item-meta">${f.cat} · B:${f.p}g W:${f.c}g T:${f.f}g / 100g</div></div>
+        <div class="food-item-kcal">${f.k} kcal</div>
+      </div>`).join('') + `<div class="food-drop-hd" style="margin-top:4px">🌐 Szukam w Open Food Facts...</div>`;
+  }
+  // Then search Open Food Facts after debounce
+  _foodTimer=setTimeout(()=>searchOFF(q),600);
+}
+
+async function searchOFF(q){
+  const drop=document.getElementById('food-drop');if(!drop)return;
+  try{
+    const url=`https://world.openfoodfacts.org/cgi/search.pl?search_terms=${encodeURIComponent(q)}&search_simple=1&action=process&json=1&page_size=8&fields=product_name,nutriments,quantity,brands&lc=pl&cc=pl`;
+    const res=await fetch(url);
+    if(!res.ok)return;
+    const data=await res.json();
+    const products=(data.products||[]).filter(p=>{
+      const n=p.nutriments;
+      return p.product_name&&n&&(n['energy-kcal_100g']||n['energy-kcal']);
+    }).slice(0,8);
+    if(!products.length)return;
+    // Merge with local results
+    const local=window._foodRes||[];
+    const offItems=products.map((p,i)=>{
+      const n=p.nutriments;
+      return{
+        n:p.product_name+(p.brands?' ('+p.brands.split(',')[0]+')':''),
+        k:Math.round(n['energy-kcal_100g']||n['energy-kcal']||0),
+        p:parseFloat((n['proteins_100g']||0).toFixed(1)),
+        c:parseFloat((n['carbohydrates_100g']||0).toFixed(1)),
+        f:parseFloat((n['fat_100g']||0).toFixed(1)),
+        cat:'OFF',qty:p.quantity||'100g'
+      };
+    });
+    const allItems=[...local,...offItems];
+    window._foodRes=allItems;
+    drop.classList.add('on');
+    drop.innerHTML=
+      (local.length?`<div class="food-drop-hd">📦 Lokalna baza (${local.length})</div>`+
+        local.map((f,i)=>`<div class="food-item" onclick="pickFood(${i})">
+          <div><div class="food-item-name">${f.n}</div><div class="food-item-meta">${f.cat} · B:${f.p}g W:${f.c}g T:${f.f}g / 100g</div></div>
+          <div class="food-item-kcal">${f.k} kcal</div>
+        </div>`).join(''):'') +
+      (offItems.length?`<div class="food-drop-hd">🌐 Open Food Facts (${offItems.length})</div>`+
+        offItems.map((f,i)=>`<div class="food-item" onclick="pickFood(${local.length+i})">
+          <div><div class="food-item-name">${f.n}</div><div class="food-item-meta">B:${f.p}g W:${f.c}g T:${f.f}g / 100g · ${f.qty}</div></div>
+          <div class="food-item-kcal">${f.k} kcal</div>
+        </div>`).join(''):'');
+  }catch(e){console.log('OFF search error:',e);}
 }
 
 function pickFood(i){
   const f=(window._foodRes||[])[i];if(!f)return;
-  const portion=parseFloat(prompt(`Ile gramów "${f.n}"?`,'100'))||100;
+  const portion=parseFloat(prompt(`Ile gramów/ml "${f.n}"?
+(Wartości dla 100g)`,'100'))||100;
   const r=portion/100;
   addMealEntry(f.n+' '+portion+'g',Math.round(f.k*r),+(f.p*r).toFixed(1),+(f.c*r).toFixed(1),+(f.f*r).toFixed(1));
   const inp=document.getElementById('food-q');if(inp)inp.value='';
   const drop=document.getElementById('food-drop');if(drop){drop.classList.remove('on');drop.innerHTML='';}
 }
-
-function toggleFoodManual(){const el=document.getElementById('food-manual');if(el)el.style.display=el.style.display==='none'?'block':'none';}
 
 async function addMealManual(){
   const name=(document.getElementById('fm-name')?.value||'').trim();if(!name)return;
@@ -2198,7 +2296,8 @@ function quickMeal(name,kcal,p,c,f){addMealEntry(name,kcal,p,c,f);}
 
 async function addMealEntry(name,kcal,p,c,f){
   const date=document.getElementById('nutr-date')?.value||td();
-  const entry={user_id:U.id,name,kcal,protein_g:p,carbs_g:c,fat_g:f,date};
+  const mealType=document.getElementById('meal-type-sel')?.value||'inne';
+  const entry={user_id:U.id,name,kcal,protein_g:p,carbs_g:c,fat_g:f,date,meal_type:mealType};
   try{const{data}=await SB.from('fit_meals').insert(entry).select().single();FIT.meals.unshift(data);}
   catch(e){FIT.meals.unshift({...entry,id:Date.now()});}
   ss();renderNutrition();
@@ -2227,12 +2326,30 @@ function renderNutrition(){
   setBar('bar-c','pv-c',totC/gC*100,Math.round(totC)+'g');
   setBar('bar-f','pv-f',totF/gF*100,Math.round(totF)+'g');
   const lEl=document.getElementById('meals-list');
-  if(lEl)lEl.innerHTML=meals.length?meals.map(m=>`<div class="meal-row">
-    <div class="meal-ic">🍽️</div>
-    <div style="flex:1;min-width:0"><div class="meal-name">${m.name}</div><div class="meal-macros">B:${m.protein_g}g W:${m.carbs_g}g T:${m.fat_g}g</div></div>
-    <div class="meal-kcal-val">${Math.round(m.kcal)} kcal</div>
-    <button class="btn btn-d" style="margin-left:8px;padding:5px 8px;font-size:11px" onclick="delMeal(${m.id})">✕</button>
-  </div>`).join(''):'<div class="empty">Brak posiłków</div>';
+  if(lEl){
+    if(!meals.length){lEl.innerHTML='<div class="empty">Brak posiłków</div>';}
+    else{
+      const MEAL_LABELS={sniadanie:'🌅 Śniadanie',ii_sniadanie:'🥪 II Śniadanie',obiad:'🍽 Obiad',przekaska:'🍎 Przekąska',kolacja:'🌙 Kolacja',inne:'📦 Inne'};
+      const MEAL_ORDER=['sniadanie','ii_sniadanie','obiad','przekaska','kolacja','inne'];
+      const byType={};meals.forEach(m=>{const t=m.meal_type||'inne';if(!byType[t])byType[t]=[];byType[t].push(m);});
+      lEl.innerHTML=MEAL_ORDER.filter(t=>byType[t]).map(t=>{
+        const tMeals=byType[t];
+        const tKcal=tMeals.reduce((s,m)=>s+parseFloat(m.kcal||0),0);
+        return`<div style="margin-bottom:14px">
+          <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;display:flex;justify-content:space-between">
+            <span>${MEAL_LABELS[t]||t}</span>
+            <span style="color:var(--yellow)">${Math.round(tKcal)} kcal</span>
+          </div>
+          ${tMeals.map(m=>`<div class="meal-row">
+            <div class="meal-ic">🍽️</div>
+            <div style="flex:1;min-width:0"><div class="meal-name">${m.name}</div><div class="meal-macros">B:${m.protein_g}g W:${m.carbs_g}g T:${m.fat_g}g</div></div>
+            <div class="meal-kcal-val">${Math.round(m.kcal)} kcal</div>
+            <button class="btn btn-d" style="margin-left:8px;padding:5px 8px;font-size:11px" onclick="delMeal(${m.id})">✕</button>
+          </div>`).join('')}
+        </div>`;
+      }).join('');
+    }
+  }
   // weekly chart
   const now=new Date();const days7=Array.from({length:7},(_,i)=>{const d=new Date(now);d.setDate(now.getDate()-6+i);return d.toISOString().split('T')[0];});
   const kcals=days7.map(d=>FIT.meals.filter(m=>m.date===d).reduce((s,m)=>s+parseFloat(m.kcal||0),0));
