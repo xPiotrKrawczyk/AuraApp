@@ -272,6 +272,119 @@ select.inp option{background:var(--surf2)}
   .budget-rule{grid-template-columns:1fr}
 }
 @media(max-width:480px){.g4{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr}.hdot{width:22px;height:22px}.calc-btn{padding:13px;font-size:15px}}
+
+/* ════════════════════════════
+   FITNESS v3
+════════════════════════════ */
+.fit-nav{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap}
+.fit-nav-btn{padding:9px 18px;border-radius:10px;border:1px solid var(--bord);background:var(--surf2);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.15s}
+.fit-nav-btn.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(124,92,252,.3)}
+.fit-nav-btn:hover:not(.on){border-color:var(--acc);color:var(--acc2)}
+.fit-sec{display:none}.fit-sec.on{display:block}
+
+/* Plan cards */
+.plan-card{background:var(--surf2);border-radius:14px;padding:18px;margin-bottom:10px;border:1px solid var(--bord);transition:.2s;cursor:pointer;display:flex;align-items:center;gap:16px}
+.plan-card:hover{border-color:var(--acc);transform:translateY(-1px)}
+.plan-card.active{border-color:var(--acc);background:rgba(124,92,252,.06)}
+.plan-emoji{font-size:30px;line-height:1;flex-shrink:0}
+.plan-body{flex:1;min-width:0}
+.plan-name{font-size:15px;font-weight:600;margin-bottom:3px}
+.plan-desc{font-size:12px;color:var(--muted);margin-bottom:8px}
+.plan-meta{display:flex;gap:8px;flex-wrap:wrap}
+.plan-pill{font-size:10px;font-weight:600;padding:3px 9px;border-radius:100px;background:var(--surf3);color:var(--muted)}
+.plan-pill.acc{background:rgba(124,92,252,.14);color:var(--acc2)}
+.plan-actions{display:flex;gap:6px;flex-shrink:0}
+
+/* Plan detail / session */
+.session-header{background:linear-gradient(135deg,rgba(124,92,252,.12),rgba(192,132,252,.06));border:1px solid rgba(124,92,252,.2);border-radius:14px;padding:20px;margin-bottom:16px}
+.session-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500;margin-bottom:4px}
+.session-meta{font-size:13px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.session-stat{display:flex;align-items:center;gap:5px}
+.session-stat-val{font-weight:600;color:var(--acc2)}
+
+/* Exercise rows in plan */
+.ex-row{background:var(--surf2);border-radius:12px;padding:13px 16px;margin-bottom:8px;border:1px solid var(--bord)}
+.ex-row-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.ex-row-ic{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ex-row-name{flex:1;font-size:14px;font-weight:600}
+.ex-row-type{font-size:10px;font-weight:600;padding:3px 8px;border-radius:100px}
+.t-strength{background:rgba(124,92,252,.14);color:var(--acc2)}
+.t-cardio{background:rgba(56,200,240,.12);color:var(--acc3)}
+.t-yoga{background:rgba(34,201,138,.12);color:var(--green)}
+.t-other{background:rgba(251,191,36,.12);color:var(--yellow)}
+.ex-sets-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ex-set-box{background:var(--surf3);border-radius:8px;padding:7px;text-align:center}
+.ex-set-lbl{font-size:10px;color:var(--muted);margin-bottom:2px}
+.ex-set-val{font-size:13px;font-weight:600}
+
+/* History */
+.hist-day{margin-bottom:16px}
+.hist-day-hd{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.hist-day-hd::after{content:'';flex:1;height:1px;background:var(--bord)}
+.hist-session-card{background:var(--surf2);border-radius:12px;padding:14px 16px;margin-bottom:8px;border:1px solid var(--bord)}
+.hist-session-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
+.hist-session-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(124,92,252,.1)}
+.hist-session-name{font-size:14px;font-weight:600;flex:1}
+.hist-session-stats{display:flex;gap:10px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.hist-stat-v{font-weight:600;color:var(--acc2)}
+
+/* Body measurements */
+.body-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.body-card{background:var(--surf2);border-radius:12px;padding:14px;border:1px solid var(--bord);text-align:center}
+.body-card-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.body-card-val{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500}
+.body-card-unit{font-size:12px;color:var(--muted)}
+.body-card-diff{font-size:11px;margin-top:4px;font-weight:500}
+.diff-better{color:var(--green)}.diff-worse{color:var(--red)}
+
+/* Nutrition */
+.nutr-search{position:relative;margin-bottom:12px}
+.nutr-search input{width:100%;padding:12px 16px 12px 40px;background:var(--surf2);border:1.5px solid var(--bord);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:.15s}
+.nutr-search input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(124,92,252,.1)}
+.nutr-search::before{content:'🔍';position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none}
+.food-drop{background:var(--surf);border:1px solid var(--bord);border-radius:12px;overflow:hidden;margin-bottom:10px;display:none;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.food-drop.on{display:block}
+.food-drop-hd{padding:8px 14px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--bord);background:var(--surf2)}
+.food-item{padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--bord);display:flex;align-items:center;justify-content:space-between;transition:.12s}
+.food-item:last-child{border-bottom:none}
+.food-item:hover{background:var(--surf2)}
+.food-item-name{font-size:13px;font-weight:500;margin-bottom:2px}
+.food-item-meta{font-size:11px;color:var(--muted)}
+.food-item-kcal{font-size:14px;font-weight:700;color:var(--yellow);white-space:nowrap}
+.macro-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
+.macro-sum-card{background:var(--surf2);border-radius:12px;padding:14px;text-align:center;border:1px solid var(--bord)}
+.macro-sum-val{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:500;margin-bottom:2px}
+.macro-sum-lbl{font-size:11px;color:var(--muted)}
+.macro-progress{margin-bottom:16px}
+.macro-prog-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.macro-prog-lbl{font-size:12px;font-weight:500;min-width:80px}
+.macro-prog-bar{flex:1;height:8px;background:var(--surf3);border-radius:100px;overflow:hidden}
+.macro-prog-fill{height:100%;border-radius:100px;transition:width .4s}
+.macro-prog-val{font-size:12px;color:var(--muted);min-width:45px;text-align:right}
+.meal-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surf2);border-radius:10px;margin-bottom:6px}
+.meal-ic{width:32px;height:32px;border-radius:8px;background:rgba(251,191,36,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.meal-name{flex:1;font-size:13px;font-weight:500}
+.meal-macros{font-size:11px;color:var(--muted)}
+.meal-kcal-val{font-size:13px;font-weight:600;color:var(--yellow);white-space:nowrap}
+
+/* Tools */
+.tool-card{background:var(--surf2);border-radius:14px;padding:20px;border:1px solid var(--bord)}
+.tool-result{background:var(--surf3);border-radius:12px;padding:16px;margin-top:14px}
+.tool-result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+.tool-res-item{background:var(--surf2);border-radius:10px;padding:12px;text-align:center}
+.tool-res-val{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500;margin-bottom:3px}
+.tool-res-lbl{font-size:11px;color:var(--muted)}
+.bmi-badge{text-align:center;padding:14px;border-radius:10px;margin-bottom:12px}
+.bmi-num{font-family:'Fraunces',serif;font-size:2.5rem;font-weight:700}
+.bmi-label{font-size:14px;font-weight:600;margin-top:3px}
+.timer-wrap{text-align:center;padding:10px 0}
+.timer-dig{font-family:'Fraunces',serif;font-size:3.5rem;font-weight:700;letter-spacing:-2px;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.timer-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.rest-ring-c{display:flex;justify-content:center;margin:12px 0}
+.rest-presets-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
+.rp-btn{padding:7px 13px;background:var(--surf2);border:1px solid var(--bord);border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text);font-family:'DM Sans',sans-serif;transition:.15s}
+.rp-btn:hover,.rp-btn.on{background:var(--acc);color:#fff;border-color:transparent}
+.steps-ring-c{display:flex;justify-content:center;margin:10px 0}
 </style>
 </head>
 <body>
@@ -1506,464 +1619,7 @@ function exportPDF(){
   const now=new Date(),cur=CUR(),mTx=C.tx.filter(t=>{const d=new Date(t.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()});
   const inc=mTx.filter(t=>t.type==='income').reduce((s,t)=>s+parseFloat(t.amount),0),exp=mTx.filter(t=>t.type==='expense').reduce((s,t)=>s+parseFloat(t.amount),0);
   const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Aura Raport</title><style>body{font-family:sans-serif;padding:32px;color:#1a1635;max-width:800px;margin:0 auto}h1{color:#7c5cfc;margin-bottom:4px}p{color:#8b85b0;font-size:13px;margin-bottom:20px}.sum{display:flex;gap:20px;margin:16px 0;padding:16px;background:#f4f3ff;border-radius:8px}.si{text-align:center;flex:1}.sv{font-size:1.4rem;font-weight:700}.sl{font-size:12px;color:#8b85b0}table{width:100%;border-collapse:collapse;margin-top:16px}th{background:#f0eeff;padding:8px 12px;text-align:left;font-size:12px;color:#8b85b0}td{padding:8px 12px;border-bottom:1px solid #eee;font-size:13px}.inc{color:#22c98a;font-weight:600}.exp{color:#f87171;font-weight:600}
-/* ── MOBILE FIXES ── */
-html, body {
-  overflow-x: hidden;
-  max-width: 100%;
-}
-* {
-  min-width: 0;
-}
-.page {
-  overflow-x: hidden;
-}
-/* Fix inline forms on mobile - stack vertically */
-@media(max-width:768px) {
-  /* Extra bottom padding so content isn't hidden behind nav bar */
-  .page {
-    padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom) + 24px) !important;
-  }
-  .if {
-    flex-direction: column;
-    gap: 10px;
-  }
-  .ifg {
-    width: 100% !important;
-  }
-  .ifg .inp, .ifg input, .ifg select {
-    width: 100% !important;
-    min-width: 0 !important;
-    box-sizing: border-box;
-  }
-  .ifg button.btn {
-    width: 100%;
-    justify-content: center;
-  }
-  /* Fix stat cards overflow */
-  .sv {
-    font-size: 1.4rem !important;
-  }
-  /* Fix week box */
-  .week-stats {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  /* Fix card padding */
-  .card {
-    padding: 16px !important;
-  }
-  .sc {
-    padding: 14px 16px !important;
-  }
-  /* Fix transaction items */
-  .tx-item {
-    flex-wrap: nowrap;
-  }
-  .tx-name {
-    max-width: 120px;
-  }
-  /* Fix topbar buttons */
-  .tb-r .btn {
-    padding: 6px 8px !important;
-  }
-  /* Fix sh header wrapping */
-  .sh {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-  /* Fix stats grid */
-  .stats-g {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  /* Fix export bar */
-  .export-bar .btn {
-    flex: 1;
-    justify-content: center;
-  }
-  /* Fix budget rule cards */
-  .budget-rule {
-    grid-template-columns: 1fr !important;
-  }
-  /* Fix settings rows */
-  .settings-row-left {
-    min-width: 0;
-    flex: 1;
-  }
-  .settings-row {
-    gap: 10px;
-  }
-  /* Ensure main doesn't overflow */
-  .main {
-    overflow-x: hidden;
-    width: 100%;
-  }
-  /* Fix calc grid */
-  .calc-grid {
-    gap: 6px;
-  }
-  .calc-btn {
-    padding: 14px 8px !important;
-    font-size: 14px !important;
-  }
-  /* Fix note editor */
-  .note-editor {
-    min-height: 200px;
-  }
-  /* Fix g2 on small screens */
-  .g2 {
-    grid-template-columns: 1fr !important;
-  }
-  /* Fix recurring cards */
-  .rec-header {
-    flex-wrap: wrap;
-  }
-  .rec-status {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  /* Fix modal */
-  .modal {
-    padding: 20px 16px !important;
-    margin: 0 4px;
-  }
-}
-@media(max-width:400px) {
-  .pt {
-    font-size: 1.4rem !important;
-  }
-  .sv {
-    font-size: 1.2rem !important;
-  }
-  .g4 {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  .hab-dots {
-    gap: 3px;
-  }
-  .hdot {
-    width: 20px !important;
-    height: 20px !important;
-    font-size: 9px !important;
-  }
-}
-
-/* ── FITNESS MODULE ── */
-.fit-tabs{display:flex;background:var(--surf2);border-radius:12px;padding:4px;margin-bottom:22px;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border:1px solid var(--bord);width:100%}.fit-tabs::-webkit-scrollbar{display:none}
-.fit-tab{flex-shrink:0;padding:9px 14px;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;border-radius:9px;cursor:pointer;transition:.2s;white-space:nowrap}
-.fit-tab.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;box-shadow:0 2px 8px rgba(124,92,252,.3)}
-.fit-section{display:none}.fit-section.on{display:block}
-.ex-card{background:var(--surf2);border-radius:12px;padding:14px 16px;margin-bottom:8px;border:1px solid var(--bord);transition:.15s}.ex-card:hover{border-color:var(--acc);background:var(--surf3)}
-.ex-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.ex-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:rgba(124,92,252,.12)}
-.ex-name{font-size:14px;font-weight:600}
-.ex-cat{font-size:11px;color:var(--muted);margin-top:2px}
-.sets-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px}
-.set-row{background:var(--surf3);border-radius:8px;padding:8px;text-align:center}
-.set-num{font-size:10px;color:var(--muted);margin-bottom:4px}
-.set-val{font-size:14px;font-weight:600;color:var(--acc2)}
-.plan-day{background:var(--surf2);border-radius:12px;margin-bottom:8px;overflow:hidden;border:1px solid var(--bord);transition:.2s}
-.plan-day-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;transition:.15s}.plan-day-header:hover{background:var(--surf3)}
-.plan-day-title{font-size:14px;font-weight:600}
-.plan-day-sub{font-size:11px;color:var(--muted)}
-.plan-day-body{padding:0 16px 14px;display:none}
-.plan-day-body.open{display:block}
-.plan-ex-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bord)}
-.plan-ex-item:last-child{border-bottom:none}
-.plan-ex-name{flex:1;font-size:13px;font-weight:500}
-.plan-ex-sets{font-size:12px;color:var(--muted)}
-/* Timer */
-.timer-display{text-align:center;padding:32px 20px}
-.timer-time{font-family:'Fraunces',serif;font-size:4rem;font-weight:700;letter-spacing:-2px;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.timer-label{font-size:13px;color:var(--muted);margin-top:6px}
-.timer-btns{display:flex;gap:10px;justify-content:center;margin-top:20px}
-.timer-ring{width:200px;height:200px;margin:0 auto;position:relative}
-.timer-ring svg{transform:rotate(-90deg)}
-.timer-ring-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
-/* BMI */
-.bmi-result{text-align:center;padding:20px;border-radius:14px;margin-top:16px}
-.bmi-value{font-family:'Fraunces',serif;font-size:3rem;font-weight:700;margin-bottom:6px}
-.bmi-label{font-size:14px;font-weight:600;margin-bottom:4px}
-.bmi-range{font-size:12px;color:var(--muted)}
-/* Weight chart */
-.weight-entry{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surf2);border-radius:10px;margin-bottom:7px}
-.weight-date{font-size:12px;color:var(--muted);min-width:80px}
-.weight-val{font-size:15px;font-weight:600;color:var(--acc2)}
-.weight-diff{font-size:12px;font-weight:500}
-/* Macro */
-.macro-bar{height:12px;background:var(--surf3);border-radius:100px;overflow:hidden;margin:6px 0 2px;display:flex;gap:2px}
-.macro-seg{height:100%;border-radius:100px;transition:width .4s}
-.macro-legend{display:flex;gap:14px;flex-wrap:wrap}
-.macro-leg-item{display:flex;align-items:center;gap:5px;font-size:12px}
-.macro-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-/* Steps */
-.steps-ring{position:relative;width:160px;height:160px;margin:0 auto 16px}
-.steps-ring svg{transform:rotate(-90deg)}
-.steps-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.steps-val{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:700;color:var(--acc2)}
-.steps-lbl{font-size:11px;color:var(--muted)}
-/* Preset plans */
-.preset-card{background:var(--surf2);border-radius:14px;padding:18px;margin-bottom:10px;border:1px solid var(--bord);cursor:pointer;transition:.2s;display:flex;align-items:center;gap:14px}
-.preset-card:hover{border-color:var(--acc);background:var(--surf3);transform:translateY(-1px)}
-.preset-card:active{transform:scale(.98)}
-.preset-card-body{flex:1;min-width:0}
-.preset-header{display:flex;align-items:center;gap:12px;margin-bottom:0}
-.preset-ic{font-size:28px;flex-shrink:0}
-.preset-name{font-size:14px;font-weight:600;margin-bottom:2px}
-.preset-sub{font-size:12px;color:var(--muted);margin-bottom:8px}
-.preset-tags{display:flex;gap:5px;flex-wrap:wrap}
-.preset-tag{font-size:10px;font-weight:500;padding:3px 9px;border-radius:100px;background:rgba(124,92,252,.15);color:var(--acc2)}
-
-/* ══════════════════════════════════
-   FITNESS MODULE — FULL REBUILD
-══════════════════════════════════ */
-.fit-header{display:flex;align-items:center;gap:14px;margin-bottom:20px}
-.fit-header-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
-.fit-header-ic.purple{background:rgba(124,92,252,.15)}
-.fit-header-ic.green{background:rgba(34,201,138,.12)}
-.fit-header-ic.blue{background:rgba(56,200,240,.12)}
-.fit-header-ic.orange{background:rgba(249,115,22,.12)}
-.fit-title{font-family:'Fraunces',serif;font-size:1.1rem;font-weight:500}
-.fit-sub{font-size:12px;color:var(--muted);margin-top:2px}
-
-/* WORKOUT LOG */
-.wlog-day{margin-bottom:18px}
-.wlog-day-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.wlog-day-label::after{content:'';flex:1;height:1px;background:var(--bord)}
-.wlog-card{background:var(--surf2);border-radius:12px;padding:14px 16px;margin-bottom:8px;border:1px solid var(--bord);transition:.15s}
-.wlog-card:hover{border-color:rgba(124,92,252,.3);background:var(--surf3)}
-.wlog-card-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
-.wlog-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
-.wlog-name{font-size:14px;font-weight:600;flex:1}
-.wlog-type{font-size:10px;font-weight:600;padding:3px 8px;border-radius:100px}
-.wt-strength{background:rgba(124,92,252,.15);color:var(--acc2)}
-.wt-cardio{background:rgba(56,200,240,.12);color:var(--acc3)}
-.wt-yoga{background:rgba(34,201,138,.12);color:var(--green)}
-.wt-swim{background:rgba(249,115,22,.12);color:#fb923c}
-.wlog-sets{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:6px}
-.wlog-set-pill{background:var(--surf3);border-radius:8px;padding:6px 8px;text-align:center;font-size:11px}
-.wlog-set-n{color:var(--muted);margin-bottom:2px}
-.wlog-set-v{font-weight:600;font-size:13px;color:var(--text)}
-.wlog-note{font-size:12px;color:var(--muted);font-style:italic;margin-top:6px}
-.wlog-stats{display:flex;gap:12px;font-size:12px;color:var(--muted);margin-top:4px}
-.wlog-stat-val{font-weight:600;color:var(--acc2)}
-
-/* PLANS */
-.plan-card{background:var(--surf2);border-radius:14px;padding:18px;margin-bottom:12px;border:1px solid var(--bord);transition:.2s;cursor:pointer}
-.plan-card:hover{border-color:var(--acc);transform:translateY(-1px)}
-.plan-card.active-plan{border-color:var(--acc);background:rgba(124,92,252,.06)}
-.plan-card-top{display:flex;align-items:flex-start;gap:14px;margin-bottom:12px}
-.plan-emoji{font-size:32px;line-height:1;flex-shrink:0}
-.plan-card-info{flex:1;min-width:0}
-.plan-card-name{font-size:15px;font-weight:600;margin-bottom:3px}
-.plan-card-desc{font-size:12px;color:var(--muted);line-height:1.5}
-.plan-active-badge{font-size:10px;font-weight:600;padding:3px 9px;border-radius:100px;background:rgba(124,92,252,.18);color:var(--acc2);white-space:nowrap}
-.plan-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
-.plan-stat{background:var(--surf3);border-radius:8px;padding:8px;text-align:center}
-.plan-stat-val{font-size:14px;font-weight:600;color:var(--acc2)}
-.plan-stat-lbl{font-size:10px;color:var(--muted);margin-top:1px}
-.plan-days-strip{display:flex;gap:4px;flex-wrap:wrap}
-.plan-day-pill{font-size:10px;font-weight:500;padding:3px 8px;border-radius:100px;background:var(--surf3);color:var(--muted)}
-.plan-day-pill.active-day{background:rgba(124,92,252,.15);color:var(--acc2)}
-
-/* PLAN DETAIL */
-.plan-detail-day{background:var(--surf2);border-radius:12px;margin-bottom:8px;border:1px solid var(--bord);overflow:hidden}
-.plan-detail-day-hd{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;transition:.15s}
-.plan-detail-day-hd:hover{background:var(--surf3)}
-.plan-detail-day-name{font-size:13px;font-weight:600}
-.plan-detail-day-sub{font-size:11px;color:var(--muted)}
-.plan-detail-day-body{padding:0 16px 12px;display:none}
-.plan-detail-day-body.open{display:block}
-.plan-ex-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--bord)}
-.plan-ex-row:last-child{border-bottom:none}
-.plan-ex-icon{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
-.plan-ex-name{flex:1;font-size:13px;font-weight:500}
-.plan-ex-spec{font-size:11px;font-weight:600;background:var(--surf3);padding:3px 8px;border-radius:6px;white-space:nowrap}
-
-/* BODY MEASUREMENTS */
-.body-chart-wrap{position:relative;height:180px}
-.measure-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
-.measure-card{background:var(--surf2);border-radius:12px;padding:14px;border:1px solid var(--bord)}
-.measure-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
-.measure-val{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500}
-.measure-unit{font-size:12px;color:var(--muted)}
-.measure-diff{font-size:11px;margin-top:3px}
-.measure-diff.better{color:var(--green)}.measure-diff.worse{color:var(--red)}
-.measure-history-item{display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--surf2);border-radius:10px;margin-bottom:6px}
-.mhi-date{font-size:12px;color:var(--muted);min-width:90px}
-.mhi-vals{flex:1;display:flex;gap:12px;flex-wrap:wrap}
-.mhi-val{font-size:12px;font-weight:500}
-.mhi-val span{color:var(--muted);font-weight:400}
-.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
-.photo-slot{aspect-ratio:1;border-radius:10px;border:2px dashed var(--bord);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s;overflow:hidden;background:var(--surf2)}
-.photo-slot:hover{border-color:var(--acc);background:var(--surf3)}
-.photo-slot img{width:100%;height:100%;object-fit:cover;border-radius:8px}
-.photo-slot-label{font-size:11px;color:var(--muted);text-align:center}
-
-/* NUTRITION */
-.food-search-wrap{position:relative;margin-bottom:16px}
-.food-search-wrap input{width:100%;padding:11px 16px 11px 38px;background:var(--surf2);border:1px solid var(--bord);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:.15s}
-.food-search-wrap input:focus{border-color:var(--acc)}
-.food-search-wrap::before{content:'⊕';position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--muted);pointer-events:none}
-.food-results{background:var(--surf2);border:1px solid var(--bord);border-radius:10px;overflow:hidden;margin-bottom:12px;display:none}
-.food-results.open{display:block}
-.food-result-item{padding:10px 14px;cursor:pointer;transition:.12s;border-bottom:1px solid var(--bord);display:flex;align-items:center;justify-content:space-between}
-.food-result-item:last-child{border-bottom:none}
-.food-result-item:hover{background:var(--surf3)}
-.food-result-name{font-size:13px;font-weight:500}
-.food-result-meta{font-size:11px;color:var(--muted)}
-.food-result-kcal{font-size:13px;font-weight:600;color:var(--yellow)}
-.macro-ring-wrap{display:flex;justify-content:center;margin:16px 0}
-.macro-ring{position:relative;width:160px;height:160px}
-.macro-ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.macro-kcal-big{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:500;color:var(--yellow)}
-.macro-kcal-lbl{font-size:11px;color:var(--muted)}
-.macro-bars{display:flex;flex-direction:column;gap:8px}
-.macro-bar-row{display:flex;align-items:center;gap:10px}
-.macro-bar-label{font-size:12px;font-weight:500;min-width:90px}
-.macro-bar-track{flex:1;height:8px;background:var(--surf3);border-radius:100px;overflow:hidden}
-.macro-bar-fill{height:100%;border-radius:100px;transition:width .4s}
-.macro-bar-val{font-size:12px;color:var(--muted);min-width:50px;text-align:right}
-.meal-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surf2);border-radius:10px;margin-bottom:6px}
-.meal-ic{width:32px;height:32px;border-radius:8px;background:rgba(251,191,36,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.meal-name{flex:1;font-size:13px;font-weight:500}
-.meal-macros{font-size:11px;color:var(--muted)}
-.meal-kcal{font-size:13px;font-weight:600;color:var(--yellow);white-space:nowrap}
-
-/* TOOLS (BMI, Timer, Steps) */
-.tools-tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
-.tool-tab{padding:9px 16px;background:var(--surf2);border:1px solid var(--bord);border-radius:10px;font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;transition:.15s;font-family:'DM Sans',sans-serif}
-.tool-tab.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border-color:transparent}
-.tool-tab:hover:not(.on){border-color:var(--acc);color:var(--acc2)}
-.tool-section{display:none}.tool-section.on{display:block}
-.timer-big{font-family:'Fraunces',serif;font-size:3.5rem;font-weight:700;text-align:center;letter-spacing:-2px;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:20px 0 8px}
-.timer-sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:20px}
-.timer-btns-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
-.lap-item{display:flex;justify-content:space-between;padding:7px 12px;background:var(--surf2);border-radius:8px;margin-bottom:5px;font-size:13px}
-.lap-num{color:var(--muted)}.lap-time{font-weight:600;color:var(--acc2)}
-.rest-ring-wrap{display:flex;justify-content:center;margin:12px 0}
-.rest-presets{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
-.rest-preset-btn{padding:7px 14px;background:var(--surf2);border:1px solid var(--bord);border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text);font-family:'DM Sans',sans-serif;transition:.15s}
-.rest-preset-btn:hover{border-color:var(--acc);color:var(--acc2)}
-.rest-preset-btn.on{background:var(--acc);color:#fff;border-color:transparent}
-.bmi-scale{display:flex;height:10px;border-radius:100px;overflow:hidden;margin:12px 0}
-.bmi-scale-seg{flex:1}
-.bmi-pointer{position:relative;height:6px;margin-bottom:4px}
-.bmi-pointer-arrow{position:absolute;top:0;width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid var(--acc2);transform:translateX(-50%);transition:left .5s}
-.steps-big-ring{display:flex;justify-content:center;margin:12px 0}
-
-/* ════════════════════════════
-   FITNESS v3
-════════════════════════════ */
-.fit-nav{display:flex;gap:6px;margin-bottom:22px;flex-wrap:wrap}
-.fit-nav-btn{padding:9px 18px;border-radius:10px;border:1px solid var(--bord);background:var(--surf2);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.15s}
-.fit-nav-btn.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border-color:transparent;box-shadow:0 2px 10px rgba(124,92,252,.3)}
-.fit-nav-btn:hover:not(.on){border-color:var(--acc);color:var(--acc2)}
-.fit-sec{display:none}.fit-sec.on{display:block}
-
-/* Plan cards */
-.plan-card{background:var(--surf2);border-radius:14px;padding:18px;margin-bottom:10px;border:1px solid var(--bord);transition:.2s;cursor:pointer;display:flex;align-items:center;gap:16px}
-.plan-card:hover{border-color:var(--acc);transform:translateY(-1px)}
-.plan-card.active{border-color:var(--acc);background:rgba(124,92,252,.06)}
-.plan-emoji{font-size:30px;line-height:1;flex-shrink:0}
-.plan-body{flex:1;min-width:0}
-.plan-name{font-size:15px;font-weight:600;margin-bottom:3px}
-.plan-desc{font-size:12px;color:var(--muted);margin-bottom:8px}
-.plan-meta{display:flex;gap:8px;flex-wrap:wrap}
-.plan-pill{font-size:10px;font-weight:600;padding:3px 9px;border-radius:100px;background:var(--surf3);color:var(--muted)}
-.plan-pill.acc{background:rgba(124,92,252,.14);color:var(--acc2)}
-.plan-actions{display:flex;gap:6px;flex-shrink:0}
-
-/* Plan detail / session */
-.session-header{background:linear-gradient(135deg,rgba(124,92,252,.12),rgba(192,132,252,.06));border:1px solid rgba(124,92,252,.2);border-radius:14px;padding:20px;margin-bottom:16px}
-.session-title{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500;margin-bottom:4px}
-.session-meta{font-size:13px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
-.session-stat{display:flex;align-items:center;gap:5px}
-.session-stat-val{font-weight:600;color:var(--acc2)}
-
-/* Exercise rows in plan */
-.ex-row{background:var(--surf2);border-radius:12px;padding:13px 16px;margin-bottom:8px;border:1px solid var(--bord)}
-.ex-row-top{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.ex-row-ic{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.ex-row-name{flex:1;font-size:14px;font-weight:600}
-.ex-row-type{font-size:10px;font-weight:600;padding:3px 8px;border-radius:100px}
-.t-strength{background:rgba(124,92,252,.14);color:var(--acc2)}
-.t-cardio{background:rgba(56,200,240,.12);color:var(--acc3)}
-.t-yoga{background:rgba(34,201,138,.12);color:var(--green)}
-.t-other{background:rgba(251,191,36,.12);color:var(--yellow)}
-.ex-sets-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.ex-set-box{background:var(--surf3);border-radius:8px;padding:7px;text-align:center}
-.ex-set-lbl{font-size:10px;color:var(--muted);margin-bottom:2px}
-.ex-set-val{font-size:13px;font-weight:600}
-
-/* History */
-.hist-day{margin-bottom:16px}
-.hist-day-hd{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:8px}
-.hist-day-hd::after{content:'';flex:1;height:1px;background:var(--bord)}
-.hist-session-card{background:var(--surf2);border-radius:12px;padding:14px 16px;margin-bottom:8px;border:1px solid var(--bord)}
-.hist-session-top{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-.hist-session-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(124,92,252,.1)}
-.hist-session-name{font-size:14px;font-weight:600;flex:1}
-.hist-session-stats{display:flex;gap:10px;font-size:12px;color:var(--muted);flex-wrap:wrap}
-.hist-stat-v{font-weight:600;color:var(--acc2)}
-
-/* Body measurements */
-.body-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
-.body-card{background:var(--surf2);border-radius:12px;padding:14px;border:1px solid var(--bord);text-align:center}
-.body-card-lbl{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
-.body-card-val{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:500}
-.body-card-unit{font-size:12px;color:var(--muted)}
-.body-card-diff{font-size:11px;margin-top:4px;font-weight:500}
-.diff-better{color:var(--green)}.diff-worse{color:var(--red)}
-
-/* Nutrition */
-.nutr-search{position:relative;margin-bottom:12px}
-.nutr-search input{width:100%;padding:12px 16px 12px 40px;background:var(--surf2);border:1.5px solid var(--bord);border-radius:12px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:.15s}
-.nutr-search input:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(124,92,252,.1)}
-.nutr-search::before{content:'🔍';position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:14px;pointer-events:none}
-.food-drop{background:var(--surf);border:1px solid var(--bord);border-radius:12px;overflow:hidden;margin-bottom:10px;display:none;box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.food-drop.on{display:block}
-.food-drop-hd{padding:8px 14px;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--bord);background:var(--surf2)}
-.food-item{padding:11px 14px;cursor:pointer;border-bottom:1px solid var(--bord);display:flex;align-items:center;justify-content:space-between;transition:.12s}
-.food-item:last-child{border-bottom:none}
-.food-item:hover{background:var(--surf2)}
-.food-item-name{font-size:13px;font-weight:500;margin-bottom:2px}
-.food-item-meta{font-size:11px;color:var(--muted)}
-.food-item-kcal{font-size:14px;font-weight:700;color:var(--yellow);white-space:nowrap}
-.macro-summary{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
-.macro-sum-card{background:var(--surf2);border-radius:12px;padding:14px;text-align:center;border:1px solid var(--bord)}
-.macro-sum-val{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:500;margin-bottom:2px}
-.macro-sum-lbl{font-size:11px;color:var(--muted)}
-.macro-progress{margin-bottom:16px}
-.macro-prog-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.macro-prog-lbl{font-size:12px;font-weight:500;min-width:80px}
-.macro-prog-bar{flex:1;height:8px;background:var(--surf3);border-radius:100px;overflow:hidden}
-.macro-prog-fill{height:100%;border-radius:100px;transition:width .4s}
-.macro-prog-val{font-size:12px;color:var(--muted);min-width:45px;text-align:right}
-.meal-row{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--surf2);border-radius:10px;margin-bottom:6px}
-.meal-ic{width:32px;height:32px;border-radius:8px;background:rgba(251,191,36,.1);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.meal-name{flex:1;font-size:13px;font-weight:500}
-.meal-macros{font-size:11px;color:var(--muted)}
-.meal-kcal-val{font-size:13px;font-weight:600;color:var(--yellow);white-space:nowrap}
-
-/* Tools */
-.tool-card{background:var(--surf2);border-radius:14px;padding:20px;border:1px solid var(--bord)}
-.tool-result{background:var(--surf3);border-radius:12px;padding:16px;margin-top:14px}
-.tool-result-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
-.tool-res-item{background:var(--surf2);border-radius:10px;padding:12px;text-align:center}
-.tool-res-val{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:500;margin-bottom:3px}
-.tool-res-lbl{font-size:11px;color:var(--muted)}
-.bmi-badge{text-align:center;padding:14px;border-radius:10px;margin-bottom:12px}
-.bmi-num{font-family:'Fraunces',serif;font-size:2.5rem;font-weight:700}
-.bmi-label{font-size:14px;font-weight:600;margin-top:3px}
-.timer-wrap{text-align:center;padding:10px 0}
-.timer-dig{font-family:'Fraunces',serif;font-size:3.5rem;font-weight:700;letter-spacing:-2px;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
-.timer-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
-.rest-ring-c{display:flex;justify-content:center;margin:12px 0}
-.rest-presets-row{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
-.rp-btn{padding:7px 13px;background:var(--surf2);border:1px solid var(--bord);border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text);font-family:'DM Sans',sans-serif;transition:.15s}
-.rp-btn:hover,.rp-btn.on{background:var(--acc);color:#fff;border-color:transparent}
-.steps-ring-c{display:flex;justify-content:center;margin:10px 0}
-</style></head><body><h1>✦ Aura — Raport miesięczny</h1><p>${now.toLocaleDateString('pl-PL',{month:'long',year:'numeric'})} · ${P?.name||'—'}</p><div class="sum"><div class="si"><div class="sv" style="color:#22c98a">${f0(inc)} ${cur}</div><div class="sl">Przychody</div></div><div class="si"><div class="sv" style="color:#f87171">${f0(exp)} ${cur}</div><div class="sl">Wydatki</div></div><div class="si"><div class="sv" style="color:#7c5cfc">${f0(inc-exp)} ${cur}</div><div class="sl">Oszczędności</div></div></div><table><tr><th>Data</th><th>Nazwa</th><th>Kategoria</th><th>Kwota</th></tr>${mTx.map(t=>`<tr><td>${t.date}</td><td>${t.name}</td><td>${t.category}</td><td class="${t.type==='income'?'inc':'exp'}">${t.type==='income'?'+':'-'}${parseFloat(t.amount).toFixed(2)} ${cur}</td></tr>`).join('')}</table></body></html>`);
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Aura Raport</title>`);
   w.document.close();setTimeout(()=>w.print(),400);notif('⬇️','Raport PDF gotowy');
 }
 function sendMonthlyReport(){
