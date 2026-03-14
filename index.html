@@ -1998,15 +1998,15 @@ function renderPlanEditor(){
     <button class="btn btn-g" style="width:100%;justify-content:center;padding:12px;margin-top:4px" onclick="addPlanDay()">+ Dodaj dzień treningowy</button>`;
 }
 
+function wlTypeOptions(){return Object.entries(WL_LABELS).map(([k,v])=>'<option value="'+k+'">'+v+'</option>').join('');}
+function wlTypeOptionsSelected(sel){return Object.entries(WL_LABELS).map(([k,v])=>'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+v+'</option>').join('');}
 function renderDayEditor(day,di){
   const exHtml=(day.exercises||[]).map((ex,ei)=>`
     <div style="background:var(--surf3);border-radius:10px;padding:11px 13px;margin-bottom:7px;border:1px solid var(--bord)">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
         <span style="font-size:18px">${WL_IC[ex.t]||'💪'}</span>
         <span style="flex:1;font-size:13px;font-weight:600">${ex.n}</span>
-        <select class="inp" style="font-size:11px;width:80px;padding:4px 6px" onchange="editingPlan.days[${di}].exercises[${ei}].t=this.value;reRenderDay(${di})">
-          ${Object.entries(WL_LABELS).map(([k,v])=>`<option value="${k}"${ex.t===k?' selected':''}>${v}</option>`).join('')}
-        </select>
+        <select class="inp" style="font-size:11px;width:80px;padding:4px 6px" onchange="editingPlan.days[${di}].exercises[${ei}].t=this.value;reRenderDay(${di})">${wlTypeOptionsSelected(ex.t)}</select>
         <button class="btn btn-d" onclick="editingPlan.days[${di}].exercises.splice(${ei},1);reRenderDay(${di})" style="padding:4px 8px;font-size:11px">✕</button>
       </div>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
@@ -2029,7 +2029,7 @@ function renderDayEditor(day,di){
       <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px">+ Dodaj ćwiczenie</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
         <div style="flex:1;min-width:160px"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Nazwa</label><input class="inp" id="ep-en-${di}" placeholder="np. Wyciskanie sztangi" style="width:100%"></div>
-        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Typ</label><select class="inp" id="ep-et-${di}" style="width:90px">${Object.entries(WL_LABELS).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></div>
+        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Typ</label><select class="inp" id="ep-et-${di}" style="width:90px">${wlTypeOptions()}</select></div>
         <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Serie</label><input class="inp" type="number" id="ep-es-${di}" value="3" min="1" style="width:52px;text-align:center"></div>
         <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Powt.</label><input class="inp" type="number" id="ep-er-${di}" value="12" min="1" style="width:52px;text-align:center"></div>
         <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">kg</label><input class="inp" type="number" id="ep-ew-${di}" value="0" min="0" step="0.5" style="width:60px;text-align:center"></div>
