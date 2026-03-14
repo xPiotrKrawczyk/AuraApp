@@ -2,7 +2,7 @@
 <html lang="pl" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
 <title>Aura — Planer Życia i Finansów</title>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@300;500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -11,9 +11,9 @@
 [data-theme="dark"]{--bg:#0a0a0f;--surf:#13131a;--surf2:#1c1c26;--surf3:#252532;--bord:#2e2e3e;--text:#f0eeff;--muted:#7a7a9a;--shadow:rgba(0,0,0,.5)}
 [data-theme="light"]{--bg:#f4f3ff;--surf:#ffffff;--surf2:#f0eeff;--surf3:#e8e5ff;--bord:#ddd8ff;--text:#1a1635;--muted:#8b85b0;--shadow:rgba(100,80,200,.12)}
 :root{--acc:#7c5cfc;--acc2:#c084fc;--acc3:#38bdf8;--green:#22c98a;--red:#f87171;--yellow:#fbbf24;--r:16px;--rs:10px;--nav-h:72px}
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{height:100%}
-body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100%;overflow-x:hidden;transition:background .25s,color .25s}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;min-width:0}
+html{height:100%;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100%;overflow-x:hidden;width:100%;transition:background .25s,color .25s}
 
 /* ── LOADER ── */
 #loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
@@ -1222,7 +1222,143 @@ function exportPDF(){
   const now=new Date(),cur=CUR(),mTx=C.tx.filter(t=>{const d=new Date(t.date);return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear()});
   const inc=mTx.filter(t=>t.type==='income').reduce((s,t)=>s+parseFloat(t.amount),0),exp=mTx.filter(t=>t.type==='expense').reduce((s,t)=>s+parseFloat(t.amount),0);
   const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Aura Raport</title><style>body{font-family:sans-serif;padding:32px;color:#1a1635;max-width:800px;margin:0 auto}h1{color:#7c5cfc;margin-bottom:4px}p{color:#8b85b0;font-size:13px;margin-bottom:20px}.sum{display:flex;gap:20px;margin:16px 0;padding:16px;background:#f4f3ff;border-radius:8px}.si{text-align:center;flex:1}.sv{font-size:1.4rem;font-weight:700}.sl{font-size:12px;color:#8b85b0}table{width:100%;border-collapse:collapse;margin-top:16px}th{background:#f0eeff;padding:8px 12px;text-align:left;font-size:12px;color:#8b85b0}td{padding:8px 12px;border-bottom:1px solid #eee;font-size:13px}.inc{color:#22c98a;font-weight:600}.exp{color:#f87171;font-weight:600}</style></head><body><h1>✦ Aura — Raport miesięczny</h1><p>${now.toLocaleDateString('pl-PL',{month:'long',year:'numeric'})} · ${P?.name||'—'}</p><div class="sum"><div class="si"><div class="sv" style="color:#22c98a">${f0(inc)} ${cur}</div><div class="sl">Przychody</div></div><div class="si"><div class="sv" style="color:#f87171">${f0(exp)} ${cur}</div><div class="sl">Wydatki</div></div><div class="si"><div class="sv" style="color:#7c5cfc">${f0(inc-exp)} ${cur}</div><div class="sl">Oszczędności</div></div></div><table><tr><th>Data</th><th>Nazwa</th><th>Kategoria</th><th>Kwota</th></tr>${mTx.map(t=>`<tr><td>${t.date}</td><td>${t.name}</td><td>${t.category}</td><td class="${t.type==='income'?'inc':'exp'}">${t.type==='income'?'+':'-'}${parseFloat(t.amount).toFixed(2)} ${cur}</td></tr>`).join('')}</table></body></html>`);
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Aura Raport</title><style>body{font-family:sans-serif;padding:32px;color:#1a1635;max-width:800px;margin:0 auto}h1{color:#7c5cfc;margin-bottom:4px}p{color:#8b85b0;font-size:13px;margin-bottom:20px}.sum{display:flex;gap:20px;margin:16px 0;padding:16px;background:#f4f3ff;border-radius:8px}.si{text-align:center;flex:1}.sv{font-size:1.4rem;font-weight:700}.sl{font-size:12px;color:#8b85b0}table{width:100%;border-collapse:collapse;margin-top:16px}th{background:#f0eeff;padding:8px 12px;text-align:left;font-size:12px;color:#8b85b0}td{padding:8px 12px;border-bottom:1px solid #eee;font-size:13px}.inc{color:#22c98a;font-weight:600}.exp{color:#f87171;font-weight:600}
+/* ── MOBILE FIXES ── */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+* {
+  min-width: 0;
+}
+.page {
+  overflow-x: hidden;
+}
+/* Fix inline forms on mobile - stack vertically */
+@media(max-width:768px) {
+  .if {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ifg {
+    width: 100% !important;
+  }
+  .ifg .inp, .ifg input, .ifg select {
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box;
+  }
+  .ifg button.btn {
+    width: 100%;
+    justify-content: center;
+  }
+  /* Fix stat cards overflow */
+  .sv {
+    font-size: 1.4rem !important;
+  }
+  /* Fix week box */
+  .week-stats {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  /* Fix card padding */
+  .card {
+    padding: 16px !important;
+  }
+  .sc {
+    padding: 14px 16px !important;
+  }
+  /* Fix transaction items */
+  .tx-item {
+    flex-wrap: nowrap;
+  }
+  .tx-name {
+    max-width: 120px;
+  }
+  /* Fix topbar buttons */
+  .tb-r .btn {
+    padding: 6px 8px !important;
+  }
+  /* Fix sh header wrapping */
+  .sh {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  /* Fix stats grid */
+  .stats-g {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  /* Fix export bar */
+  .export-bar .btn {
+    flex: 1;
+    justify-content: center;
+  }
+  /* Fix budget rule cards */
+  .budget-rule {
+    grid-template-columns: 1fr !important;
+  }
+  /* Fix settings rows */
+  .settings-row-left {
+    min-width: 0;
+    flex: 1;
+  }
+  .settings-row {
+    gap: 10px;
+  }
+  /* Ensure main doesn't overflow */
+  .main {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  /* Fix calc grid */
+  .calc-grid {
+    gap: 6px;
+  }
+  .calc-btn {
+    padding: 14px 8px !important;
+    font-size: 14px !important;
+  }
+  /* Fix note editor */
+  .note-editor {
+    min-height: 200px;
+  }
+  /* Fix g2 on small screens */
+  .g2 {
+    grid-template-columns: 1fr !important;
+  }
+  /* Fix recurring cards */
+  .rec-header {
+    flex-wrap: wrap;
+  }
+  .rec-status {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  /* Fix modal */
+  .modal {
+    padding: 20px 16px !important;
+    margin: 0 4px;
+  }
+}
+@media(max-width:400px) {
+  .pt {
+    font-size: 1.4rem !important;
+  }
+  .sv {
+    font-size: 1.2rem !important;
+  }
+  .g4 {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .hab-dots {
+    gap: 3px;
+  }
+  .hdot {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 9px !important;
+  }
+}
+</style></head><body><h1>✦ Aura — Raport miesięczny</h1><p>${now.toLocaleDateString('pl-PL',{month:'long',year:'numeric'})} · ${P?.name||'—'}</p><div class="sum"><div class="si"><div class="sv" style="color:#22c98a">${f0(inc)} ${cur}</div><div class="sl">Przychody</div></div><div class="si"><div class="sv" style="color:#f87171">${f0(exp)} ${cur}</div><div class="sl">Wydatki</div></div><div class="si"><div class="sv" style="color:#7c5cfc">${f0(inc-exp)} ${cur}</div><div class="sl">Oszczędności</div></div></div><table><tr><th>Data</th><th>Nazwa</th><th>Kategoria</th><th>Kwota</th></tr>${mTx.map(t=>`<tr><td>${t.date}</td><td>${t.name}</td><td>${t.category}</td><td class="${t.type==='income'?'inc':'exp'}">${t.type==='income'?'+':'-'}${parseFloat(t.amount).toFixed(2)} ${cur}</td></tr>`).join('')}</table></body></html>`);
   w.document.close();setTimeout(()=>w.print(),400);notif('⬇️','Raport PDF gotowy');
 }
 function sendMonthlyReport(){
