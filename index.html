@@ -88,7 +88,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 
 /* MORE MENU (mobile) */
 .more-drawer{display:none;position:fixed;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom));left:0;right:0;background:var(--surf);border-top:1px solid var(--bord);border-radius:20px 20px 0 0;z-index:199;padding:12px 16px 16px;transform:translateY(100%);transition:transform .3s cubic-bezier(.34,1.2,.64,1);box-shadow:0 -8px 32px var(--shadow)}
-.more-drawer.open{transform:translateY(0)}
+.more-drawer.open{display:block;transform:translateY(0)}
 .more-drawer-grip{width:36px;height:4px;background:var(--bord);border-radius:100px;margin:0 auto 16px}
 .more-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .more-item{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;background:var(--surf2);border-radius:12px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--muted);transition:.15s}
@@ -938,23 +938,26 @@ select.inp option{background:var(--surf2)}
                 <input class="inp" type="number" id="kcal-goal-inp" value="2000" oninput="renderNutrition()" style="width:80px;font-size:13px">
               </div>
             </div>
-            <div class="macro-ring-wrap">
-              <div class="macro-ring">
-                <svg width="160" height="160" viewBox="0 0 160 160">
-                  <circle cx="80" cy="80" r="68" fill="none" stroke="var(--surf3)" stroke-width="10"/>
-                  <circle id="kcal-ring" cx="80" cy="80" r="68" fill="none" stroke="url(#kg)" stroke-width="10" stroke-linecap="round" stroke-dasharray="427" stroke-dashoffset="427" style="transform:rotate(-90deg);transform-origin:80px 80px"/>
+            <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px;flex-wrap:wrap">
+              <div style="position:relative;width:120px;height:120px;flex-shrink:0">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="var(--surf3)" stroke-width="8"/>
+                  <circle id="kcal-ring" cx="60" cy="60" r="50" fill="none" stroke="url(#kg)" stroke-width="8" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" style="transform:rotate(-90deg);transform-origin:60px 60px"/>
                   <defs><linearGradient id="kg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f97316"/></linearGradient></defs>
                 </svg>
-                <div class="macro-ring-text">
-                  <div class="macro-kcal-big" id="macro-kcal-total">0</div>
-                  <div class="macro-kcal-lbl">/ <span id="macro-kcal-goal-lbl">2000</span> kcal</div>
+                <div style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center">
+                  <div style="font-family:'Fraunces',serif;font-size:1.4rem;font-weight:700;color:var(--yellow)" id="macro-kcal-total">0</div>
+                  <div style="font-size:10px;color:var(--muted)">kcal</div>
                 </div>
               </div>
-            </div>
-            <div class="macro-bars">
-              <div class="macro-bar-row"><div class="macro-bar-label" style="color:var(--acc2)">Białko</div><div class="macro-bar-track"><div class="macro-bar-fill" id="bar-protein" style="background:var(--acc2)"></div></div><div class="macro-bar-val" id="val-protein">0g</div></div>
-              <div class="macro-bar-row"><div class="macro-bar-label" style="color:var(--green)">Węglowodany</div><div class="macro-bar-track"><div class="macro-bar-fill" id="bar-carbs" style="background:var(--green)"></div></div><div class="macro-bar-val" id="val-carbs">0g</div></div>
-              <div class="macro-bar-row"><div class="macro-bar-label" style="color:var(--red)">Tłuszcze</div><div class="macro-bar-track"><div class="macro-bar-fill" id="bar-fat" style="background:var(--red)"></div></div><div class="macro-bar-val" id="val-fat">0g</div></div>
+              <div style="flex:1;min-width:160px">
+                <div style="font-size:13px;color:var(--muted);margin-bottom:8px">Cel: <strong style="color:var(--text)" id="macro-kcal-goal-lbl">2000</strong> kcal · Pozostało: <strong id="macro-kcal-left" style="color:var(--green)">2000</strong></div>
+                <div class="macro-bars">
+                  <div class="macro-bar-row"><div class="macro-bar-label" style="color:var(--acc2)">Białko</div><div class="macro-bar-track"><div class="macro-bar-fill" id="bar-protein" style="background:var(--acc2)"></div></div><div class="macro-bar-val" id="val-protein">0g</div></div>
+                  <div class="macro-bar-row"><div class="macro-bar-label" style="color:var(--green)">Węglow.</div><div class="macro-bar-track"><div class="macro-bar-fill" id="bar-carbs" style="background:var(--green)"></div></div><div class="macro-bar-val" id="val-carbs">0g</div></div>
+                  <div class="macro-bar-row"><div class="macro-bar-label" style="color:var(--red)">Tłuszcze</div><div class="macro-bar-track"><div class="macro-bar-fill" id="bar-fat" style="background:var(--red)"></div></div><div class="macro-bar-val" id="val-fat">0g</div></div>
+                </div>
+              </div>
             </div>
           </div>
           <div class="card">
@@ -1153,6 +1156,38 @@ select.inp option{background:var(--surf2)}
   </div>
 </div>
 
+
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="mob-nav" id="mob-nav">
+    <div class="mob-nav-inner">
+      <button class="mn-item on" id="mn-dashboard" onclick="nav('dashboard')"><span class="mn-ic">⊞</span>Pulpit</button>
+      <button class="mn-item" id="mn-transactions" onclick="nav('transactions')"><span class="mn-ic">⇄</span>Finanse</button>
+      <button class="mn-item" id="mn-tasks" onclick="nav('tasks')"><span class="mn-ic">✓</span>Zadania</button>
+      <button class="mn-item" id="mn-habits" onclick="nav('habits')"><span class="mn-ic">◈</span>Nawyki</button>
+      <button class="mn-item" id="mn-more" onclick="toggleMore()"><span class="mn-ic">⋯</span>Więcej</button>
+    </div>
+  </nav>
+
+  <!-- MORE DRAWER -->
+  <div class="more-overlay" id="more-overlay" onclick="closeMore()"></div>
+  <div class="more-drawer" id="more-drawer">
+    <div class="more-drawer-grip"></div>
+    <div class="more-grid">
+      <button class="more-item" onclick="nav('fit-workout');closeMore()"><span class="more-ic">⊕</span>Trening</button>
+      <button class="more-item" onclick="nav('fit-plans');closeMore()"><span class="more-ic">▤</span>Plany</button>
+      <button class="more-item" onclick="nav('fit-body');closeMore()"><span class="more-ic">○</span>Pomiary</button>
+      <button class="more-item" onclick="nav('fit-nutrition');closeMore()"><span class="more-ic">◍</span>Żywienie</button>
+      <button class="more-item" onclick="nav('calendar');closeMore()"><span class="more-ic">◷</span>Kalendarz</button>
+      <button class="more-item" onclick="nav('stats');closeMore()"><span class="more-ic">▲</span>Statystyki</button>
+      <button class="more-item" onclick="nav('notes');closeMore()"><span class="more-ic">≡</span>Notatki</button>
+      <button class="more-item" onclick="nav('budget');closeMore()"><span class="more-ic">◉</span>Budżet</button>
+      <button class="more-item" onclick="nav('goals');closeMore()"><span class="more-ic">◎</span>Cele</button>
+      <button class="more-item" onclick="nav('settings');closeMore()"><span class="more-ic">⚙</span>Ustawienia</button>
+    </div>
+  </div>
+
+</div><!-- /#app -->
 
 <div class="saving" id="saving">✓ Zapisano</div>
 
@@ -2253,16 +2288,27 @@ function renderPlanDaysEditor(){
         <button class="btn btn-d" onclick="FIT.newPlanDays.splice(${di},1);renderPlanDaysEditor()" style="padding:5px 9px;font-size:11px">Usuń dzień</button>
       </div>
       ${day.exercises.map((ex,ei)=>`
-        <div class="plan-ex-row">
-          <div class="plan-ex-icon" style="background:rgba(124,92,252,.1)">${WL_TYPES[ex.t]?.ic||'💪'}</div>
-          <span class="plan-ex-name">${ex.n}</span>
-          <select class="inp" style="font-size:11px;width:90px" onchange="FIT.newPlanDays[${di}].exercises[${ei}].t=this.value">
-            ${Object.entries(WL_TYPES).map(([k,v])=>`<option value="${k}" ${ex.t===k?'selected':''}>${v.label}</option>`).join('')}
-          </select>
-          <input class="inp" type="number" value="${ex.s}" min="1" style="width:50px" onchange="FIT.newPlanDays[${di}].exercises[${ei}].s=+this.value" title="Serie">
-          <input class="inp" type="number" value="${ex.r}" min="1" style="width:50px" onchange="FIT.newPlanDays[${di}].exercises[${ei}].r=+this.value" title="Powt.">
-          <input class="inp" type="number" value="${ex.w}" min="0" style="width:55px" onchange="FIT.newPlanDays[${di}].exercises[${ei}].w=+this.value" title="Ciężar kg">
-          <button class="btn btn-d" onclick="FIT.newPlanDays[${di}].exercises.splice(${ei},1);renderPlanDaysEditor()" style="padding:4px 7px;font-size:10px">✕</button>
+        <div style="background:var(--surf3);border-radius:10px;padding:10px 12px;margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <div style="width:28px;height:28px;border-radius:7px;background:rgba(124,92,252,.12);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">${WL_TYPES[ex.t]?.ic||'💪'}</div>
+          <span style="flex:1;font-size:13px;font-weight:600;min-width:100px">${ex.n}</span>
+          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+            <select class="inp" style="font-size:11px;padding:5px 8px;width:85px" onchange="FIT.newPlanDays[${di}].exercises[${ei}].t=this.value">
+              ${Object.entries(WL_TYPES).map(([k,v])=>`<option value="${k}" ${ex.t===k?'selected':''}>${v.label}</option>`).join('')}
+            </select>
+            <div style="display:flex;align-items:center;gap:4px">
+              <input class="inp" type="number" value="${ex.s}" min="1" style="width:46px;padding:5px 8px;text-align:center" onchange="FIT.newPlanDays[${di}].exercises[${ei}].s=+this.value">
+              <span style="font-size:11px;color:var(--muted)">serii</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <input class="inp" type="number" value="${ex.r}" min="1" style="width:46px;padding:5px 8px;text-align:center" onchange="FIT.newPlanDays[${di}].exercises[${ei}].r=+this.value">
+              <span style="font-size:11px;color:var(--muted)">powt.</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:4px">
+              <input class="inp" type="number" value="${ex.w}" min="0" style="width:50px;padding:5px 8px;text-align:center" onchange="FIT.newPlanDays[${di}].exercises[${ei}].w=+this.value">
+              <span style="font-size:11px;color:var(--muted)">kg</span>
+            </div>
+          </div>
+          <button class="btn btn-d" onclick="FIT.newPlanDays[${di}].exercises.splice(${ei},1);renderPlanDaysEditor()" style="padding:5px 9px;font-size:11px">✕</button>
         </div>`).join('')}
       <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
         <input class="inp" id="new-ex-name-${di}" placeholder="Nazwa ćwiczenia" style="flex:1;min-width:140px">
@@ -2545,6 +2591,12 @@ function searchFood(q){
   </div>`).join('');
 }
 
+function selectFoodIdx(idx, q){
+  const results=window._lastFoodResults||FOOD_DB.filter(f=>f.n.toLowerCase().includes(q.toLowerCase())).slice(0,8);
+  const f=results[idx];
+  if(!f)return;
+  selectFood(f);
+}
 function selectFood(f){
   // Show portion dialog
   const portion=parseFloat(prompt(`Ile gramów / porcji "${f.n}"?\n(Wartości podane dla 100g lub 1 porcji)`, '100'))||100;
@@ -2597,6 +2649,8 @@ function renderNutrition(){
   if(ktEl) ktEl.textContent=Math.round(totK);
   const kgEl=document.getElementById('macro-kcal-goal-lbl');
   if(kgEl) kgEl.textContent=goal;
+  const klEl=document.getElementById('macro-kcal-left');
+  if(klEl){const rem=goal-Math.round(totK);klEl.textContent=Math.max(0,rem);klEl.style.color=rem<0?'var(--red)':'var(--green)';}
   // Bars
   const goalP=Math.round(goal*0.3/4),goalC=Math.round(goal*0.4/4),goalF=Math.round(goal*0.3/9);
   const setBar=(id,val,id2,valEl)=>{const el=document.getElementById(id);if(el)el.style.width=Math.min(100,val/goalP*100)+'%';const ve=document.getElementById(valEl);if(ve)ve.textContent=Math.round(val)+'g';};
