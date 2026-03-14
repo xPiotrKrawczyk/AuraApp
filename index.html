@@ -1305,7 +1305,19 @@ function nav(p){
   document.querySelectorAll('.ni').forEach(n=>{if(n.getAttribute('onclick')?.includes("'"+p+"'"))n.classList.add('on')});
   const mnId=MOB_NAV_PAGES[p];if(mnId)document.getElementById(mnId)?.classList.add('on');
   closeSb();closeMore();
-  ({dashboard:renderDash,stats:renderStats,transactions:renderTx,budget:renderBudget,goals:renderGoals,tasks:renderTasks,habits:renderHabits,calendar:renderCal,recurring:renderRec,notes:renderNotes,calculator:()=>{},rule503020:renderRule,settings:updateSettingsUI,})[p]?.();
+  const navRenders={
+    dashboard:renderDash, stats:renderStats, transactions:renderTx,
+    budget:renderBudget, goals:renderGoals, tasks:renderTasks,
+    habits:renderHabits, calendar:renderCal, recurring:renderRec,
+    notes:renderNotes, calculator:()=>{}, rule503020:renderRule,
+    settings:updateSettingsUI,
+    'fit-workout':()=>renderWL(),
+    'fit-plans':()=>showPlansView(),
+    'fit-body':()=>{renderBodyMeasures();renderPhotos();},
+    'fit-nutrition':()=>renderNutrition(),
+    'fit-tools':()=>toolTab('bmi'),
+  };
+  if(navRenders[p]) navRenders[p]();
 }
 function toggleSb(){document.getElementById('sidebar').classList.toggle('on');document.getElementById('overlay').classList.toggle('on')}
 function closeSb(){document.getElementById('sidebar').classList.remove('on');document.getElementById('overlay').classList.remove('on')}
@@ -1408,6 +1420,7 @@ function chMonth(d){calM+=d;if(calM<0){calM=11;calY--}if(calM>11){calM=0;calY++}
 async function addEvent(){const name=document.getElementById('ev-name').value.trim(),date=document.getElementById('ev-date').value,desc=document.getElementById('ev-desc').value.trim();if(!name||!date)return;const{data}=await SB.from('events').insert({user_id:U.id,name,date,description:desc}).select().single();C.events.push(data);C.events.sort((a,b)=>a.date.localeCompare(b.date));ss();document.getElementById('ev-name').value='';document.getElementById('ev-desc').value='';closeMod('mod-ev');renderCal();notif('📅','Nowe wydarzenie: '+name)}
 async function delEv(id){await SB.from('events').delete().eq('id',id);C.events=C.events.filter(e=>e.id!==id);ss();renderCal()}
 function renderCal(){
+  if(calY===undefined||calM===undefined){calY=new Date().getFullYear();calM=new Date().getMonth();}
   const mns=['Styczeń','Luty','Marzec','Kwiecień','Maj','Czerwiec','Lipiec','Sierpień','Wrzesień','Październik','Listopad','Grudzień'];
   document.getElementById('cal-lbl').textContent=`${mns[calM]} ${calY}`;
   const first=new Date(calY,calM,1);let dow=first.getDay();if(dow===0)dow=7;
@@ -2066,23 +2079,23 @@ const FIT_PRESETS = [
 // ── LOAD FITNESS DATA ──
 async function loadFitData(){
   if(!U) return;
-  try {
-    const [w,p,b,m,s] = await Promise.all([
-      SB.from('fit_workouts').select('*').eq('user_id',U.id).order('date',{ascending:false}).order('created_at',{ascending:false}),
-      SB.from('fit_plans').select('*').eq('user_id',U.id).order('created_at'),
-      SB.from('fit_body').select('*').eq('user_id',U.id).order('date',{ascending:false}),
-      SB.from('fit_meals').select('*').eq('user_id',U.id).order('created_at',{ascending:false}),
-      SB.from('fit_steps').select('*').eq('user_id',U.id).order('date',{ascending:false}),
-    ]);
-    FIT.workouts = w.data||[];
-    FIT.plans = p.data||[];
-    FIT.bodyMeasures = b.data||[];
-    FIT.meals = m.data||[];
-    FIT.steps = s.data||[];
-    // load active plan
-    const active = FIT.plans.find(p=>p.is_active);
-    if(active) FIT.activePlanId = active.id;
-  } catch(e){ console.log('Fitness tables not yet created'); }
+  // Load each table independently so one failure doesn't block others
+  const tryLoad = async (table, order, extra) => {
+    try {
+      let q = SB.from(table).select('*').eq('user_id',U.id).order(order,{ascending:false});
+      if(extra) q = q.order(extra,{ascending:false});
+      const {data,error} = await q;
+      if(error) throw error;
+      return data||[];
+    } catch(e) { console.warn(table+' not ready:', e.message); return []; }
+  };
+  FIT.workouts = await tryLoad('fit_workouts','date','created_at');
+  FIT.plans = (await (async()=>{try{const{data}=await SB.from('fit_plans').select('*').eq('user_id',U.id).order('created_at');return data||[];}catch(e){return [];}})());
+  FIT.bodyMeasures = await tryLoad('fit_body','date');
+  FIT.meals = await tryLoad('fit_meals','created_at');
+  FIT.steps = await tryLoad('fit_steps','date');
+  const active = FIT.plans.find(p=>p.is_active);
+  if(active) FIT.activePlanId = active.id;
 }
 
 // ── TOOLS TABS ──
