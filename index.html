@@ -2030,50 +2030,61 @@ function renderPlanEditor(){
 
 function wlTypeOptions(){return Object.entries(WL_LABELS).map(([k,v])=>'<option value="'+k+'">'+v+'</option>').join('');}
 function wlTypeOptionsSelected(sel){return Object.entries(WL_LABELS).map(([k,v])=>'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+v+'</option>').join('');}
+
 function renderDayEditor(day,di){
-  const exHtml=(day.exercises||[]).map((ex,ei)=>`
-    <div style="background:var(--surf3);border-radius:10px;padding:11px 13px;margin-bottom:7px;border:1px solid var(--bord)">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-        <span style="font-size:18px">${WL_IC[ex.t]||'💪'}</span>
-        <span style="flex:1;font-size:13px;font-weight:600">${ex.n}</span>
-        <select class="inp" style="font-size:11px;width:80px;padding:4px 6px" onchange="editingPlan.days[${di}].exercises[${ei}].t=this.value;reRenderDay(${di})">${wlTypeOptionsSelected(ex.t)}</select>
-        <button class="btn btn-d" onclick="editingPlan.days[${di}].exercises.splice(${ei},1);reRenderDay(${di})" style="padding:4px 8px;font-size:11px">✕</button>
-      </div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <label style="font-size:11px;color:var(--muted)">Serie:</label>
-        <input class="inp" type="number" value="${ex.s||3}" min="1" max="20" style="width:52px;text-align:center" onchange="editingPlan.days[${di}].exercises[${ei}].s=+this.value">
-        <label style="font-size:11px;color:var(--muted)">Powt.:</label>
-        <input class="inp" type="number" value="${ex.r||12}" min="1" max="200" style="width:52px;text-align:center" onchange="editingPlan.days[${di}].exercises[${ei}].r=+this.value">
-        <label style="font-size:11px;color:var(--muted)">Ciężar (kg):</label>
-        <input class="inp" type="number" value="${ex.w||0}" min="0" step="0.5" style="width:60px;text-align:center" onchange="editingPlan.days[${di}].exercises[${ei}].w=+this.value">
-        ${ex.t==='cardio'?`<label style="font-size:11px;color:var(--muted)">Czas (min):</label><input class="inp" type="number" value="${ex.dur||30}" min="1" style="width:52px;text-align:center" onchange="editingPlan.days[${di}].exercises[${ei}].dur=+this.value">`:''}
-      </div>
-    </div>`).join('');
-  return`<div class="card mb14" id="ep-day-${di}">
-    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">
-      <input class="inp" value="${day.name||'Dzień '+(di+1)}" oninput="editingPlan.days[${di}].name=this.value" style="font-size:14px;font-weight:600;flex:1">
-      <button class="btn btn-d" style="font-size:11px;padding:6px 10px;flex-shrink:0" onclick="removePlanDay(${di})">Usuń dzień</button>
-    </div>
-    <div id="ep-exs-${di}">${exHtml||'<div style="color:var(--muted);font-size:13px;padding:8px 0">Brak ćwiczeń — dodaj poniżej</div>'}</div>
-    <div style="background:var(--surf2);border-radius:10px;padding:12px;border:1px dashed var(--bord);margin-top:8px">
-      <div style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:8px">+ Dodaj ćwiczenie</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
-        <div style="flex:1;min-width:160px"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Nazwa</label><input class="inp" id="ep-en-${di}" placeholder="np. Wyciskanie sztangi" style="width:100%"></div>
-        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Typ</label><select class="inp" id="ep-et-${di}" style="width:90px">${wlTypeOptions()}</select></div>
-        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Serie</label><input class="inp" type="number" id="ep-es-${di}" value="3" min="1" style="width:52px;text-align:center"></div>
-        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Powt.</label><input class="inp" type="number" id="ep-er-${di}" value="12" min="1" style="width:52px;text-align:center"></div>
-        <div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">kg</label><input class="inp" type="number" id="ep-ew-${di}" value="0" min="0" step="0.5" style="width:60px;text-align:center"></div>
-        <button class="btn btn-a" onclick="addExToDay(${di})" style="padding:9px 16px">+ Dodaj</button>
-      </div>
-    </div>
-  </div>`;
+  // Build existing exercises HTML without nested backticks
+  const exRows=(day.exercises||[]).map(function(ex,ei){
+    const cardioExtra = ex.t==='cardio'
+      ? '<label style="font-size:11px;color:var(--muted);margin-left:4px">Czas(min):</label>'
+        +'<input class="inp" type="number" value="'+(ex.dur||30)+'" min="1" style="width:52px;text-align:center" onchange="editingPlan.days['+di+'].exercises['+ei+'].dur=+this.value">'
+      : '';
+    return '<div style="background:var(--surf3);border-radius:10px;padding:11px 13px;margin-bottom:7px;border:1px solid var(--bord)">'
+      +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">'
+      +'<span style="font-size:18px">'+(WL_IC[ex.t]||'💪')+'</span>'
+      +'<span style="flex:1;font-size:13px;font-weight:600">'+ex.n+'</span>'
+      +'<select class="inp" style="font-size:11px;width:80px;padding:4px 6px" onchange="editingPlan.days['+di+'].exercises['+ei+'].t=this.value;reRenderDay('+di+')">'+wlTypeOptionsSelected(ex.t)+'</select>'
+      +'<button class="btn btn-d" onclick="editingPlan.days['+di+'].exercises.splice('+ei+',1);reRenderDay('+di+')" style="padding:4px 8px;font-size:11px">✕</button>'
+      +'</div>'
+      +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">'
+      +'<label style="font-size:11px;color:var(--muted)">Serie:</label>'
+      +'<input class="inp" type="number" value="'+(ex.s||3)+'" min="1" max="20" style="width:52px;text-align:center" onchange="editingPlan.days['+di+'].exercises['+ei+'].s=+this.value">'
+      +'<label style="font-size:11px;color:var(--muted)">Powt.:</label>'
+      +'<input class="inp" type="number" value="'+(ex.r||12)+'" min="1" max="200" style="width:52px;text-align:center" onchange="editingPlan.days['+di+'].exercises['+ei+'].r=+this.value">'
+      +'<label style="font-size:11px;color:var(--muted)">kg:</label>'
+      +'<input class="inp" type="number" value="'+(ex.w||0)+'" min="0" step="0.5" style="width:60px;text-align:center" onchange="editingPlan.days['+di+'].exercises['+ei+'].w=+this.value">'
+      +cardioExtra
+      +'</div></div>';
+  }).join('');
+
+  const emptyMsg = '<div style="color:var(--muted);font-size:13px;padding:8px 0;text-align:center">Brak ćwiczeń — dodaj poniżej ↓</div>';
+
+  return '<div class="card mb14" id="ep-day-'+di+'">'
+    +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px">'
+    +'<input class="inp" value="'+(day.name||'Dzień '+(di+1))+'" oninput="editingPlan.days['+di+'].name=this.value" style="font-size:14px;font-weight:600;flex:1">'
+    +'<button class="btn btn-d" style="font-size:11px;padding:6px 10px;flex-shrink:0" onclick="removePlanDay('+di+')">Usuń dzień</button>'
+    +'</div>'
+    +'<div id="ep-exs-'+di+'">'+(exRows||emptyMsg)+'</div>'
+    +'<div style="background:var(--surf2);border-radius:12px;padding:14px;border:1px dashed var(--acc);margin-top:10px">'
+    +'<div style="font-size:12px;font-weight:600;color:var(--acc2);margin-bottom:10px">+ Dodaj ćwiczenie do dnia '+(di+1)+'</div>'
+    +'<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">'
+    +'<div style="flex:1;min-width:150px"><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Nazwa ćwiczenia</label>'
+    +'<input class="inp" id="ep-en-'+di+'" placeholder="np. Wyciskanie sztangi" style="width:100%"></div>'
+    +'<div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Typ</label>'
+    +'<select class="inp" id="ep-et-'+di+'" style="width:90px">'+wlTypeOptions()+'</select></div>'
+    +'<div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Serie</label>'
+    +'<input class="inp" type="number" id="ep-es-'+di+'" value="3" min="1" style="width:52px;text-align:center"></div>'
+    +'<div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">Powt.</label>'
+    +'<input class="inp" type="number" id="ep-er-'+di+'" value="12" min="1" style="width:52px;text-align:center"></div>'
+    +'<div><label style="font-size:11px;color:var(--muted);display:block;margin-bottom:4px">kg</label>'
+    +'<input class="inp" type="number" id="ep-ew-'+di+'" value="0" min="0" step="0.5" style="width:55px;text-align:center"></div>'
+    +'<button class="btn btn-a" onclick="addExToDay('+di+')" style="padding:10px 16px;font-weight:600">+ Dodaj</button>'
+    +'</div></div></div>';
 }
 
 function reRenderDay(di){
   const el=document.getElementById('ep-day-'+di);
   if(el) el.outerHTML=renderDayEditor(editingPlan.days[di],di);
 }
-
 
 
 function addPlanDay(){
@@ -2365,7 +2376,9 @@ async function addMealManual(){
 function quickMeal(name,kcal,p,c,f){addMealEntry(name,kcal,p,c,f);}
 
 async function addMealEntry(name,kcal,p,c,f){
-  const date=document.getElementById('nutr-date')?.value||td();
+  const dateEl=document.getElementById('nutr-date');
+  if(dateEl&&!dateEl.value) dateEl.value=td();
+  const date=(dateEl?.value)||td();
   const mealType=document.getElementById('meal-type-sel')?.value||'inne';
   const entry={user_id:U.id,name,kcal,protein_g:p,carbs_g:c,fat_g:f,date,meal_type:mealType};
   try{const{data}=await SB.from('fit_meals').insert(entry).select().single();FIT.meals.unshift(data);}
@@ -2384,9 +2397,10 @@ async function clearDayMeals(){
 }
 
 function renderNutrition(){
-  const date=document.getElementById('nutr-date')?.value||td();
-  if(!date){const el=document.getElementById('nutr-date');if(el)el.value=td();}
-  const meals=FIT.meals.filter(m=>m.date===(document.getElementById('nutr-date')?.value||td()));
+  const dateEl=document.getElementById('nutr-date');
+  if(dateEl&&!dateEl.value) dateEl.value=td();
+  const date=dateEl?.value||td();
+  const meals=FIT.meals.filter(m=>m.date===date);
   const totK=meals.reduce((s,m)=>s+parseFloat(m.kcal||0),0);
   const totP=meals.reduce((s,m)=>s+parseFloat(m.protein_g||0),0);
   const totC=meals.reduce((s,m)=>s+parseFloat(m.carbs_g||0),0);
