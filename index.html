@@ -102,7 +102,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .overlay.on{display:block}
 
 /* ── PAGES ── */
-.page{display:none;padding:28px 24px;animation:fi .22s ease}
+.page{display:none;padding:28px 24px;animation:fi .22s ease;background:var(--bg);min-height:calc(100vh - 60px)}
 .page.on{display:block}
 @keyframes fi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .ph{margin-bottom:24px}
@@ -724,40 +724,11 @@ select.inp option{background:var(--surf2)}
       </div>
     </div>
 
-  </div><!-- /main -->
 
-  <!-- MOBILE BOTTOM NAV -->
-  <nav class="mob-nav">
-    <div class="mob-nav-inner">
-      <button class="mn-item on" id="mn-dashboard" onclick="nav('dashboard')"><span class="mn-ic">⊞</span>Pulpit</button>
-      <button class="mn-item" id="mn-transactions" onclick="nav('transactions')"><span class="mn-ic">⇄</span>Finanse</button>
-      <button class="mn-item" id="mn-tasks" onclick="nav('tasks')"><span class="mn-ic">✓</span>Zadania</button>
-      <button class="mn-item" id="mn-habits" onclick="nav('habits')"><span class="mn-ic">◈</span>Nawyki</button>
-      <button class="mn-item" id="mn-more" onclick="toggleMore()"><span class="mn-ic">⋯</span>Więcej</button>
-    </div>
-  </nav>
-
-  <!-- MORE DRAWER (mobile) -->
-  <div class="more-drawer" id="more-drawer">
-    <div class="more-drawer-grip"></div>
-    <div class="more-grid">
-      <button class="more-item" onclick="nav('stats');closeMore()"><span class="more-ic">📊</span>Statystyki</button>
-      <button class="more-item" onclick="nav('calendar');closeMore()"><span class="more-ic">📅</span>Kalendarz</button>
-      <button class="more-item" onclick="nav('notes');closeMore()"><span class="more-ic">📝</span>Notatki</button>
-      <button class="more-item" onclick="nav('budget');closeMore()"><span class="more-ic">◉</span>Budżet</button>
-      <button class="more-item" onclick="nav('goals');closeMore()"><span class="more-ic">◎</span>Cele</button>
-      <button class="more-item" onclick="nav('recurring');closeMore()"><span class="more-ic">↻</span>Cykliczne</button>
-      <button class="more-item" onclick="nav('rule503020');closeMore()"><span class="more-ic">🧮</span>50/30/20</button>
-      <button class="more-item" onclick="nav('calculator');closeMore()"><span class="more-ic">🔢</span>Kalkulator</button>
-      <button class="more-item" onclick="nav('fitness');closeMore()"><span class="more-ic">💪</span>Fitness</button>
-      <button class="more-item" onclick="nav('settings');closeMore()"><span class="more-ic">⚙️</span>Ustawienia</button>
-    </div>
-  </div>
-</div>
 
 
     <!-- FITNESS -->
-    <div class="page" id="page-fitness">
+    <div class="page" id="page-fitness" style="min-height:100vh">
       <div class="ph"><div class="pt">Fitness</div><div class="ps">Treningi, zdrowie i aktywność</div></div>
       <div class="fit-tabs">
         <button class="fit-tab on" onclick="fitTab('workout')">💪 Trening</button>
@@ -981,6 +952,36 @@ select.inp option{background:var(--surf2)}
       </div>
     </div>
 
+  </div><!-- /main -->
+
+  <!-- MOBILE BOTTOM NAV -->
+  <nav class="mob-nav">
+    <div class="mob-nav-inner">
+      <button class="mn-item on" id="mn-dashboard" onclick="nav('dashboard')"><span class="mn-ic">⊞</span>Pulpit</button>
+      <button class="mn-item" id="mn-transactions" onclick="nav('transactions')"><span class="mn-ic">⇄</span>Finanse</button>
+      <button class="mn-item" id="mn-tasks" onclick="nav('tasks')"><span class="mn-ic">✓</span>Zadania</button>
+      <button class="mn-item" id="mn-habits" onclick="nav('habits')"><span class="mn-ic">◈</span>Nawyki</button>
+      <button class="mn-item" id="mn-more" onclick="toggleMore()"><span class="mn-ic">⋯</span>Więcej</button>
+    </div>
+  </nav>
+
+  <!-- MORE DRAWER (mobile) -->
+  <div class="more-drawer" id="more-drawer">
+    <div class="more-drawer-grip"></div>
+    <div class="more-grid">
+      <button class="more-item" onclick="nav('stats');closeMore()"><span class="more-ic">📊</span>Statystyki</button>
+      <button class="more-item" onclick="nav('calendar');closeMore()"><span class="more-ic">📅</span>Kalendarz</button>
+      <button class="more-item" onclick="nav('notes');closeMore()"><span class="more-ic">📝</span>Notatki</button>
+      <button class="more-item" onclick="nav('budget');closeMore()"><span class="more-ic">◉</span>Budżet</button>
+      <button class="more-item" onclick="nav('goals');closeMore()"><span class="more-ic">◎</span>Cele</button>
+      <button class="more-item" onclick="nav('recurring');closeMore()"><span class="more-ic">↻</span>Cykliczne</button>
+      <button class="more-item" onclick="nav('rule503020');closeMore()"><span class="more-ic">🧮</span>50/30/20</button>
+      <button class="more-item" onclick="nav('calculator');closeMore()"><span class="more-ic">🔢</span>Kalkulator</button>
+      <button class="more-item" onclick="nav('fitness');closeMore()"><span class="more-ic">💪</span>Fitness</button>
+      <button class="more-item" onclick="nav('settings');closeMore()"><span class="more-ic">⚙️</span>Ustawienia</button>
+    </div>
+  </div>
+</div>
 <!-- MODALS -->
 <div class="modal-bg" id="mod-budget">
   <div class="modal"><h3>Limit budżetowy</h3>
@@ -1616,10 +1617,10 @@ html, body {
 }
 
 /* ── FITNESS MODULE ── */
-.fit-tabs{display:flex;background:var(--surf2);border-radius:10px;padding:3px;margin-bottom:20px;gap:3px}
-.fit-tab{flex:1;padding:9px 6px;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;border-radius:8px;cursor:pointer;transition:.15s;white-space:nowrap}
+.fit-tabs{display:flex;background:var(--surf2);border-radius:10px;padding:3px;margin-bottom:20px;gap:3px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}.fit-tabs::-webkit-scrollbar{display:none}
+.fit-tab{flex-shrink:0;padding:9px 10px;background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;border-radius:8px;cursor:pointer;transition:.15s;white-space:nowrap}
 .fit-tab.on{background:var(--acc);color:#fff}
-.fit-section{display:none}.fit-section.on{display:block}
+.fit-section{display:none !important}.fit-section.on{display:block !important}
 .ex-card{background:var(--surf2);border-radius:12px;padding:14px 16px;margin-bottom:10px;border:1px solid var(--bord)}
 .ex-header{display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .ex-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;background:rgba(124,92,252,.12)}
