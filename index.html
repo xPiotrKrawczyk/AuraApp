@@ -355,16 +355,14 @@ select.inp option{background:var(--surf2)}
 
 
 /* ── WIDGETS ── */
-.widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:10px}
 @media(min-width:700px){.widget-grid{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:1100px){.widget-grid{grid-template-columns:repeat(4,1fr)}}
-.widget{background:var(--surf2);border-radius:16px;padding:16px;border:1px solid var(--bord);position:relative;overflow:hidden;min-height:100px;transition:.2s}
-.widget:hover{border-color:rgba(124,92,252,.3);transform:translateY(-1px)}
-.widget-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px}
-.widget-big{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;margin-bottom:2px;line-height:1.1}
-.widget-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.widget{background:var(--surf2);border-radius:14px;padding:14px 16px;border:1px solid var(--bord);position:relative;overflow:hidden;transition:.2s}
+.widget:hover{border-color:rgba(124,92,252,.3)}
+.widget-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px}
+.widget-big{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:700;margin-bottom:1px;line-height:1.1}
+.widget-sub{font-size:11px;color:var(--muted)}
 .widget-full{grid-column:1/-1}
-.widget-half{grid-column:span 2}
 .widget-picker-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;border:1px solid var(--bord);margin-bottom:8px;cursor:pointer;transition:.15s;background:var(--surf2)}
 .widget-picker-item.active{border-color:var(--acc);background:rgba(124,92,252,.08)}
 .widget-picker-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--bord);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.15s}
@@ -1148,7 +1146,7 @@ function showApp(){ loadWidgetConfig();
   document.getElementById('today-str').textContent=new Date().toLocaleDateString('pl-PL',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   document.getElementById('t-date').value=td();document.getElementById('tk-date').value=td();document.getElementById('ev-date').value=td()
   calY=new Date().getFullYear();calM=new Date().getMonth();
-  initHDays();fillCats();fillTags();fillStatsYear();updateSettingsUI();checkAlerts();applyRecAuto();nav('dashboard');
+  initHDays();fillCats();fillTags();fillStatsYear();updateSettingsUI();checkAlerts();applyRecAuto();requestAnimationFrame(()=>nav('dashboard'));
 }
 function fillCats(){['t-cat','rc-cat','bl-cat'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=CATS.map(c=>`<option value="${c}">${EMO[c]} ${c}</option>`).join('')});const cf=document.getElementById('t-cat-filter');if(cf)cf.innerHTML='<option value="">Wszystkie kat.</option>'+CATS.map(c=>`<option value="${c}">${EMO[c]} ${c}</option>`).join('')}
 function fillTags(){const e=document.getElementById('t-tag');if(e)e.innerHTML='<option value="">Brak tagu</option>'+C.tags.map(t=>`<option value="${t.id}">${t.name}</option>`).join('')}
@@ -1275,7 +1273,7 @@ function renderTasks(){
 }
 
 // HABITS
-function initHDays(){const now=new Date();hDays=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(now.getDate()-i);hDays.push(d)}const fm=d=>d.toLocaleDateString('pl-PL',{day:'numeric',month:'short'});document.getElementById('hb-range').textContent=`${fm(hDays[0])} – ${fm(hDays[6])}`}
+function initHDays(){const now=new Date();hDays=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(now.getDate()-i);hDays.push(d)}const fm=d=>d.toLocaleDateString('pl-PL',{day:'numeric',month:'short'});const el=document.getElementById('hb-range');if(el)el.textContent=`${fm(hDays[0])} – ${fm(hDays[6])}`}
 async function addHabit(){const name=document.getElementById('hb-name').value.trim(),icon=document.getElementById('hb-icon').value;if(!name)return;const{data}=await SB.from('habits').insert({user_id:U.id,name,icon}).select().single();C.habits.push(data);ss();document.getElementById('hb-name').value='';renderHabits()}
 async function togHab(hid,ds){const ex=C.hLogs.find(l=>l.habit_id===hid&&l.date===ds);if(ex){await SB.from('habit_logs').delete().eq('id',ex.id);C.hLogs=C.hLogs.filter(l=>l.id!==ex.id)}else{const{data}=await SB.from('habit_logs').insert({habit_id:hid,user_id:U.id,date:ds}).select().single();if(data)C.hLogs.push(data)}ss();renderHabits()}
 async function delHabit(id){await SB.from('habits').delete().eq('id',id);C.habits=C.habits.filter(h=>h.id!==id);C.hLogs=C.hLogs.filter(l=>l.habit_id!==id);ss();renderHabits()}
@@ -1488,15 +1486,6 @@ function renderDash(){
 // ═══════════════════════════════════════════════════════
 // SUBCATEGORIES
 // ═══════════════════════════════════════════════════════
-const SUBCATS = {
-  'Jedzenie':    ['Restauracje','Kawiarnie','Sklep spożywczy','Fastfood','Alkohol','Słodycze'],
-  'Transport':   ['Paliwo','Parking','Komunikacja miejska','Taxi/Uber','Serwis auta','Bilety'],
-  'Rozrywka':    ['Kino/Teatr','Streaming','Gry','Książki','Sport','Imprezy'],
-  'Zdrowie':     ['Leki','Wizyta lekarska','Siłownia','Suplementy','Kosmetyki','Dentysta'],
-  'Rachunki':    ['Czynsz','Prąd','Internet','Telefon','Woda','Ubezpieczenie'],
-  'Praca':       ['Sprzęt','Szkolenia','Dojazdy','Biuro','Oprogramowanie'],
-  'Inne':        ['Prezenty','Odzież','Dom','Zwierzęta','Podróże','Edukacja'],
-};
 
 function updateSubcats() {
   var cat = (document.getElementById('t-cat')||{value:''}).value;
