@@ -355,13 +355,16 @@ select.inp option{background:var(--surf2)}
 
 
 /* ── WIDGETS ── */
-.widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-@media(min-width:900px){.widget-grid{grid-template-columns:repeat(3,1fr)}}
-.widget{background:var(--surf);border-radius:18px;padding:18px;border:1px solid var(--bord);position:relative;overflow:hidden;min-height:120px}
-.widget-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.widget-big{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;margin-bottom:4px;line-height:1}
-.widget-sub{font-size:12px;color:var(--muted)}
+.widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:700px){.widget-grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1100px){.widget-grid{grid-template-columns:repeat(4,1fr)}}
+.widget{background:var(--surf2);border-radius:16px;padding:16px;border:1px solid var(--bord);position:relative;overflow:hidden;min-height:100px;transition:.2s}
+.widget:hover{border-color:rgba(124,92,252,.3);transform:translateY(-1px)}
+.widget-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin-bottom:8px}
+.widget-big{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;margin-bottom:2px;line-height:1.1}
+.widget-sub{font-size:11px;color:var(--muted);margin-top:2px}
 .widget-full{grid-column:1/-1}
+.widget-half{grid-column:span 2}
 .widget-picker-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;border:1px solid var(--bord);margin-bottom:8px;cursor:pointer;transition:.15s;background:var(--surf2)}
 .widget-picker-item.active{border-color:var(--acc);background:rgba(124,92,252,.08)}
 .widget-picker-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--bord);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.15s}
@@ -498,7 +501,6 @@ select.inp option{background:var(--surf2)}
           <div class="pt">Dzień dobry, <span id="greet"></span> 👋</div>
           <div class="ps" id="today-str"></div>
         </div>
-        <button class="btn btn-g" onclick="openWidgetPicker()" style="font-size:12px;gap:5px">⊞ Widżety</button>
       </div>
 
       <!-- WIDGET GRID -->
@@ -755,6 +757,13 @@ select.inp option{background:var(--surf2)}
 
       <div class="settings-section">
         <div class="settings-title">Aplikacja</div>
+        <div class="settings-row" onclick="openWidgetPicker()">
+          <div class="settings-row-left">
+            <div class="settings-row-ic" style="background:rgba(124,92,252,.12)">⊞</div>
+            <div><div class="settings-row-txt">Widżety pulpitu</div><div class="settings-row-sub">Dostosuj co widzisz na stronie głównej</div></div>
+          </div>
+          <div class="settings-row-arrow">›</div>
+        </div>
         <div class="settings-row">
           <div class="settings-row-left">
             <div class="settings-row-ic" style="background:rgba(124,92,252,.1)">✦</div>
@@ -1209,9 +1218,10 @@ async function changePassword(){
 
 // TRANSACTIONS
 async function addTx(){
-  const name=document.getElementById('t-name').value.trim(),amt=parseFloat(document.getElementById('t-amt').value),type=document.getElementById('t-type').value,cat=document.getElementById('t-cat').value,tag=document.getElementById('t-tag').value||null,date=document.getElementById('t-date').value;
+  const name=document.getElementById('t-name').value.trim(),amt=parseFloat(document.getElementById('t-amt').value),type=document.getElementById('t-type').value,cat=document.getElementById('t-cat').value,subcat=(document.getElementById('t-subcat')?.value||''),tag=document.getElementById('t-tag').value||null,date=document.getElementById('t-date').value;
   if(!name||isNaN(amt)||amt<=0)return;
-  const{data,error}=await SB.from('transactions').insert({user_id:U.id,name,amount:amt,type,category:cat,tag_id:tag,date}).select().single();
+  const fullName=subcat?name+' ('+subcat+')':name;
+  const{data,error}=await SB.from('transactions').insert({user_id:U.id,name:fullName,amount:amt,type,category:cat,tag_id:tag,date}).select().single();
   if(error){alert('Błąd: '+error.message);return}
   C.tx.unshift(data);ss();notif(type==='income'?'💰':'💸',`${type==='income'?'Przychód':'Wydatek'}: ${name} — ${amt.toFixed(0)} ${CUR()}`);
   document.getElementById('t-name').value='';document.getElementById('t-amt').value='';
