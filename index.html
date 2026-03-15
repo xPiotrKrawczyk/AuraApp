@@ -1155,9 +1155,9 @@ function fillStatsYear(){const e=document.getElementById('stats-year');if(!e)ret
 // NAV
 const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','debts':'mn-fin','tasks':'mn-main','habits2':'mn-main','habits':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
 const MOB_GROUPS={
-  main:['dashboard','calendar','tasks','notes'],
-  fin:['transactions','budget','goals','stats','recurring','rule503020','calculator'],
-  acc:['habits','settings']
+  main:['dashboard','calendar','tasks','notes','habits2'],
+  fin:['transactions','budget','goals','stats','recurring','debts'],
+  acc:['settings']
 };
 function toggleMobGroup(g){
   const pages=MOB_GROUPS[g]||[];
@@ -1170,7 +1170,7 @@ function nav(p){
   document.querySelectorAll('.ni').forEach(n=>n.classList.remove('on'));
   document.querySelectorAll('.mn-item').forEach(n=>n.classList.remove('on'));
   const mobId=MOB_NAV_PAGES[p];if(mobId)document.getElementById(mobId)?.classList.add('on');
-  document.getElementById('page-'+p).classList.add('on');
+  const pageEl=document.getElementById('page-'+p);if(!pageEl)return;pageEl.classList.add('on');
   document.querySelectorAll('.ni').forEach(n=>{if(n.getAttribute('onclick')?.includes("'"+p+"'"))n.classList.add('on')});
   const mnId=MOB_NAV_PAGES[p];if(mnId)document.getElementById(mnId)?.classList.add('on');
   closeSb();closeMore();
