@@ -1104,7 +1104,7 @@ function fillTags(){const e=document.getElementById('t-tag');if(e)e.innerHTML='<
 function fillStatsYear(){const e=document.getElementById('stats-year');if(!e)return;const ys=new Set(C.tx.map(t=>new Date(t.date).getFullYear()));ys.add(new Date().getFullYear());e.innerHTML=[...ys].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('')}
 
 // NAV
-const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','tasks':'mn-main':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
+const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','tasks':'mn-main','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
 const MOB_GROUPS={
   main:['dashboard','calendar','tasks','notes'],
   fin:['transactions','budget','goals','stats','recurring'],
