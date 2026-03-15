@@ -1493,14 +1493,7 @@ function renderWidget(id) {
       + '<div class="widget-big">'+todayTasks.length+'</div>'
       + '<div class="widget-sub">Do zrobienia dziś</div>';
   }
-  if (id===) {
-    var openDebts = DEBTS.filter(function(d){ return !d.settled; });
-    var netD = openDebts.filter(function(d){return d.type==='lent';}).reduce(function(s,d){return s+parseFloat(d.amount);},0)
-             - openDebts.filter(function(d){return d.type==='owe';}).reduce(function(s,d){return s+parseFloat(d.amount);},0);
-    return '<div class="widget-title">⇋ Długi</div>'
-      + '<div class="widget-big" style="color:'+(netD>=0?'var(--green)':'var(--red)')+'">'+(netD>=0?'+':'')+f0(netD)+' '+cur+'</div>'
-      + '<div class="widget-sub">'+openDebts.length+' aktywnych pozycji</div>';
-  }
+
   if (id==='week-sum') {
     var ws=new Date(now);ws.setDate(now.getDate()-((now.getDay()||7)-1));ws.setHours(0,0,0,0);
     var we=new Date(ws);we.setDate(ws.getDate()+6);
