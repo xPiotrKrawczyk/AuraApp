@@ -1081,7 +1081,7 @@ async function doRegister(){
   U=data.user;await new Promise(r=>setTimeout(r,1000));await loadP();await loadAll();showApp();
 }
 async function doLogout(){
-  await SB.auth.signOut();U=null;P=null;C={tx:[],goals:[],tasks:[],habits:[],hLogs:[],bLimits:[],events:[],tags:[],rec:[],notes:[]};DEBTS=[];HABITS2=[];HLOGS2={};NOTIFS=[];
+  await SB.auth.signOut();U=null;P=null;C={tx:[],goals:[],tasks:[],habits:[],hLogs:[],bLimits:[],events:[],tags:[],rec:[],notes:[]};NOTIFS=[];
   document.getElementById('li-email').value='';document.getElementById('li-pw').value='';
   document.getElementById('app').style.display='none';document.getElementById('auth').style.display='flex';
   hm();Object.values(CHARTS).forEach(c=>{try{c.destroy()}catch(e){}});CHARTS={};
@@ -1104,7 +1104,7 @@ function fillTags(){const e=document.getElementById('t-tag');if(e)e.innerHTML='<
 function fillStatsYear(){const e=document.getElementById('stats-year');if(!e)return;const ys=new Set(C.tx.map(t=>new Date(t.date).getFullYear()));ys.add(new Date().getFullYear());e.innerHTML=[...ys].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('')}
 
 // NAV
-const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','tasks':'mn-main','habits':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
+const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','tasks':'mn-main':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
 const MOB_GROUPS={
   main:['dashboard','calendar','tasks','notes'],
   fin:['transactions','budget','goals','stats','recurring'],
@@ -1500,7 +1500,7 @@ function renderWidget(id) {
       + '<div style="text-align:center"><div style="font-family:\'Fraunces\',serif;font-size:1.1rem;color:var(--green)">'+f0(wI)+'</div><div style="font-size:10px;color:var(--muted)">Przychody</div></div>'
       + '<div style="text-align:center"><div style="font-family:\'Fraunces\',serif;font-size:1.1rem;color:var(--red)">'+f0(wE)+'</div><div style="font-size:10px;color:var(--muted)">Wydatki</div></div>'
       + '<div style="text-align:center"><div style="font-family:\'Fraunces\',serif;font-size:1.1rem">'+C.tasks.filter(function(t){return t.done;}).length+'</div><div style="font-size:10px;color:var(--muted)">Zadań done</div></div>'
-      + '<div style="text-align:center"><div style="font-family:\'Fraunces\',serif;font-size:1.1rem;color:var(--acc2)">'+HABITS2.filter(function(h){return HLOGS2[h.id+'_'+today];}).length+'/'+HABITS2.length+'</div><div style="font-size:10px;color:var(--muted)">Nawyki</div></div>'
+      + '<div style="text-align:center"><div style="font-family:\'Fraunces\',serif;font-size:1.1rem;color:var(--acc2)">'+todayTasks.length+'</div><div style="font-size:10px;color:var(--muted)">Dziś zadań</div></div>'
       + '</div>';
   }
   if (id==='recent-tx') {
@@ -1532,18 +1532,7 @@ function renderWidget(id) {
             + '</div>';
         }).join('');
   }
-  if (id==='habits') {
-    var todayDone = HABITS2.filter(function(h){ return HLOGS2[h.id+'_'+today]; });
-    return '<div class="widget-title">◈ Nawyki dziś</div>'
-      + (HABITS2.length===0 ? '<div style="color:var(--muted);font-size:13px">Brak nawyków</div>' :
-        '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px">'
-        + HABITS2.map(function(h){
-            var done = !!HLOGS2[h.id+'_'+today];
-            return '<div onclick="toggleHabit2('+h.id+')" style="display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:100px;background:'+(done?h.color:'var(--surf2)')+';color:'+(done?'#fff':'var(--muted)')+';font-size:12px;font-weight:500;cursor:pointer;border:1px solid '+(done?h.color:'var(--bord)')+'">'+h.emoji+' '+e2(h.name)+'</div>';
-          }).join('')
-        + '</div>'
-        + '<div style="font-size:12px;color:var(--muted)">'+todayDone.length+' / '+HABITS2.length+' ukończonych</div>');
-  }
+
   if (id==='chart') {
     return '<div class="widget-title">▲ Wydatki vs Przychody</div>'
       + '<div class="chart-box" style="height:160px"><canvas id="d-chart"></canvas></div>';
