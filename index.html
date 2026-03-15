@@ -452,7 +452,6 @@ select.inp option{background:var(--surf2)}
       <button class="ni on" onclick="nav('dashboard')"><span class="ni-ic">◫</span>Pulpit</button>
       <button class="ni" onclick="nav('calendar')"><span class="ni-ic">◷</span>Kalendarz</button>
       <button class="ni" onclick="nav('tasks')"><span class="ni-ic">✓</span>Zadania</button>
-      <button class="ni" onclick="nav('habits2')"><span class="ni-ic">◈</span>Nawyki</button>
       <button class="ni" onclick="nav('notes')"><span class="ni-ic">≡</span>Notatki</button>
     </div>
     <div class="nav-sec">
@@ -462,7 +461,6 @@ select.inp option{background:var(--surf2)}
       <button class="ni" onclick="nav('goals')"><span class="ni-ic">◎</span>Cele</button>
       <button class="ni" onclick="nav('stats')"><span class="ni-ic">▲</span>Statystyki</button>
       <button class="ni" onclick="nav('recurring')"><span class="ni-ic">↺</span>Cykliczne</button>
-      <button class="ni" onclick="nav('debts')"><span class="ni-ic">⇋</span>Długi</button>
     </div>
     <div class="nav-sec">
       <div class="nav-lbl">Konto</div>
@@ -502,6 +500,7 @@ select.inp option{background:var(--surf2)}
           <div class="pt">Dzień dobry, <span id="greet"></span> 👋</div>
           <div class="ps" id="today-str"></div>
         </div>
+        <button class="btn btn-g" onclick="openWidgetPicker()" style="font-size:12px;padding:8px 12px;gap:5px;white-space:nowrap">⊞ Widżety</button>
       </div>
 
       <!-- WIDGET GRID -->
@@ -758,13 +757,6 @@ select.inp option{background:var(--surf2)}
 
       <div class="settings-section">
         <div class="settings-title">Aplikacja</div>
-        <div class="settings-row" onclick="openWidgetPicker()">
-          <div class="settings-row-left">
-            <div class="settings-row-ic" style="background:rgba(124,92,252,.12)">⊞</div>
-            <div><div class="settings-row-txt">Widżety pulpitu</div><div class="settings-row-sub">Dostosuj co widzisz na stronie głównej</div></div>
-          </div>
-          <div class="settings-row-arrow">›</div>
-        </div>
         <div class="settings-row">
           <div class="settings-row-left">
             <div class="settings-row-ic" style="background:rgba(124,92,252,.1)">✦</div>
@@ -788,30 +780,6 @@ select.inp option{background:var(--surf2)}
 
 
 
-    <!-- DŁUGI / POŻYCZKI -->
-    <div class="page" id="page-debts">
-      <div class="ph"><div class="pt">Długi i pożyczki</div><div class="ps">Śledź komu jesteś winien i kto jest Tobie winien</div></div>
-
-      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
-        <button class="btn btn-a" onclick="openMod('mod-debt')">+ Dodaj dług</button>
-        <div style="display:flex;gap:4px;background:var(--surf2);border-radius:10px;padding:3px">
-          <button id="debt-tab-all" style="padding:7px 14px;border-radius:8px;border:none;background:var(--acc);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer" onclick="debtFilter('all')">Wszystkie</button>
-          <button id="debt-tab-owe" style="padding:7px 14px;border-radius:8px;border:none;background:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer" onclick="debtFilter('owe')">Ja jestem winien</button>
-          <button id="debt-tab-lent" style="padding:7px 14px;border-radius:8px;border:none;background:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer" onclick="debtFilter('lent')">Ktoś mi jest winien</button>
-        </div>
-      </div>
-
-      <div class="g4 mb14">
-        <div class="sc r"><div class="sl">Moje długi</div><div class="sv" id="debt-total-owe">0 zł</div></div>
-        <div class="sc g"><div class="sl">Pożyczone innym</div><div class="sv" id="debt-total-lent">0 zł</div></div>
-        <div class="sc b"><div class="sl">Saldo netto</div><div class="sv" id="debt-net">0 zł</div></div>
-        <div class="sc p"><div class="sl">Otwarte pozycje</div><div class="sv" id="debt-open-count">0</div></div>
-      </div>
-
-      <div id="debt-list"></div>
-    </div>
-
-    <!-- MODAL: Dodaj dług -->
     <div class="mod" id="mod-debt" style="display:none" onclick="if(event.target===this)closeMod('mod-debt')">
       <div class="mod-box">
         <div class="sh mb14"><div class="st" id="debt-mod-title">Nowy dług / pożyczka</div><button class="btn btn-g" onclick="closeMod('mod-debt')">✕</button></div>
@@ -836,37 +804,6 @@ select.inp option{background:var(--surf2)}
       </div>
     </div>
 
-    <!-- NAWYKI 2.0 -->
-    <div class="page" id="page-habits2">
-      <div class="ph"><div class="pt">Nawyki</div><div class="ps">Buduj dobre nawyki każdego dnia</div></div>
-
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
-        <div class="g4" style="flex:1;min-width:200px">
-          <div class="sc p"><div class="sl">Dziś ukończone</div><div class="sv" id="h2-today-done">0/0</div></div>
-          <div class="sc g"><div class="sl">Najdłuższy streak</div><div class="sv" id="h2-best-streak">0 dni</div></div>
-          <div class="sc b"><div class="sl">Ten tydzień</div><div class="sv" id="h2-week-pct">0%</div></div>
-          <div class="sc r"><div class="sl">Do poprawy</div><div class="sv" id="h2-missed">0</div></div>
-        </div>
-        <button class="btn btn-a" onclick="openMod('mod-habit2')">+ Nowy nawyk</button>
-      </div>
-
-      <!-- TODAY -->
-      <div class="card mb14">
-        <div class="sh mb14"><div class="st">Dziś — <span id="h2-date-lbl"></span></div></div>
-        <div id="h2-today-list"></div>
-      </div>
-
-      <!-- HEATMAP -->
-      <div class="card mb14">
-        <div class="sh mb14"><div class="st">Aktywność — ostatnie 12 tygodni</div></div>
-        <div id="h2-heatmap" style="overflow-x:auto"></div>
-      </div>
-
-      <!-- HABIT DETAILS -->
-      <div id="h2-habits-detail"></div>
-    </div>
-
-    <!-- MODAL: Nawyk -->
     <div class="mod" id="mod-habit2" style="display:none" onclick="if(event.target===this)closeMod('mod-habit2')">
       <div class="mod-box">
         <div class="sh mb14"><div class="st">Nowy nawyk</div><button class="btn btn-g" onclick="closeMod('mod-habit2')">✕</button></div>
@@ -973,7 +910,6 @@ select.inp option{background:var(--surf2)}
       <button class="more-item" onclick="nav('dashboard');closeMore()"><span class="more-ic">⊞</span>Pulpit</button>
       <button class="more-item" onclick="nav('calendar');closeMore()"><span class="more-ic">◷</span>Kalendarz</button>
       <button class="more-item" onclick="nav('tasks');closeMore()"><span class="more-ic">✓</span>Zadania</button>
-      <button class="more-item" onclick="nav('habits2');closeMore()"><span class="more-ic">◈</span>Nawyki</button>
       <button class="more-item" onclick="nav('notes');closeMore()"><span class="more-ic">≡</span>Notatki</button>
       <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px;margin-top:8px">Finanse</div>
       <button class="more-item" onclick="nav('transactions');closeMore()"><span class="more-ic">⇄</span>Transakcje</button>
@@ -981,7 +917,6 @@ select.inp option{background:var(--surf2)}
       <button class="more-item" onclick="nav('goals');closeMore()"><span class="more-ic">◎</span>Cele</button>
       <button class="more-item" onclick="nav('stats');closeMore()"><span class="more-ic">▲</span>Statystyki</button>
       <button class="more-item" onclick="nav('recurring');closeMore()"><span class="more-ic">↺</span>Cykliczne</button>
-      <button class="more-item" onclick="nav('debts');closeMore()"><span class="more-ic">⇋</span>Długi</button>
       <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px;margin-top:8px">Konto</div>
       <button class="more-item" onclick="nav('settings');closeMore()"><span class="more-ic">⚙</span>Ustawienia</button>
     </div>
@@ -997,9 +932,9 @@ let calY,calM,hDays=[],CHARTS={},NOTIFS=[],tagCol='#7c5cfc';
 let SETTINGS={currency:'zł','notif-budget':true,'notif-events':true,'notif-tasks':true};
 let NOTES_EDITING=null;
 let calcExpr='',calcCurrent='0',calcPrevOp=null,calcPrevNum=null,calcFresh=false;
-const CATS=['Jedzenie','Transport','Rozrywka','Zdrowie','Rachunki','Praca','Inne'];
-const EMO={Jedzenie:'🛒',Transport:'🚗',Rozrywka:'🎬',Zdrowie:'💊',Rachunki:'💡',Praca:'💼',Inne:'📦'};
-const COL={Jedzenie:'#f97316',Transport:'#3b82f6',Rozrywka:'#a855f7',Zdrowie:'#ec4899',Rachunki:'#f59e0b',Praca:'#10b981',Inne:'#6b7280'};
+const CATS=['Jedzenie','Restauracje','Transport','Rozrywka','Zdrowie','Rachunki','Praca','Zakupy','Dom','Podróże','Edukacja','Sport','Uroda','Zwierzęta','Prezenty','Oszczędności','Inwestycje','Inne'];
+const EMO={Jedzenie:'🛒',Restauracje:'🍽️',Transport:'🚗',Rozrywka:'🎬',Zdrowie:'💊',Rachunki:'💡',Praca:'💼',Zakupy:'🛍️',Dom:'🏠',Podróże:'✈️',Edukacja:'📚',Sport:'🏃',Uroda:'💄',Zwierzęta:'🐾',Prezenty:'🎁',Oszczędności:'🏦',Inwestycje:'📈',Inne:'📦'};
+const COL={Jedzenie:'#f97316',Restauracje:'#fb923c',Transport:'#3b82f6',Rozrywka:'#a855f7',Zdrowie:'#ec4899',Rachunki:'#f59e0b',Praca:'#10b981',Zakupy:'#e879f9',Dom:'#84cc16',Podróże:'#06b6d4',Edukacja:'#6366f1',Sport:'#22d3ee',Uroda:'#f472b6',Zwierzęta:'#a78bfa',Prezenty:'#fb7185',Oszczędności:'#34d399',Inwestycje:'#4ade80',Inne:'#64748b'};
 const fd=s=>s?new Date(s+'T12:00:00').toLocaleDateString('pl-PL',{day:'numeric',month:'short',year:'numeric'}):'';
 const td=()=>new Date().toISOString().split('T')[0];
 const f0=n=>parseFloat(n||0).toFixed(0);
@@ -1102,8 +1037,6 @@ async function init(){
 }
 async function loadP(){const{data}=await SB.from('profiles').select('*').eq('id',U.id).single();P=data}
 async function loadAll(){
-  try{await loadDebts();}catch(e){console.warn("debts table missing");}
-  try{await loadHabits2();}catch(e){console.warn("habits2 table missing");}
   const uid=U.id;
   const[a,b,c,d,e,f,g,h,i,j]=await Promise.all([
     SB.from('transactions').select('*').eq('user_id',uid).order('created_at',{ascending:false}),
@@ -1171,10 +1104,10 @@ function fillTags(){const e=document.getElementById('t-tag');if(e)e.innerHTML='<
 function fillStatsYear(){const e=document.getElementById('stats-year');if(!e)return;const ys=new Set(C.tx.map(t=>new Date(t.date).getFullYear()));ys.add(new Date().getFullYear());e.innerHTML=[...ys].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('')}
 
 // NAV
-const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','debts':'mn-fin','tasks':'mn-main','habits2':'mn-main','habits':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
+const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','tasks':'mn-main','habits':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
 const MOB_GROUPS={
-  main:['dashboard','calendar','tasks','notes','habits2'],
-  fin:['transactions','budget','goals','stats','recurring','debts'],
+  main:['dashboard','calendar','tasks','notes'],
+  fin:['transactions','budget','goals','stats','recurring'],
   acc:['settings']
 };
 function toggleMobGroup(g){
@@ -1195,9 +1128,9 @@ function nav(p){
   const navRenders={
     dashboard:renderDash, stats:renderStats, transactions:renderTx,
     budget:renderBudget, goals:renderGoals, tasks:renderTasks,
-    habits:()=>{}, habits2:renderHabits2, calendar:renderCal, recurring:renderRec,
+    habits:()=>{}, calendar:renderCal, recurring:renderRec,
     notes:renderNotes, calculator:()=>{}, rule503020:()=>{},
-    settings:updateSettingsUI, debts:renderDebts,
+    settings:updateSettingsUI,
   }
   if(navRenders[p]) navRenders[p]();
 }
@@ -1560,7 +1493,7 @@ function renderWidget(id) {
       + '<div class="widget-big">'+todayTasks.length+'</div>'
       + '<div class="widget-sub">Do zrobienia dziś</div>';
   }
-  if (id==='debts') {
+  if (id===) {
     var openDebts = DEBTS.filter(function(d){ return !d.settled; });
     var netD = openDebts.filter(function(d){return d.type==='lent';}).reduce(function(s,d){return s+parseFloat(d.amount);},0)
              - openDebts.filter(function(d){return d.type==='owe';}).reduce(function(s,d){return s+parseFloat(d.amount);},0);
@@ -1677,6 +1610,25 @@ function renderDash() {
 // SUBCATEGORIES
 // ═══════════════════════════════════════════════════════
 const SUBCATS = {
+  'Jedzenie':     ['Sklep spożywczy','Piekarnia','Mięso','Owoce i warzywa','Nabiał','Słodycze','Alkohol','Napoje'],
+  'Restauracje':  ['Restauracja','Kawiarnia','Fast food','Pizza','Sushi','Lunch','Kolacja na mieście'],
+  'Transport':    ['Paliwo','Parking','Komunikacja miejska','Taxi/Uber','Bolt','Serwis auta','Ubezpieczenie auta','Bilety'],
+  'Rozrywka':     ['Kino','Teatr','Koncert','Netflix/Streaming','Gry','Książki','Imprezy','Wyjście ze znajomymi'],
+  'Zdrowie':      ['Apteka','Lekarz','Dentysta','Siłownia','Suplementy','Badania','Optyk'],
+  'Rachunki':     ['Czynsz','Prąd','Gaz','Woda','Internet','Telefon','Ubezpieczenie','Telewizja'],
+  'Praca':        ['Sprzęt biurowy','Szkolenia','Dojazdy','Oprogramowanie','Konto firmowe'],
+  'Zakupy':       ['Odzież','Buty','Elektronika','Kosmetyki','Meble','AGD','Inne zakupy'],
+  'Dom':          ['Remonty','Narzędzia','Dekoracje','Sprzątanie','Ogród','Czynsz','Naprawy'],
+  'Podróże':      ['Bilety lotnicze','Hotel','Airbnb','Wycieczka','Ubezpieczenie podróży','Wymiana walut'],
+  'Edukacja':     ['Kurs online','Szkolenie','Książki edukacyjne','Czesne','Korepetycje'],
+  'Sport':        ['Karnet siłowni','Sprzęt sportowy','Odzież sportowa','Zajęcia','Basen'],
+  'Uroda':        ['Fryzjer','Kosmetyczka','Kosmetyki','Manicure','Perfumy'],
+  'Zwierzęta':    ['Karma','Weterynarz','Akcesoria','Pielęgnacja'],
+  'Prezenty':     ['Urodziny','Święta','Ślub','Inne prezenty'],
+  'Oszczędności': ['Lokata','Fundusz awaryjny','Cel oszczędnościowy'],
+  'Inwestycje':   ['Akcje','ETF','Kryptowaluty','Nieruchomości'],
+  'Inne':         ['Bez kategorii','Różne'],
+};
   'Jedzenie':    ['Restauracje','Kawiarnie','Sklep spożywczy','Fastfood','Alkohol','Słodycze'],
   'Transport':   ['Paliwo','Parking','Komunikacja miejska','Taxi/Uber','Serwis auta','Bilety'],
   'Rozrywka':    ['Kino/Teatr','Streaming','Gry','Książki','Sport','Imprezy'],
@@ -1709,7 +1661,7 @@ var debtFilterMode = 'all';
 async function loadDebts() {
   if (!U) return;
   try {
-    var r = await SB.from('debts').select('*').eq('user_id',U.id).order('created_at',{ascending:false});
+    var r = await SB.from().select('*').eq('user_id',U.id).order('created_at',{ascending:false});
     DEBTS = r.data || [];
   } catch(e) { DEBTS = JSON.parse(localStorage.getItem('aura_debts')||'[]'); }
 }
@@ -1758,10 +1710,10 @@ async function saveDebt() {
   var obj = {user_id:U.id, person:person, amount:amount, type:type, description:desc, date:date, due_date:due, settled:false};
   try {
     if (editId) {
-      var r = await SB.from('debts').update(obj).eq('id',editId).select().single();
+      var r = await SB.from().update(obj).eq('id',editId).select().single();
       DEBTS = DEBTS.map(function(d){ return d.id==editId ? r.data : d; });
     } else {
-      var r2 = await SB.from('debts').insert(obj).select().single();
+      var r2 = await SB.from().insert(obj).select().single();
       DEBTS.unshift(r2.data);
     }
   } catch(e) {
@@ -1782,7 +1734,7 @@ async function saveDebt() {
 
 async function settleDebt(id) {
   DEBTS = DEBTS.map(function(d){ return d.id==id ? Object.assign({},d,{settled:true}) : d; });
-  try { await SB.from('debts').update({settled:true}).eq('id',id); } catch(e) { saveDebtsLocal(); }
+  try { await SB.from().update({settled:true}).eq('id',id); } catch(e) { saveDebtsLocal(); }
   renderDebts();
   notif('✓','Dług rozliczony!');
 }
@@ -1790,7 +1742,7 @@ async function settleDebt(id) {
 
 async function deleteDebt(id) {
   DEBTS = DEBTS.filter(function(d){ return d.id!=id; });
-  try { await SB.from('debts').delete().eq('id',id); } catch(e) { saveDebtsLocal(); }
+  try { await SB.from().delete().eq('id',id); } catch(e) { saveDebtsLocal(); }
   renderDebts();
 }
 
@@ -2033,7 +1985,7 @@ var WIDGET_DEFS = [
   {id:'recent-tx',  name:'Ostatnie transakcje',icon:'⇄',  size:'full'},
   {id:'goals',      name:'Cele finansowe',     icon:'◎',  size:'full'},
   {id:'habits',     name:'Nawyki dziś',        icon:'◈',  size:'full'},
-  {id:'debts',      name:'Długi / Pożyczki',   icon:'⇋',  size:'normal'},
+  {id:,      name:'Długi / Pożyczki',   icon:'⇋',  size:'normal'},
   {id:'chart',      name:'Wykres miesięczny',  icon:'▲',  size:'full'},
 ];
 
