@@ -353,6 +353,44 @@ select.inp option{background:var(--surf2)}
 .timer-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
 /* END FITNESS CSS */
 
+
+/* ── WIDGETS ── */
+.widget-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:900px){.widget-grid{grid-template-columns:repeat(3,1fr)}}
+.widget{background:var(--surf);border-radius:18px;padding:18px;border:1px solid var(--bord);position:relative;overflow:hidden;min-height:120px}
+.widget-title{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.widget-big{font-family:'Fraunces',serif;font-size:2rem;font-weight:700;margin-bottom:4px;line-height:1}
+.widget-sub{font-size:12px;color:var(--muted)}
+.widget-full{grid-column:1/-1}
+.widget-picker-item{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;border:1px solid var(--bord);margin-bottom:8px;cursor:pointer;transition:.15s;background:var(--surf2)}
+.widget-picker-item.active{border-color:var(--acc);background:rgba(124,92,252,.08)}
+.widget-picker-check{width:20px;height:20px;border-radius:6px;border:2px solid var(--bord);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.15s}
+.widget-picker-item.active .widget-picker-check{background:var(--acc);border-color:var(--acc);color:#fff}
+/* ── DEBT ── */
+.debt-card{background:var(--surf2);border-radius:14px;padding:16px;margin-bottom:10px;border:1px solid var(--bord);display:flex;align-items:center;gap:14px}
+.debt-card.overdue{border-color:rgba(248,113,113,.4);background:rgba(248,113,113,.05)}
+.debt-card.settled{opacity:.55}
+.debt-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;flex-shrink:0}
+.debt-info{flex:1;min-width:0}
+.debt-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.debt-meta{font-size:12px;color:var(--muted)}
+.debt-amount{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;text-align:right;white-space:nowrap}
+/* ── HABITS 2 ── */
+.h2-item{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--surf2);border-radius:12px;margin-bottom:8px;border:1px solid var(--bord);transition:.2s}
+.h2-item.done-today{border-color:rgba(34,201,138,.35);background:rgba(34,201,138,.06)}
+.h2-check{width:38px;height:38px;border-radius:50%;border:2px solid var(--bord);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0;transition:.2s}
+.h2-check.done{border-color:transparent}
+.h2-check:hover{transform:scale(1.1)}
+.h2-info{flex:1;min-width:0}
+.h2-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.h2-streak{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:4px}
+.h2-prog-bar{height:4px;background:var(--surf3);border-radius:100px;overflow:hidden;margin-top:6px}
+.h2-prog-fill{height:100%;border-radius:100px;transition:width .3s}
+/* Heatmap */
+.heatmap-wrap{display:flex;gap:3px;min-width:max-content}
+.heatmap-col{display:flex;flex-direction:column;gap:3px}
+.heatmap-cell{width:12px;height:12px;border-radius:3px;background:var(--surf3)}
+.heatmap-lbl{font-size:9px;color:var(--muted);height:12px;display:flex;align-items:center;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -410,6 +448,7 @@ select.inp option{background:var(--surf2)}
       <button class="ni on" onclick="nav('dashboard')"><span class="ni-ic">◫</span>Pulpit</button>
       <button class="ni" onclick="nav('calendar')"><span class="ni-ic">◷</span>Kalendarz</button>
       <button class="ni" onclick="nav('tasks')"><span class="ni-ic">✓</span>Zadania</button>
+      <button class="ni" onclick="nav('habits2')"><span class="ni-ic">◈</span>Nawyki</button>
       <button class="ni" onclick="nav('notes')"><span class="ni-ic">≡</span>Notatki</button>
     </div>
     <div class="nav-sec">
@@ -419,6 +458,7 @@ select.inp option{background:var(--surf2)}
       <button class="ni" onclick="nav('goals')"><span class="ni-ic">◎</span>Cele</button>
       <button class="ni" onclick="nav('stats')"><span class="ni-ic">▲</span>Statystyki</button>
       <button class="ni" onclick="nav('recurring')"><span class="ni-ic">↺</span>Cykliczne</button>
+      <button class="ni" onclick="nav('debts')"><span class="ni-ic">⇋</span>Długi</button>
     </div>
     <div class="nav-sec">
       <div class="nav-lbl">Konto</div>
@@ -453,27 +493,25 @@ select.inp option{background:var(--surf2)}
 
     <!-- DASHBOARD -->
     <div class="page on" id="page-dashboard">
-      <div class="ph"><div class="pt">Dzień dobry, <span id="greet"></span> 👋</div><div class="ps" id="today-str"></div></div>
-      <div class="week-box">
-        <div class="week-title">📅 Podsumowanie tygodnia</div>
-        <div class="week-stats">
-          <div class="ws-item"><div class="ws-val" id="ws-inc">0 zł</div><div class="ws-lbl">Przychody</div></div>
-          <div class="ws-item"><div class="ws-val" id="ws-exp" style="color:var(--red)">0 zł</div><div class="ws-lbl">Wydatki</div></div>
-          <div class="ws-item"><div class="ws-val" id="ws-tasks">0/0</div><div class="ws-lbl">Zadania</div></div>
-          <div class="ws-item"><div class="ws-val" id="ws-habits">—</div><div class="ws-lbl">Nawyki</div></div>
+      <div class="ph">
+        <div>
+          <div class="pt">Dzień dobry, <span id="greet"></span> 👋</div>
+          <div class="ps" id="today-str"></div>
         </div>
+        <button class="btn btn-g" onclick="openWidgetPicker()" style="font-size:12px;gap:5px">⊞ Widżety</button>
       </div>
-      <div class="g4 mb14">
-        <div class="sc p"><div class="sl">Saldo</div><div class="sv" id="d-bal">—</div></div>
-        <div class="sc g"><div class="sl">Przychody</div><div class="sv" id="d-inc">—</div><div class="sc2">Ten miesiąc</div></div>
-        <div class="sc r"><div class="sl">Wydatki</div><div class="sv" id="d-exp">—</div><div class="sc2">Ten miesiąc</div></div>
-        <div class="sc b"><div class="sl">Zadania dziś</div><div class="sv" id="d-tasks">—</div></div>
-      </div>
-      <div class="g2" style="gap:14px">
-        <div class="card"><div class="sh"><div class="st">Ostatnie transakcje</div><button class="btn btn-g" onclick="nav('transactions')">Wszystkie →</button></div><div id="d-tx"></div></div>
-        <div class="card"><div class="sh"><div class="st">Cele finansowe</div><button class="btn btn-g" onclick="nav('goals')">Wszystkie →</button></div><div id="d-goals"></div></div>
-        <div class="card"><div class="sh"><div class="st">Zadania na dziś</div><button class="btn btn-g" onclick="nav('tasks')">Wszystkie →</button></div><div id="d-tasklist"></div></div>
-        <div class="card"><div class="sh"><div class="st">Wydatki vs Przychody</div></div><div class="chart-box"><canvas id="d-chart"></canvas></div></div>
+
+      <!-- WIDGET GRID -->
+      <div id="widget-grid" class="widget-grid"></div>
+
+      <!-- WIDGET PICKER MODAL -->
+      <div id="mod-widgets" class="mod" style="display:none" onclick="if(event.target===this)closeWidgetPicker()">
+        <div class="mod-box" style="max-width:480px">
+          <div class="sh mb14"><div class="st">Dostosuj pulpit</div><button class="btn btn-g" onclick="closeWidgetPicker()">✕</button></div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Wybierz widżety do wyświetlenia na pulpicie</div>
+          <div id="widget-picker-list"></div>
+          <button class="btn btn-a" style="width:100%;justify-content:center;padding:12px;margin-top:14px" onclick="saveWidgetConfig()">Zapisz układ</button>
+        </div>
       </div>
     </div>
 
@@ -509,7 +547,7 @@ select.inp option{background:var(--surf2)}
           <div class="ifg"><label>Opis</label><input class="inp" id="t-name" placeholder="np. Zakupy" style="width:155px"></div>
           <div class="ifg"><label>Kwota</label><input class="inp" type="number" id="t-amt" placeholder="0.00" style="width:90px"></div>
           <div class="ifg"><label>Typ</label><select class="inp" id="t-type"><option value="expense">Wydatek</option><option value="income">Przychód</option></select></div>
-          <div class="ifg"><label>Kategoria</label><select class="inp" id="t-cat" style="width:120px"></select></div>
+          <div class="ifg"><label>Kategoria</label><select class="inp" id="t-cat" onchange="updateSubcats()" style="width:120px"></select></div><div class="ifg" id="subcat-wrap" style="display:none"><label>Podkat.</label><select class="inp" id="t-subcat" style="width:110px"></select></div>
           <div class="ifg"><label>Tag</label><select class="inp" id="t-tag" style="width:100px"><option value="">Brak</option></select></div>
           <div class="ifg"><label>Data</label><input class="inp" type="date" id="t-date" style="width:130px"></div>
           <div class="ifg" style="justify-content:flex-end"><button class="btn btn-a" onclick="addTx()">+ Dodaj</button></div>
@@ -740,6 +778,110 @@ select.inp option{background:var(--surf2)}
 
 
 
+    <!-- DŁUGI / POŻYCZKI -->
+    <div class="page" id="page-debts">
+      <div class="ph"><div class="pt">Długi i pożyczki</div><div class="ps">Śledź komu jesteś winien i kto jest Tobie winien</div></div>
+
+      <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+        <button class="btn btn-a" onclick="openMod('mod-debt')">+ Dodaj dług</button>
+        <div style="display:flex;gap:4px;background:var(--surf2);border-radius:10px;padding:3px">
+          <button id="debt-tab-all" style="padding:7px 14px;border-radius:8px;border:none;background:var(--acc);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer" onclick="debtFilter('all')">Wszystkie</button>
+          <button id="debt-tab-owe" style="padding:7px 14px;border-radius:8px;border:none;background:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer" onclick="debtFilter('owe')">Ja jestem winien</button>
+          <button id="debt-tab-lent" style="padding:7px 14px;border-radius:8px;border:none;background:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;cursor:pointer" onclick="debtFilter('lent')">Ktoś mi jest winien</button>
+        </div>
+      </div>
+
+      <div class="g4 mb14">
+        <div class="sc r"><div class="sl">Moje długi</div><div class="sv" id="debt-total-owe">0 zł</div></div>
+        <div class="sc g"><div class="sl">Pożyczone innym</div><div class="sv" id="debt-total-lent">0 zł</div></div>
+        <div class="sc b"><div class="sl">Saldo netto</div><div class="sv" id="debt-net">0 zł</div></div>
+        <div class="sc p"><div class="sl">Otwarte pozycje</div><div class="sv" id="debt-open-count">0</div></div>
+      </div>
+
+      <div id="debt-list"></div>
+    </div>
+
+    <!-- MODAL: Dodaj dług -->
+    <div class="mod" id="mod-debt" style="display:none" onclick="if(event.target===this)closeMod('mod-debt')">
+      <div class="mod-box">
+        <div class="sh mb14"><div class="st" id="debt-mod-title">Nowy dług / pożyczka</div><button class="btn btn-g" onclick="closeMod('mod-debt')">✕</button></div>
+        <input type="hidden" id="debt-edit-id">
+        <div class="fg"><label>Typ</label>
+          <div style="display:flex;gap:6px">
+            <button id="debt-type-owe" class="btn btn-a" style="flex:1;justify-content:center" onclick="setDebtType('owe')">😬 Ja jestem winien</button>
+            <button id="debt-type-lent" class="btn btn-g" style="flex:1;justify-content:center" onclick="setDebtType('lent')">💰 Ktoś mi jest winien</button>
+          </div>
+        </div>
+        <input type="hidden" id="debt-type-val" value="owe">
+        <div class="if">
+          <div class="ifg" style="flex:1"><label>Osoba</label><input class="inp" id="debt-person" placeholder="np. Marek, Mama..." style="width:100%"></div>
+          <div class="ifg" style="width:110px"><label>Kwota</label><input class="inp" type="number" id="debt-amount" placeholder="0.00" step="0.01" style="width:100%"></div>
+        </div>
+        <div class="fg"><label>Opis (opcjonalnie)</label><input class="inp" id="debt-desc" placeholder="Za co?" style="width:100%"></div>
+        <div class="if">
+          <div class="ifg"><label>Data</label><input class="inp" type="date" id="debt-date" style="width:130px"></div>
+          <div class="ifg"><label>Termin spłaty</label><input class="inp" type="date" id="debt-due" style="width:130px"></div>
+        </div>
+        <button class="btn btn-a" style="width:100%;justify-content:center;padding:12px;margin-top:8px" onclick="saveDebt()">Zapisz</button>
+      </div>
+    </div>
+
+    <!-- NAWYKI 2.0 -->
+    <div class="page" id="page-habits2">
+      <div class="ph"><div class="pt">Nawyki</div><div class="ps">Buduj dobre nawyki każdego dnia</div></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <div class="g4" style="flex:1;min-width:200px">
+          <div class="sc p"><div class="sl">Dziś ukończone</div><div class="sv" id="h2-today-done">0/0</div></div>
+          <div class="sc g"><div class="sl">Najdłuższy streak</div><div class="sv" id="h2-best-streak">0 dni</div></div>
+          <div class="sc b"><div class="sl">Ten tydzień</div><div class="sv" id="h2-week-pct">0%</div></div>
+          <div class="sc r"><div class="sl">Do poprawy</div><div class="sv" id="h2-missed">0</div></div>
+        </div>
+        <button class="btn btn-a" onclick="openMod('mod-habit2')">+ Nowy nawyk</button>
+      </div>
+
+      <!-- TODAY -->
+      <div class="card mb14">
+        <div class="sh mb14"><div class="st">Dziś — <span id="h2-date-lbl"></span></div></div>
+        <div id="h2-today-list"></div>
+      </div>
+
+      <!-- HEATMAP -->
+      <div class="card mb14">
+        <div class="sh mb14"><div class="st">Aktywność — ostatnie 12 tygodni</div></div>
+        <div id="h2-heatmap" style="overflow-x:auto"></div>
+      </div>
+
+      <!-- HABIT DETAILS -->
+      <div id="h2-habits-detail"></div>
+    </div>
+
+    <!-- MODAL: Nawyk -->
+    <div class="mod" id="mod-habit2" style="display:none" onclick="if(event.target===this)closeMod('mod-habit2')">
+      <div class="mod-box">
+        <div class="sh mb14"><div class="st">Nowy nawyk</div><button class="btn btn-g" onclick="closeMod('mod-habit2')">✕</button></div>
+        <input type="hidden" id="h2-edit-id">
+        <div class="fg"><label>Nazwa nawyku</label><input class="inp" id="h2-name" placeholder="np. Pić 2L wody, Medytacja..." style="width:100%"></div>
+        <div class="if">
+          <div class="ifg" style="flex:1"><label>Emoji</label><input class="inp" id="h2-emoji" placeholder="💧" style="width:70px;text-align:center;font-size:20px"></div>
+          <div class="ifg" style="flex:1"><label>Kolor</label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap" id="h2-color-pick">
+              <span style="width:28px;height:28px;border-radius:50%;background:#7c5cfc;cursor:pointer;border:3px solid #7c5cfc" onclick="pickH2Color('#7c5cfc',this)"></span>
+              <span style="width:28px;height:28px;border-radius:50%;background:#22c98a;cursor:pointer" onclick="pickH2Color('#22c98a',this)"></span>
+              <span style="width:28px;height:28px;border-radius:50%;background:#f97316;cursor:pointer" onclick="pickH2Color('#f97316',this)"></span>
+              <span style="width:28px;height:28px;border-radius:50%;background:#38bdf8;cursor:pointer" onclick="pickH2Color('#38bdf8',this)"></span>
+              <span style="width:28px;height:28px;border-radius:50%;background:#f59e0b;cursor:pointer" onclick="pickH2Color('#f59e0b',this)"></span>
+              <span style="width:28px;height:28px;border-radius:50%;background:#ec4899;cursor:pointer" onclick="pickH2Color('#ec4899',this)"></span>
+            </div>
+            <input type="hidden" id="h2-color" value="#7c5cfc">
+          </div>
+        </div>
+        <div class="fg"><label>Cel dzienny (opcjonalnie)</label><input class="inp" id="h2-goal" placeholder="np. 8 szklanek" style="width:100%"></div>
+        <div class="fg"><label>Przypomnienie (opcjonalnie)</label><input class="inp" type="time" id="h2-remind" style="width:130px"></div>
+        <button class="btn btn-a" style="width:100%;justify-content:center;padding:12px;margin-top:8px" onclick="saveHabit2()">Zapisz nawyk</button>
+      </div>
+    </div>
+
 <!-- MODALS -->
 <div class="modal-bg" id="mod-budget">
   <div class="modal"><h3>Limit budżetowy</h3>
@@ -821,6 +963,7 @@ select.inp option{background:var(--surf2)}
       <button class="more-item" onclick="nav('dashboard');closeMore()"><span class="more-ic">⊞</span>Pulpit</button>
       <button class="more-item" onclick="nav('calendar');closeMore()"><span class="more-ic">◷</span>Kalendarz</button>
       <button class="more-item" onclick="nav('tasks');closeMore()"><span class="more-ic">✓</span>Zadania</button>
+      <button class="more-item" onclick="nav('habits2');closeMore()"><span class="more-ic">◈</span>Nawyki</button>
       <button class="more-item" onclick="nav('notes');closeMore()"><span class="more-ic">≡</span>Notatki</button>
       <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px;margin-top:8px">Finanse</div>
       <button class="more-item" onclick="nav('transactions');closeMore()"><span class="more-ic">⇄</span>Transakcje</button>
@@ -828,6 +971,7 @@ select.inp option{background:var(--surf2)}
       <button class="more-item" onclick="nav('goals');closeMore()"><span class="more-ic">◎</span>Cele</button>
       <button class="more-item" onclick="nav('stats');closeMore()"><span class="more-ic">▲</span>Statystyki</button>
       <button class="more-item" onclick="nav('recurring');closeMore()"><span class="more-ic">↺</span>Cykliczne</button>
+      <button class="more-item" onclick="nav('debts');closeMore()"><span class="more-ic">⇋</span>Długi</button>
       <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px;margin-top:8px">Konto</div>
       <button class="more-item" onclick="nav('settings');closeMore()"><span class="more-ic">⚙</span>Ustawienia</button>
     </div>
@@ -933,6 +1077,8 @@ async function init(){
 }
 async function loadP(){const{data}=await SB.from('profiles').select('*').eq('id',U.id).single();P=data}
 async function loadAll(){
+  await loadDebts();
+  await loadHabits2();
   const uid=U.id;
   const[a,b,c,d,e,f,g,h,i,j]=await Promise.all([
     SB.from('transactions').select('*').eq('user_id',uid).order('created_at',{ascending:false}),
@@ -977,14 +1123,14 @@ async function doRegister(){
   U=data.user;await new Promise(r=>setTimeout(r,1000));await loadP();await loadAll();showApp();
 }
 async function doLogout(){
-  await SB.auth.signOut();U=null;P=null;C={tx:[],goals:[],tasks:[],habits:[],hLogs:[],bLimits:[],events:[],tags:[],rec:[],notes:[]};NOTIFS=[];
+  await SB.auth.signOut();U=null;P=null;C={tx:[],goals:[],tasks:[],habits:[],hLogs:[],bLimits:[],events:[],tags:[],rec:[],notes:[]};DEBTS=[];HABITS2=[];HLOGS2={};NOTIFS=[];
   document.getElementById('li-email').value='';document.getElementById('li-pw').value='';
   document.getElementById('app').style.display='none';document.getElementById('auth').style.display='flex';
   hm();Object.values(CHARTS).forEach(c=>{try{c.destroy()}catch(e){}});CHARTS={};
 }
 
 // BOOT
-function showApp(){
+function showApp(){ loadWidgetConfig();
   document.getElementById('auth').style.display='none';document.getElementById('app').style.display='block';
   const name=P?.name||U?.email||'Użytkownik';
   document.getElementById('greet').textContent=name.split(' ')[0];
@@ -1000,7 +1146,7 @@ function fillTags(){const e=document.getElementById('t-tag');if(e)e.innerHTML='<
 function fillStatsYear(){const e=document.getElementById('stats-year');if(!e)return;const ys=new Set(C.tx.map(t=>new Date(t.date).getFullYear()));ys.add(new Date().getFullYear());e.innerHTML=[...ys].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('')}
 
 // NAV
-const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','tasks':'mn-main','habits':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
+const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','debts':'mn-fin','tasks':'mn-main','habits2':'mn-main','habits':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
 const MOB_GROUPS={
   main:['dashboard','calendar','tasks','notes'],
   fin:['transactions','budget','goals','stats','recurring','rule503020','calculator'],
@@ -1326,6 +1472,553 @@ function renderDash(){
 
 
 
+
+
+
+// ═══════════════════════════════════════════════════════
+// SUBCATEGORIES
+// ═══════════════════════════════════════════════════════
+const SUBCATS = {
+  'Jedzenie':    ['Restauracje','Kawiarnie','Sklep spożywczy','Fastfood','Alkohol','Słodycze'],
+  'Transport':   ['Paliwo','Parking','Komunikacja miejska','Taxi/Uber','Serwis auta','Bilety'],
+  'Rozrywka':    ['Kino/Teatr','Streaming','Gry','Książki','Sport','Imprezy'],
+  'Zdrowie':     ['Leki','Wizyta lekarska','Siłownia','Suplementy','Kosmetyki','Dentysta'],
+  'Rachunki':    ['Czynsz','Prąd','Internet','Telefon','Woda','Ubezpieczenie'],
+  'Praca':       ['Sprzęt','Szkolenia','Dojazdy','Biuro','Oprogramowanie'],
+  'Inne':        ['Prezenty','Odzież','Dom','Zwierzęta','Podróże','Edukacja'],
+};
+
+function updateSubcats() {
+  var cat = (document.getElementById('t-cat')||{value:''}).value;
+  var wrap = document.getElementById('subcat-wrap');
+  var sel = document.getElementById('t-subcat');
+  if (!wrap || !sel) return;
+  var subs = SUBCATS[cat] || [];
+  if (!subs.length) { wrap.style.display='none'; return; }
+  wrap.style.display = '';
+  sel.innerHTML = '<option value="">— brak —</option>' +
+    subs.map(function(s){ return '<option value="'+s+'">'+s+'</option>'; }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// DŁUGI / POŻYCZKI
+// ═══════════════════════════════════════════════════════
+var DEBTS = [];
+var debtFilterMode = 'all';
+
+async function loadDebts() {
+  if (!U) return;
+  try {
+    var r = await SB.from('debts').select('*').eq('user_id',U.id).order('created_at',{ascending:false});
+    DEBTS = r.data || [];
+  } catch(e) { DEBTS = JSON.parse(localStorage.getItem('aura_debts')||'[]'); }
+}
+
+function saveDebtsLocal() {
+  localStorage.setItem('aura_debts', JSON.stringify(DEBTS));
+}
+
+function setDebtType(t) {
+  document.getElementById('debt-type-val').value = t;
+  document.getElementById('debt-type-owe').className = t==='owe' ? 'btn btn-a' : 'btn btn-g';
+  document.getElementById('debt-type-lent').className = t==='lent' ? 'btn btn-a' : 'btn btn-g';
+  document.getElementById('debt-type-owe').style.flex = '1';
+  document.getElementById('debt-type-owe').style.justifyContent = 'center';
+  document.getElementById('debt-type-lent').style.flex = '1';
+  document.getElementById('debt-type-lent').style.justifyContent = 'center';
+}
+
+function debtFilter(mode) {
+  debtFilterMode = mode;
+  ['all','owe','lent'].forEach(function(m) {
+    var btn = document.getElementById('debt-tab-'+m);
+    if (!btn) return;
+    if (m === mode) {
+      btn.style.background = 'var(--acc)'; btn.style.color = '#fff';
+    } else {
+      btn.style.background = 'none'; btn.style.color = 'var(--muted)';
+    }
+  });
+  renderDebts();
+}
+
+async function saveDebt() {
+  var person = (document.getElementById('debt-person')||{value:''}).value.trim();
+  var amount = parseFloat((document.getElementById('debt-amount')||{value:0}).value)||0;
+  var type = (document.getElementById('debt-type-val')||{value:'owe'}).value;
+  var desc = (document.getElementById('debt-desc')||{value:''}).value.trim();
+  var date = (document.getElementById('debt-date')||{value:''}).value || td();
+  var due = (document.getElementById('debt-due')||{value:''}).value || null;
+  var editId = (document.getElementById('debt-edit-id')||{value:''}).value;
+  if (!person || !amount) { alert('Podaj osobę i kwotę'); return; }
+  var obj = {user_id:U.id, person:person, amount:amount, type:type, description:desc, date:date, due_date:due, settled:false};
+  try {
+    if (editId) {
+      var r = await SB.from('debts').update(obj).eq('id',editId).select().single();
+      DEBTS = DEBTS.map(function(d){ return d.id==editId ? r.data : d; });
+    } else {
+      var r2 = await SB.from('debts').insert(obj).select().single();
+      DEBTS.unshift(r2.data);
+    }
+  } catch(e) {
+    var local = Object.assign({},obj,{id: editId || Date.now()});
+    if (editId) DEBTS = DEBTS.map(function(d){ return d.id==editId ? local : d; });
+    else DEBTS.unshift(local);
+    saveDebtsLocal();
+  }
+  closeMod('mod-debt');
+  ['debt-person','debt-amount','debt-desc','debt-due'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  document.getElementById('debt-edit-id').value = '';
+  renderDebts();
+  notif('⇋', (type==='owe'?'Dług dodany: ':'Pożyczka dodana: ')+person+' — '+amount+' '+CUR());
+}
+
+async function settleDebt(id) {
+  DEBTS = DEBTS.map(function(d){ return d.id==id ? Object.assign({},d,{settled:true}) : d; });
+  try { await SB.from('debts').update({settled:true}).eq('id',id); } catch(e) { saveDebtsLocal(); }
+  renderDebts();
+  notif('✓','Dług rozliczony!');
+}
+
+async function deleteDebt(id) {
+  DEBTS = DEBTS.filter(function(d){ return d.id!=id; });
+  try { await SB.from('debts').delete().eq('id',id); } catch(e) { saveDebtsLocal(); }
+  renderDebts();
+}
+
+function renderDebts() {
+  var cur = CUR();
+  var active = DEBTS.filter(function(d){ return !d.settled; });
+  var owe = active.filter(function(d){ return d.type==='owe'; });
+  var lent = active.filter(function(d){ return d.type==='lent'; });
+  var totalOwe = owe.reduce(function(s,d){ return s+parseFloat(d.amount); }, 0);
+  var totalLent = lent.reduce(function(s,d){ return s+parseFloat(d.amount); }, 0);
+  var net = totalLent - totalOwe;
+  var sv = function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
+  sv('debt-total-owe', f0(totalOwe)+' '+cur);
+  sv('debt-total-lent', f0(totalLent)+' '+cur);
+  sv('debt-net', (net>=0?'+':'')+f0(net)+' '+cur);
+  sv('debt-open-count', active.length);
+  var netEl = document.getElementById('debt-net');
+  if (netEl) netEl.style.color = net>=0 ? 'var(--green)' : 'var(--red)';
+
+  var list = DEBTS;
+  if (debtFilterMode==='owe') list = DEBTS.filter(function(d){ return d.type==='owe'; });
+  if (debtFilterMode==='lent') list = DEBTS.filter(function(d){ return d.type==='lent'; });
+
+  var el = document.getElementById('debt-list');
+  if (!el) return;
+  if (!list.length) { el.innerHTML='<div class="empty">Brak wpisów</div>'; return; }
+
+  var today = td();
+  el.innerHTML = list.map(function(d) {
+    var isOwe = d.type==='owe';
+    var overdue = d.due_date && d.due_date < today && !d.settled;
+    var avCol = isOwe ? 'rgba(248,113,113,.15)' : 'rgba(34,201,138,.15)';
+    var avTxtCol = isOwe ? 'var(--red)' : 'var(--green)';
+    var initials = d.person.slice(0,2).toUpperCase();
+    var classes = 'debt-card' + (overdue?' overdue':'') + (d.settled?' settled':'');
+    return '<div class="'+classes+'">'
+      + '<div class="debt-av" style="background:'+avCol+';color:'+avTxtCol+'">'+initials+'</div>'
+      + '<div class="debt-info">'
+      + '<div class="debt-name">'+e2(d.person)+(d.settled?' <span style="font-size:10px;background:rgba(34,201,138,.15);color:var(--green);padding:2px 7px;border-radius:100px">Rozliczony</span>':'')+'</div>'
+      + '<div class="debt-meta">'+(isOwe?'Jestem winien':'Pożyczono')+(d.description?' · '+e2(d.description):'')+'</div>'
+      + '<div class="debt-meta" style="margin-top:2px">'+fd(d.date)+(d.due_date?' · Termin: <span style="color:'+(overdue?'var(--red)':'var(--muted)')+'">'+fd(d.due_date)+'</span>':'')+'</div>'
+      + '</div>'
+      + '<div>'
+      + '<div class="debt-amount" style="color:'+(isOwe?'var(--red)':'var(--green)')+'">'+(isOwe?'-':'+')+''+f0(d.amount)+' '+cur+'</div>'
+      + (!d.settled ? '<div style="display:flex;gap:5px;margin-top:8px;justify-content:flex-end">'
+        + '<button class="btn btn-g" style="font-size:11px;padding:5px 9px" onclick="settleDebt('+d.id+')">✓ Rozlicz</button>'
+        + '<button class="btn btn-d" style="font-size:11px;padding:5px 8px" onclick="deleteDebt('+d.id+')">✕</button>'
+        + '</div>' : '<div style="display:flex;gap:5px;margin-top:8px;justify-content:flex-end"><button class="btn btn-d" style="font-size:11px;padding:5px 8px" onclick="deleteDebt('+d.id+')">Usuń</button></div>')
+      + '</div></div>';
+  }).join('');
+}
+
+function e2(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// ═══════════════════════════════════════════════════════
+// NAWYKI 2.0
+// ═══════════════════════════════════════════════════════
+var HABITS2 = [];
+var HLOGS2 = {};
+var h2SelColor = '#7c5cfc';
+
+async function loadHabits2() {
+  if (!U) return;
+  try {
+    var r = await SB.from('habits2').select('*').eq('user_id',U.id).order('created_at');
+    HABITS2 = r.data || [];
+    var r2 = await SB.from('habit2_logs').select('*').eq('user_id',U.id);
+    HLOGS2 = {};
+    (r2.data||[]).forEach(function(l){ HLOGS2[l.habit_id+'_'+l.date] = l; });
+  } catch(e) {
+    HABITS2 = JSON.parse(localStorage.getItem('aura_habits2')||'[]');
+    HLOGS2 = JSON.parse(localStorage.getItem('aura_hlogs2')||'{}');
+  }
+}
+
+function pickH2Color(col, el) {
+  h2SelColor = col;
+  document.getElementById('h2-color').value = col;
+  document.querySelectorAll('#h2-color-pick span').forEach(function(s){ s.style.border='none'; });
+  el.style.border = '3px solid white';
+}
+
+async function saveHabit2() {
+  var name = (document.getElementById('h2-name')||{value:''}).value.trim();
+  if (!name) { var el=document.getElementById('h2-name'); if(el)el.focus(); return; }
+  var emoji = (document.getElementById('h2-emoji')||{value:'⭐'}).value || '⭐';
+  var color = (document.getElementById('h2-color')||{value:'#7c5cfc'}).value;
+  var goal = (document.getElementById('h2-goal')||{value:''}).value.trim();
+  var remind = (document.getElementById('h2-remind')||{value:''}).value;
+  var editId = (document.getElementById('h2-edit-id')||{value:''}).value;
+  var obj = {user_id:U.id, name:name, emoji:emoji, color:color, goal_desc:goal, remind_time:remind||null};
+  try {
+    if (editId) {
+      var r = await SB.from('habits2').update(obj).eq('id',editId).select().single();
+      HABITS2 = HABITS2.map(function(h){ return h.id==editId ? r.data : h; });
+    } else {
+      var r2 = await SB.from('habits2').insert(obj).select().single();
+      HABITS2.push(r2.data);
+    }
+  } catch(e) {
+    var loc = Object.assign({},obj,{id:editId||Date.now()});
+    if(editId) HABITS2=HABITS2.map(function(h){return h.id==editId?loc:h;}); else HABITS2.push(loc);
+    localStorage.setItem('aura_habits2',JSON.stringify(HABITS2));
+  }
+  closeMod('mod-habit2');
+  ['h2-name','h2-emoji','h2-goal','h2-remind'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('h2-edit-id').value='';
+  renderHabits2();
+  notif('◈','Nawyk dodany: '+name);
+}
+
+async function toggleHabit2(id) {
+  var date = td();
+  var key = id+'_'+date;
+  if (HLOGS2[key]) {
+    // Untoggle
+    try { await SB.from('habit2_logs').delete().eq('habit_id',id).eq('date',date); } catch(e){}
+    delete HLOGS2[key];
+  } else {
+    var obj = {user_id:U.id, habit_id:id, date:date};
+    try { var r = await SB.from('habit2_logs').insert(obj).select().single(); HLOGS2[key]=r.data; }
+    catch(e) { HLOGS2[key]=Object.assign({},obj,{id:Date.now()}); localStorage.setItem('aura_hlogs2',JSON.stringify(HLOGS2)); }
+  }
+  renderHabits2();
+}
+
+async function deleteHabit2(id) {
+  try { await SB.from('habits2').delete().eq('id',id); } catch(e){}
+  HABITS2 = HABITS2.filter(function(h){ return h.id!=id; });
+  localStorage.setItem('aura_habits2',JSON.stringify(HABITS2));
+  renderHabits2();
+}
+
+function getStreak(habitId) {
+  var streak = 0;
+  var d = new Date();
+  while (true) {
+    var ds = d.toISOString().split('T')[0];
+    if (HLOGS2[habitId+'_'+ds]) { streak++; d.setDate(d.getDate()-1); }
+    else break;
+  }
+  return streak;
+}
+
+function renderHabits2() {
+  var today = td();
+  var dateEl = document.getElementById('h2-date-lbl');
+  if (dateEl) dateEl.textContent = fd(today);
+
+  // Stats
+  var done = HABITS2.filter(function(h){ return HLOGS2[h.id+'_'+today]; }).length;
+  var sv = function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
+  sv('h2-today-done', done+'/'+HABITS2.length);
+  var bestStreak = HABITS2.reduce(function(max,h){ return Math.max(max,getStreak(h.id)); }, 0);
+  sv('h2-best-streak', bestStreak+' dni');
+  // Week completion
+  var weekDone=0, weekTotal=0;
+  for (var i=0;i<7;i++) {
+    var d2=new Date(); d2.setDate(d2.getDate()-i);
+    var ds2=d2.toISOString().split('T')[0];
+    weekTotal += HABITS2.length;
+    weekDone += HABITS2.filter(function(h){ return HLOGS2[h.id+'_'+ds2]; }).length;
+  }
+  sv('h2-week-pct', weekTotal>0 ? Math.round(weekDone/weekTotal*100)+'%' : '0%');
+  var missed = HABITS2.filter(function(h){ return !HLOGS2[h.id+'_'+today]; }).length;
+  sv('h2-missed', missed);
+
+  // Today list
+  var listEl = document.getElementById('h2-today-list');
+  if (listEl) {
+    if (!HABITS2.length) {
+      listEl.innerHTML = '<div class="empty">Brak nawyków — dodaj pierwszy!</div>';
+    } else {
+      listEl.innerHTML = HABITS2.map(function(h) {
+        var isDone = !!HLOGS2[h.id+'_'+today];
+        var streak = getStreak(h.id);
+        return '<div class="h2-item'+(isDone?' done-today':'')+'">'
+          + '<div class="h2-check'+(isDone?' done':'')+'" style="'+(isDone?'background:'+h.color+';border-color:'+h.color:'')+'" onclick="toggleHabit2('+h.id+')">'
+          + (isDone ? '✓' : (h.emoji||'⭐'))
+          + '</div>'
+          + '<div class="h2-info">'
+          + '<div class="h2-name">'+e2(h.name)+(h.goal_desc?' <span style="font-size:10px;color:var(--muted)">'+e2(h.goal_desc)+'</span>':'')+'</div>'
+          + '<div class="h2-streak">'
+          + (streak>0 ? '<span style="color:'+h.color+'">🔥 '+streak+' dni z rzędu</span>' : '<span>Brak streaka dziś</span>')
+          + '</div>'
+          + '</div>'
+          + '<button class="btn btn-d" style="padding:5px 8px;font-size:11px" onclick="deleteHabit2('+h.id+')">✕</button>'
+          + '</div>';
+      }).join('');
+    }
+  }
+
+  // Heatmap — last 12 weeks
+  var heatEl = document.getElementById('h2-heatmap');
+  if (heatEl && HABITS2.length) {
+    var weeks = 12, days = 7;
+    var cells = '';
+    var now2 = new Date();
+    // Find start of week 12 weeks ago
+    var startDate = new Date(now2);
+    startDate.setDate(now2.getDate() - (weeks*7 - 1));
+    cells += '<div class="heatmap-wrap">';
+    for (var w=0; w<weeks; w++) {
+      cells += '<div class="heatmap-col">';
+      for (var day=0; day<days; day++) {
+        var cellDate = new Date(startDate);
+        cellDate.setDate(startDate.getDate() + w*7 + day);
+        var ds3 = cellDate.toISOString().split('T')[0];
+        var doneCnt = HABITS2.filter(function(h){ return HLOGS2[h.id+'_'+ds3]; }).length;
+        var total3 = HABITS2.length;
+        var pct3 = total3>0 ? doneCnt/total3 : 0;
+        var bg = pct3===0 ? 'var(--surf3)' : pct3<.5 ? 'rgba(124,92,252,.35)' : pct3<1 ? 'rgba(124,92,252,.65)' : '#7c5cfc';
+        cells += '<div class="heatmap-cell" style="background:'+bg+'" title="'+ds3+': '+doneCnt+'/'+total3+'"></div>';
+      }
+      cells += '</div>';
+    }
+    cells += '</div>';
+    heatEl.innerHTML = cells;
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// WIDGET SYSTEM
+// ═══════════════════════════════════════════════════════
+var WIDGET_DEFS = [
+  {id:'balance',    name:'Saldo konta',       icon:'💰', size:'normal'},
+  {id:'month-exp',  name:'Wydatki — miesiąc', icon:'📉', size:'normal'},
+  {id:'month-inc',  name:'Przychody — miesiąc',icon:'📈',size:'normal'},
+  {id:'tasks-today',name:'Zadania dziś',       icon:'✓',  size:'normal'},
+  {id:'week-sum',   name:'Podsumowanie tygodnia',icon:'📅',size:'full'},
+  {id:'recent-tx',  name:'Ostatnie transakcje',icon:'⇄',  size:'full'},
+  {id:'goals',      name:'Cele finansowe',     icon:'◎',  size:'full'},
+  {id:'habits',     name:'Nawyki dziś',        icon:'◈',  size:'full'},
+  {id:'debts',      name:'Długi / Pożyczki',   icon:'⇋',  size:'normal'},
+  {id:'chart',      name:'Wykres miesięczny',  icon:'▲',  size:'full'},
+];
+
+var activeWidgets = [];
+
+function loadWidgetConfig() {
+  var saved = localStorage.getItem('aura_widgets');
+  if (saved) {
+    activeWidgets = JSON.parse(saved);
+  } else {
+    // Default set
+    activeWidgets = ['balance','month-exp','month-inc','tasks-today','week-sum','recent-tx','goals','chart'];
+  }
+}
+
+function saveWidgetConfig() {
+  // Read from picker
+  activeWidgets = WIDGET_DEFS.filter(function(w) {
+    var el = document.getElementById('wpick-'+w.id);
+    return el && el.classList.contains('active');
+  }).map(function(w){ return w.id; });
+  localStorage.setItem('aura_widgets', JSON.stringify(activeWidgets));
+  closeWidgetPicker();
+  renderDash();
+  notif('⊞','Układ pulpitu zapisany');
+}
+
+function openWidgetPicker() {
+  var list = document.getElementById('widget-picker-list');
+  if (!list) return;
+  list.innerHTML = WIDGET_DEFS.map(function(w) {
+    var isActive = activeWidgets.indexOf(w.id) >= 0;
+    return '<div id="wpick-'+w.id+'" class="widget-picker-item'+(isActive?' active':'')+'" onclick="toggleWidgetPick(\''+w.id+'\')">'
+      + '<div class="widget-picker-check">'+(isActive?'✓':'')+'</div>'
+      + '<span style="font-size:18px">'+w.icon+'</span>'
+      + '<div style="flex:1"><div style="font-size:13px;font-weight:600">'+w.name+'</div>'
+      + '<div style="font-size:11px;color:var(--muted)">'+(w.size==='full'?'Pełna szerokość':'Normalny')+'</div></div>'
+      + '</div>';
+  }).join('');
+  document.getElementById('mod-widgets').style.display = 'flex';
+}
+
+function toggleWidgetPick(id) {
+  var el = document.getElementById('wpick-'+id);
+  if (!el) return;
+  var isActive = el.classList.contains('active');
+  el.classList.toggle('active');
+  el.querySelector('.widget-picker-check').textContent = isActive ? '' : '✓';
+}
+
+function closeWidgetPicker() {
+  var el = document.getElementById('mod-widgets');
+  if (el) el.style.display = 'none';
+}
+
+function renderWidget(id) {
+  var cur = CUR();
+  var now = new Date();
+  var mTx = C.tx.filter(function(t){
+    var d=new Date(t.date); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear();
+  });
+  var tI=C.tx.filter(function(t){return t.type==='income';}).reduce(function(s,t){return s+parseFloat(t.amount);},0);
+  var tE=C.tx.filter(function(t){return t.type==='expense';}).reduce(function(s,t){return s+parseFloat(t.amount);},0);
+  var mI=mTx.filter(function(t){return t.type==='income';}).reduce(function(s,t){return s+parseFloat(t.amount);},0);
+  var mE=mTx.filter(function(t){return t.type==='expense';}).reduce(function(s,t){return s+parseFloat(t.amount);},0);
+  var today=td();
+  var todayTasks=C.tasks.filter(function(t){return !t.done&&t.date===today;});
+
+  if (id==='balance') {
+    var bal = tI-tE;
+    return '<div class="widget-title">💰 Saldo</div>'
+      + '<div class="widget-big" style="color:'+(bal>=0?'var(--green)':'var(--red)')+'">'+(bal>=0?'+':'')+f0(bal)+' '+cur+'</div>'
+      + '<div class="widget-sub">Wszystkie transakcje</div>';
+  }
+  if (id==='month-exp') {
+    return '<div class="widget-title">📉 Wydatki</div>'
+      + '<div class="widget-big" style="color:var(--red)">'+f0(mE)+' '+cur+'</div>'
+      + '<div class="widget-sub">Ten miesiąc</div>';
+  }
+  if (id==='month-inc') {
+    return '<div class="widget-big" style="color:var(--green);margin-top:4px">'+f0(mI)+' '+cur+'</div>'
+      + '<div class="widget-sub">Ten miesiąc</div>'
+      + '<div class="widget-title" style="margin-top:6px;margin-bottom:0">📈 Przychody</div>';
+  }
+  if (id==='tasks-today') {
+    return '<div class="widget-title">✓ Zadania</div>'
+      + '<div class="widget-big">'+todayTasks.length+'</div>'
+      + '<div class="widget-sub">Do zrobienia dziś</div>';
+  }
+  if (id==='debts') {
+    var openDebts = DEBTS.filter(function(d){ return !d.settled; });
+    var netD = openDebts.filter(function(d){return d.type==='lent';}).reduce(function(s,d){return s+parseFloat(d.amount);},0)
+             - openDebts.filter(function(d){return d.type==='owe';}).reduce(function(s,d){return s+parseFloat(d.amount);},0);
+    return '<div class="widget-title">⇋ Długi</div>'
+      + '<div class="widget-big" style="color:'+(netD>=0?'var(--green)':'var(--red)')+'">'+(netD>=0?'+':'')+f0(netD)+' '+cur+'</div>'
+      + '<div class="widget-sub">'+openDebts.length+' aktywnych pozycji</div>';
+  }
+  if (id==='week-sum') {
+    var ws=new Date(now);ws.setDate(now.getDate()-((now.getDay()||7)-1));ws.setHours(0,0,0,0);
+    var we=new Date(ws);we.setDate(ws.getDate()+6);
+    var wTx=C.tx.filter(function(t){return t.date>=ws.toISOString().split('T')[0]&&t.date<=we.toISOString().split('T')[0];});
+    var wI=wTx.filter(function(t){return t.type==='income';}).reduce(function(s,t){return s+parseFloat(t.amount);},0);
+    var wE=wTx.filter(function(t){return t.type==='expense';}).reduce(function(s,t){return s+parseFloat(t.amount);},0);
+    return '<div class="widget-title">📅 Tydzień</div>'
+      + '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">'
+      + '<div style="text-align:center"><div style="font-family:\'Fraunces\',serif;font-size:1.1rem;color:var(--green)">'+f0(wI)+'</div><div style="font-size:10px;color:var(--muted)">Przychody</div></div>'
+      + '<div style="text-align:center"><div style="font-family:\'Fraunces\',serif;font-size:1.1rem;color:var(--red)">'+f0(wE)+'</div><div style="font-size:10px;color:var(--muted)">Wydatki</div></div>'
+      + '<div style="text-align:center"><div style="font-family:\'Fraunces\',serif;font-size:1.1rem">'+C.tasks.filter(function(t){return t.done;}).length+'</div><div style="font-size:10px;color:var(--muted)">Zadań done</div></div>'
+      + '<div style="text-align:center"><div style="font-family:\'Fraunces\',serif;font-size:1.1rem;color:var(--acc2)">'+HABITS2.filter(function(h){return HLOGS2[h.id+'_'+today];}).length+'/'+HABITS2.length+'</div><div style="font-size:10px;color:var(--muted)">Nawyki</div></div>'
+      + '</div>';
+  }
+  if (id==='recent-tx') {
+    var last = C.tx.slice(0,4);
+    if (!last.length) return '<div class="widget-title">⇄ Transakcje</div><div style="color:var(--muted);font-size:13px">Brak transakcji</div>';
+    return '<div class="widget-title">⇄ Ostatnie transakcje</div>'
+      + last.map(function(t) {
+          var ic = EMO[t.category]||'📦';
+          var isInc = t.type==='income';
+          return '<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--bord)">'
+            + '<span style="font-size:16px">'+ic+'</span>'
+            + '<div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+e2(t.description||t.category)+'</div>'
+            + '<div style="font-size:11px;color:var(--muted)">'+fd(t.date)+'</div></div>'
+            + '<div style="font-size:13px;font-weight:600;color:'+(isInc?'var(--green)':'var(--red)')+'">'+(isInc?'+':'-')+f0(t.amount)+' '+cur+'</div>'
+            + '</div>';
+        }).join('')
+      + '<button class="btn btn-g" style="width:100%;justify-content:center;margin-top:10px;font-size:12px" onclick="nav(\'transactions\')">Wszystkie →</button>';
+  }
+  if (id==='goals') {
+    if (!C.goals.length) return '<div class="widget-title">◎ Cele</div><div style="color:var(--muted);font-size:13px">Brak celów</div>';
+    return '<div class="widget-title">◎ Cele finansowe</div>'
+      + C.goals.slice(0,3).map(function(g) {
+          var pct = Math.min(100,Math.round(parseFloat(g.saved_amount||0)/parseFloat(g.target_amount)*100));
+          return '<div style="margin-bottom:10px">'
+            + '<div style="display:flex;justify-content:space-between;margin-bottom:4px">'
+            + '<span style="font-size:13px;font-weight:500">'+e2(g.name)+'</span>'
+            + '<span style="font-size:12px;color:var(--muted)">'+pct+'%</span></div>'
+            + '<div class="pb-bg"><div class="pb-bar" style="width:'+pct+'%"></div></div>'
+            + '</div>';
+        }).join('');
+  }
+  if (id==='habits') {
+    var todayDone = HABITS2.filter(function(h){ return HLOGS2[h.id+'_'+today]; });
+    return '<div class="widget-title">◈ Nawyki dziś</div>'
+      + (HABITS2.length===0 ? '<div style="color:var(--muted);font-size:13px">Brak nawyków</div>' :
+        '<div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px">'
+        + HABITS2.map(function(h){
+            var done = !!HLOGS2[h.id+'_'+today];
+            return '<div onclick="toggleHabit2('+h.id+')" style="display:flex;align-items:center;gap:5px;padding:5px 10px;border-radius:100px;background:'+(done?h.color:'var(--surf2)')+';color:'+(done?'#fff':'var(--muted)')+';font-size:12px;font-weight:500;cursor:pointer;border:1px solid '+(done?h.color:'var(--bord)')+'">'+h.emoji+' '+e2(h.name)+'</div>';
+          }).join('')
+        + '</div>'
+        + '<div style="font-size:12px;color:var(--muted)">'+todayDone.length+' / '+HABITS2.length+' ukończonych</div>');
+  }
+  if (id==='chart') {
+    return '<div class="widget-title">▲ Wydatki vs Przychody</div>'
+      + '<div class="chart-box" style="height:160px"><canvas id="d-chart"></canvas></div>';
+  }
+  return '';
+}
+
+function renderDash() {
+  var now = new Date();
+  var days = ['Niedziela','Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota'];
+  var months = ['stycznia','lutego','marca','kwietnia','maja','czerwca','lipca','sierpnia','września','października','listopada','grudnia'];
+  var el = document.getElementById('today-str');
+  if (el) el.textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+now.getFullYear();
+
+  loadWidgetConfig();
+  var grid = document.getElementById('widget-grid');
+  if (!grid) return;
+
+  grid.innerHTML = activeWidgets.map(function(wid) {
+    var def = WIDGET_DEFS.find(function(w){ return w.id===wid; });
+    if (!def) return '';
+    var isFull = def.size==='full';
+    return '<div class="widget'+(isFull?' widget-full':'')+'">' + renderWidget(wid) + '</div>';
+  }).join('');
+
+  // Render chart if active
+  if (activeWidgets.indexOf('chart') >= 0) {
+    var mTx2 = C.tx;
+    var months6 = [];
+    for (var i=5;i>=0;i--) {
+      var d=new Date(now); d.setMonth(now.getMonth()-i);
+      var mn=d.getMonth(),yr=d.getFullYear();
+      var txM=mTx2.filter(function(t){var dd=new Date(t.date);return dd.getMonth()===mn&&dd.getFullYear()===yr;});
+      months6.push({
+        label:d.toLocaleDateString('pl-PL',{month:'short'}),
+        inc:txM.filter(function(t){return t.type==='income';}).reduce(function(s,t){return s+parseFloat(t.amount);},0),
+        exp:txM.filter(function(t){return t.type==='expense';}).reduce(function(s,t){return s+parseFloat(t.amount);},0)
+      });
+    }
+    mkC('d-chart','bar',{
+      labels:months6.map(function(m){return m.label;}),
+      datasets:[
+        {label:'Przychody',data:months6.map(function(m){return m.inc;}),backgroundColor:'rgba(34,201,138,.7)',borderRadius:4},
+        {label:'Wydatki',data:months6.map(function(m){return m.exp;}),backgroundColor:'rgba(248,113,113,.7)',borderRadius:4}
+      ]
+    });
+  }
+}
 
 
 init();
