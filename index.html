@@ -278,7 +278,7 @@ select.inp option{background:var(--surf2)}
 .fit-tab{padding:9px 16px;border-radius:10px;border:1px solid var(--bord);background:var(--surf2);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:.15s;white-space:nowrap}
 .fit-tab.on{background:linear-gradient(135deg,var(--acc),var(--acc2));color:#fff;border-color:transparent}
 .fit-tab:hover:not(.on){border-color:var(--acc);color:var(--acc2)}
-.fit-panel{display:none}.fit-panel.on{display:block}
+.fit-panel{display:none !important}.fit-panel.on{display:block !important}
 .plan-card{background:var(--surf2);border-radius:14px;padding:16px;margin-bottom:10px;border:1px solid var(--bord);transition:.2s;cursor:pointer;display:flex;align-items:center;gap:14px}
 .plan-card:hover{border-color:var(--acc);transform:translateY(-1px)}
 .plan-card.plan-active{border-color:var(--acc);background:rgba(124,92,252,.07)}
@@ -420,11 +420,7 @@ select.inp option{background:var(--surf2)}
       <div class="nav-lbl">Fitness</div>
       <button class="ni" onclick="nav('fitness')"><span class="ni-ic">⊕</span>Fitness</button>
     </div>
-    <div class="nav-sec">
-      <div class="nav-lbl">Fitness</div>
-      <button class="ni" onclick="nav('fitness')"><span class="ni-ic">⊕</span>Fitness</button>
-    </div>
-    <div class="nav-sec">
+div class="nav-sec">
       <div class="nav-lbl">Konto</div>
       <button class="ni" onclick="nav('settings')"><span class="ni-ic">⚙</span>Ustawienia</button>
     </div>
@@ -832,7 +828,7 @@ select.inp option{background:var(--surf2)}
 
       <!-- PLANS -->
       <div class="fit-panel on" id="fp-plans">
-        <div id="fp-plans-inner"></div>
+        <div id="fp-plans-inner"><div class="empty" style="padding:24px 0">Ładowanie...</div></div>
       </div>
 
       <!-- HISTORY -->
@@ -1176,10 +1172,10 @@ select.inp option{background:var(--surf2)}
       <button class="more-item" onclick="nav('goals');closeMore()"><span class="more-ic">◎</span>Cele</button>
       <button class="more-item" onclick="nav('stats');closeMore()"><span class="more-ic">▲</span>Statystyki</button>
       <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;margin-bottom:2px">Fitness</div>
-      <button class="more-item" onclick="nav('fitness');fitSec('plans');closeMore()"><span class="more-ic">⊕</span>Treningi</button>
-      <button class="more-item" onclick="nav('fitness');fitSec('nutrition');closeMore()"><span class="more-ic">◍</span>Żywienie</button>
-      <button class="more-item" onclick="nav('fitness');fitSec('body');closeMore()"><span class="more-ic">○</span>Pomiary</button>
-      <button class="more-item" onclick="nav('fitness');fitSec('tools');closeMore()"><span class="more-ic">⚙</span>Narzędzia</button>
+      <button class="more-item" onclick="nav('fitness');closeMore()"><span class="more-ic">⊕</span>Treningi</button>
+      <button class="more-item" onclick="nav('fitness');ftab('nutr');closeMore()"><span class="more-ic">◍</span>Żywienie</button>
+      <button class="more-item" onclick="nav('fitness');ftab('body');closeMore()"><span class="more-ic">○</span>Pomiary</button>
+      <button class="more-item" onclick="nav('fitness');ftab('tools');closeMore()"><span class="more-ic">⚙</span>Narzędzia</button>
       <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;margin-bottom:2px">Konto</div>
       <button class="more-item" onclick="nav('habits');closeMore()"><span class="more-ic">◈</span>Nawyki</button>
       <button class="more-item" onclick="nav('settings');closeMore()"><span class="more-ic">⚙</span>Ustawienia</button>
@@ -1731,7 +1727,10 @@ function ftab(t) {
   if (t==='tools') ttab('bmi');
 }
 
-function renderFitness() { ftab('plans'); }
+function renderFitness() {
+  // Small delay to ensure DOM is ready after page transition
+  setTimeout(function() { ftab('plans'); }, 10);
+}
 
 // ── PLANS ──────────────────────────────────────
 function parseDays(plan) {
