@@ -1412,8 +1412,6 @@ function sendMonthlyReport(){
 
 
 // ═══════════════════════════════════════════════════════
-// DŁUGI / POŻYCZKI
-// ═══════════════════════════════════════════════════════
 
 
 
@@ -1423,9 +1421,6 @@ function sendMonthlyReport(){
 
 
 // ═══════════════════════════════════════════════════════
-// NAWYKI 2.0
-// ═══════════════════════════════════════════════════════
-var h2SelColor = '#7c5cfc';
 
 
 
@@ -1639,147 +1634,22 @@ function updateSubcats() {
 // ═══════════════════════════════════════════════════════
 // DŁUGI / POŻYCZKI
 // ═══════════════════════════════════════════════════════
-var DEBTS = [];
-var debtFilterMode = 'all';
 
 
-async function loadDebts() {
-  if (!U) return;
-  try {
-    var r = await SB.from().select('*').eq('user_id',U.id).order('created_at',{ascending:false});
-    DEBTS = r.data || [];
-  } catch(e) { DEBTS = JSON.parse(localStorage.getItem('aura_debts')||'[]'); }
-}
 
 
-function saveDebtsLocal() {
-  localStorage.setItem('aura_debts', JSON.stringify(DEBTS));
-}
 
 
-function setDebtType(t) {
-  document.getElementById('debt-type-val').value = t;
-  document.getElementById('debt-type-owe').className = t==='owe' ? 'btn btn-a' : 'btn btn-g';
-  document.getElementById('debt-type-lent').className = t==='lent' ? 'btn btn-a' : 'btn btn-g';
-  document.getElementById('debt-type-owe').style.flex = '1';
-  document.getElementById('debt-type-owe').style.justifyContent = 'center';
-  document.getElementById('debt-type-lent').style.flex = '1';
-  document.getElementById('debt-type-lent').style.justifyContent = 'center';
-}
 
 
-function debtFilter(mode) {
-  debtFilterMode = mode;
-  ['all','owe','lent'].forEach(function(m) {
-    var btn = document.getElementById('debt-tab-'+m);
-    if (!btn) return;
-    if (m === mode) {
-      btn.style.background = 'var(--acc)'; btn.style.color = '#fff';
-    } else {
-      btn.style.background = 'none'; btn.style.color = 'var(--muted)';
-    }
-  });
-  renderDebts();
-}
 
 
-async function saveDebt() {
-  var person = (document.getElementById('debt-person')||{value:''}).value.trim();
-  var amount = parseFloat((document.getElementById('debt-amount')||{value:0}).value)||0;
-  var type = (document.getElementById('debt-type-val')||{value:'owe'}).value;
-  var desc = (document.getElementById('debt-desc')||{value:''}).value.trim();
-  var date = (document.getElementById('debt-date')||{value:''}).value || td();
-  var due = (document.getElementById('debt-due')||{value:''}).value || null;
-  var editId = (document.getElementById('debt-edit-id')||{value:''}).value;
-  if (!person || !amount) { alert('Podaj osobę i kwotę'); return; }
-  var obj = {user_id:U.id, person:person, amount:amount, type:type, description:desc, date:date, due_date:due, settled:false};
-  try {
-    if (editId) {
-      var r = await SB.from().update(obj).eq('id',editId).select().single();
-      DEBTS = DEBTS.map(function(d){ return d.id==editId ? r.data : d; });
-    } else {
-      var r2 = await SB.from().insert(obj).select().single();
-      DEBTS.unshift(r2.data);
-    }
-  } catch(e) {
-    var local = Object.assign({},obj,{id: editId || Date.now()});
-    if (editId) DEBTS = DEBTS.map(function(d){ return d.id==editId ? local : d; });
-    else DEBTS.unshift(local);
-    saveDebtsLocal();
-  }
-  closeMod('mod-debt');
-  ['debt-person','debt-amount','debt-desc','debt-due'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.value='';
-  });
-  document.getElementById('debt-edit-id').value = '';
-  renderDebts();
-  notif('⇋', (type==='owe'?'Dług dodany: ':'Pożyczka dodana: ')+person+' — '+amount+' '+CUR());
-}
 
 
-async function settleDebt(id) {
-  DEBTS = DEBTS.map(function(d){ return d.id==id ? Object.assign({},d,{settled:true}) : d; });
-  try { await SB.from().update({settled:true}).eq('id',id); } catch(e) { saveDebtsLocal(); }
-  renderDebts();
-  notif('✓','Dług rozliczony!');
-}
 
 
-async function deleteDebt(id) {
-  DEBTS = DEBTS.filter(function(d){ return d.id!=id; });
-  try { await SB.from().delete().eq('id',id); } catch(e) { saveDebtsLocal(); }
-  renderDebts();
-}
 
 
-function renderDebts() {
-  var cur = CUR();
-  var active = DEBTS.filter(function(d){ return !d.settled; });
-  var owe = active.filter(function(d){ return d.type==='owe'; });
-  var lent = active.filter(function(d){ return d.type==='lent'; });
-  var totalOwe = owe.reduce(function(s,d){ return s+parseFloat(d.amount); }, 0);
-  var totalLent = lent.reduce(function(s,d){ return s+parseFloat(d.amount); }, 0);
-  var net = totalLent - totalOwe;
-  var sv = function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
-  sv('debt-total-owe', f0(totalOwe)+' '+cur);
-  sv('debt-total-lent', f0(totalLent)+' '+cur);
-  sv('debt-net', (net>=0?'+':'')+f0(net)+' '+cur);
-  sv('debt-open-count', active.length);
-  var netEl = document.getElementById('debt-net');
-  if (netEl) netEl.style.color = net>=0 ? 'var(--green)' : 'var(--red)';
-
-  var list = DEBTS;
-  if (debtFilterMode==='owe') list = DEBTS.filter(function(d){ return d.type==='owe'; });
-  if (debtFilterMode==='lent') list = DEBTS.filter(function(d){ return d.type==='lent'; });
-
-  var el = document.getElementById('debt-list');
-  if (!el) return;
-  if (!list.length) { el.innerHTML='<div class="empty">Brak wpisów</div>'; return; }
-
-  var today = td();
-  el.innerHTML = list.map(function(d) {
-    var isOwe = d.type==='owe';
-    var overdue = d.due_date && d.due_date < today && !d.settled;
-    var avCol = isOwe ? 'rgba(248,113,113,.15)' : 'rgba(34,201,138,.15)';
-    var avTxtCol = isOwe ? 'var(--red)' : 'var(--green)';
-    var initials = d.person.slice(0,2).toUpperCase();
-    var classes = 'debt-card' + (overdue?' overdue':'') + (d.settled?' settled':'');
-    return '<div class="'+classes+'">'
-      + '<div class="debt-av" style="background:'+avCol+';color:'+avTxtCol+'">'+initials+'</div>'
-      + '<div class="debt-info">'
-      + '<div class="debt-name">'+e2(d.person)+(d.settled?' <span style="font-size:10px;background:rgba(34,201,138,.15);color:var(--green);padding:2px 7px;border-radius:100px">Rozliczony</span>':'')+'</div>'
-      + '<div class="debt-meta">'+(isOwe?'Jestem winien':'Pożyczono')+(d.description?' · '+e2(d.description):'')+'</div>'
-      + '<div class="debt-meta" style="margin-top:2px">'+fd(d.date)+(d.due_date?' · Termin: <span style="color:'+(overdue?'var(--red)':'var(--muted)')+'">'+fd(d.due_date)+'</span>':'')+'</div>'
-      + '</div>'
-      + '<div>'
-      + '<div class="debt-amount" style="color:'+(isOwe?'var(--red)':'var(--green)')+'">'+(isOwe?'-':'+')+''+f0(d.amount)+' '+cur+'</div>'
-      + (!d.settled ? '<div style="display:flex;gap:5px;margin-top:8px;justify-content:flex-end">'
-        + '<button class="btn btn-g" style="font-size:11px;padding:5px 9px" onclick="settleDebt('+d.id+')">✓ Rozlicz</button>'
-        + '<button class="btn btn-d" style="font-size:11px;padding:5px 8px" onclick="deleteDebt('+d.id+')">✕</button>'
-        + '</div>' : '<div style="display:flex;gap:5px;margin-top:8px;justify-content:flex-end"><button class="btn btn-d" style="font-size:11px;padding:5px 8px" onclick="deleteDebt('+d.id+')">Usuń</button></div>')
-      + '</div></div>';
-  }).join('');
-}
 
 
 function e2(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -1787,176 +1657,21 @@ function e2(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 // ═══════════════════════════════════════════════════════
 // NAWYKI 2.0
 // ═══════════════════════════════════════════════════════
-var HABITS2 = [];
-var HLOGS2 = {};
 var h2SelColor = '#7c5cfc';
 
 
-async function loadHabits2() {
-  if (!U) return;
-  try {
-    var r = await SB.from('habits2').select('*').eq('user_id',U.id).order('created_at');
-    HABITS2 = r.data || [];
-    var r2 = await SB.from('habit2_logs').select('*').eq('user_id',U.id);
-    HLOGS2 = {};
-    (r2.data||[]).forEach(function(l){ HLOGS2[l.habit_id+'_'+l.date] = l; });
-  } catch(e) {
-    HABITS2 = JSON.parse(localStorage.getItem('aura_habits2')||'[]');
-    HLOGS2 = JSON.parse(localStorage.getItem('aura_hlogs2')||'{}');
-  }
-}
 
 
-function pickH2Color(col, el) {
-  h2SelColor = col;
-  document.getElementById('h2-color').value = col;
-  document.querySelectorAll('#h2-color-pick span').forEach(function(s){ s.style.border='none'; });
-  el.style.border = '3px solid white';
-}
 
 
-async function saveHabit2() {
-  var name = (document.getElementById('h2-name')||{value:''}).value.trim();
-  if (!name) { var el=document.getElementById('h2-name'); if(el)el.focus(); return; }
-  var emoji = (document.getElementById('h2-emoji')||{value:'⭐'}).value || '⭐';
-  var color = (document.getElementById('h2-color')||{value:'#7c5cfc'}).value;
-  var goal = (document.getElementById('h2-goal')||{value:''}).value.trim();
-  var remind = (document.getElementById('h2-remind')||{value:''}).value;
-  var editId = (document.getElementById('h2-edit-id')||{value:''}).value;
-  var obj = {user_id:U.id, name:name, emoji:emoji, color:color, goal_desc:goal, remind_time:remind||null};
-  try {
-    if (editId) {
-      var r = await SB.from('habits2').update(obj).eq('id',editId).select().single();
-      HABITS2 = HABITS2.map(function(h){ return h.id==editId ? r.data : h; });
-    } else {
-      var r2 = await SB.from('habits2').insert(obj).select().single();
-      HABITS2.push(r2.data);
-    }
-  } catch(e) {
-    var loc = Object.assign({},obj,{id:editId||Date.now()});
-    if(editId) HABITS2=HABITS2.map(function(h){return h.id==editId?loc:h;}); else HABITS2.push(loc);
-    localStorage.setItem('aura_habits2',JSON.stringify(HABITS2));
-  }
-  closeMod('mod-habit2');
-  ['h2-name','h2-emoji','h2-goal','h2-remind'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('h2-edit-id').value='';
-  renderHabits2();
-  notif('◈','Nawyk dodany: '+name);
-}
 
 
-async function toggleHabit2(id) {
-  var date = td();
-  var key = id+'_'+date;
-  if (HLOGS2[key]) {
-    // Untoggle
-    try { await SB.from('habit2_logs').delete().eq('habit_id',id).eq('date',date); } catch(e){}
-    delete HLOGS2[key];
-  } else {
-    var obj = {user_id:U.id, habit_id:id, date:date};
-    try { var r = await SB.from('habit2_logs').insert(obj).select().single(); HLOGS2[key]=r.data; }
-    catch(e) { HLOGS2[key]=Object.assign({},obj,{id:Date.now()}); localStorage.setItem('aura_hlogs2',JSON.stringify(HLOGS2)); }
-  }
-  renderHabits2();
-}
 
 
-async function deleteHabit2(id) {
-  try { await SB.from('habits2').delete().eq('id',id); } catch(e){}
-  HABITS2 = HABITS2.filter(function(h){ return h.id!=id; });
-  localStorage.setItem('aura_habits2',JSON.stringify(HABITS2));
-  renderHabits2();
-}
 
 
-function getStreak(habitId) {
-  var streak = 0;
-  var d = new Date();
-  while (true) {
-    var ds = d.toISOString().split('T')[0];
-    if (HLOGS2[habitId+'_'+ds]) { streak++; d.setDate(d.getDate()-1); }
-    else break;
-  }
-  return streak;
-}
 
 
-function renderHabits2() {
-  var today = td();
-  var dateEl = document.getElementById('h2-date-lbl');
-  if (dateEl) dateEl.textContent = fd(today);
-
-  // Stats
-  var done = HABITS2.filter(function(h){ return HLOGS2[h.id+'_'+today]; }).length;
-  var sv = function(id,v){ var e=document.getElementById(id); if(e) e.textContent=v; };
-  sv('h2-today-done', done+'/'+HABITS2.length);
-  var bestStreak = HABITS2.reduce(function(max,h){ return Math.max(max,getStreak(h.id)); }, 0);
-  sv('h2-best-streak', bestStreak+' dni');
-  // Week completion
-  var weekDone=0, weekTotal=0;
-  for (var i=0;i<7;i++) {
-    var d2=new Date(); d2.setDate(d2.getDate()-i);
-    var ds2=d2.toISOString().split('T')[0];
-    weekTotal += HABITS2.length;
-    weekDone += HABITS2.filter(function(h){ return HLOGS2[h.id+'_'+ds2]; }).length;
-  }
-  sv('h2-week-pct', weekTotal>0 ? Math.round(weekDone/weekTotal*100)+'%' : '0%');
-  var missed = HABITS2.filter(function(h){ return !HLOGS2[h.id+'_'+today]; }).length;
-  sv('h2-missed', missed);
-
-  // Today list
-  var listEl = document.getElementById('h2-today-list');
-  if (listEl) {
-    if (!HABITS2.length) {
-      listEl.innerHTML = '<div class="empty">Brak nawyków — dodaj pierwszy!</div>';
-    } else {
-      listEl.innerHTML = HABITS2.map(function(h) {
-        var isDone = !!HLOGS2[h.id+'_'+today];
-        var streak = getStreak(h.id);
-        return '<div class="h2-item'+(isDone?' done-today':'')+'">'
-          + '<div class="h2-check'+(isDone?' done':'')+'" style="'+(isDone?'background:'+h.color+';border-color:'+h.color:'')+'" onclick="toggleHabit2('+h.id+')">'
-          + (isDone ? '✓' : (h.emoji||'⭐'))
-          + '</div>'
-          + '<div class="h2-info">'
-          + '<div class="h2-name">'+e2(h.name)+(h.goal_desc?' <span style="font-size:10px;color:var(--muted)">'+e2(h.goal_desc)+'</span>':'')+'</div>'
-          + '<div class="h2-streak">'
-          + (streak>0 ? '<span style="color:'+h.color+'">🔥 '+streak+' dni z rzędu</span>' : '<span>Brak streaka dziś</span>')
-          + '</div>'
-          + '</div>'
-          + '<button class="btn btn-d" style="padding:5px 8px;font-size:11px" onclick="deleteHabit2('+h.id+')">✕</button>'
-          + '</div>';
-      }).join('');
-    }
-  }
-
-  // Heatmap — last 12 weeks
-  var heatEl = document.getElementById('h2-heatmap');
-  if (heatEl && HABITS2.length) {
-    var weeks = 12, days = 7;
-    var cells = '';
-    var now2 = new Date();
-    // Find start of week 12 weeks ago
-    var startDate = new Date(now2);
-    startDate.setDate(now2.getDate() - (weeks*7 - 1));
-    cells += '<div class="heatmap-wrap">';
-    for (var w=0; w<weeks; w++) {
-      cells += '<div class="heatmap-col">';
-      for (var day=0; day<days; day++) {
-        var cellDate = new Date(startDate);
-        cellDate.setDate(startDate.getDate() + w*7 + day);
-        var ds3 = cellDate.toISOString().split('T')[0];
-        var doneCnt = HABITS2.filter(function(h){ return HLOGS2[h.id+'_'+ds3]; }).length;
-        var total3 = HABITS2.length;
-        var pct3 = total3>0 ? doneCnt/total3 : 0;
-        var bg = pct3===0 ? 'var(--surf3)' : pct3<.5 ? 'rgba(124,92,252,.35)' : pct3<1 ? 'rgba(124,92,252,.65)' : '#7c5cfc';
-        cells += '<div class="heatmap-cell" style="background:'+bg+'" title="'+ds3+': '+doneCnt+'/'+total3+'"></div>';
-      }
-      cells += '</div>';
-    }
-    cells += '</div>';
-    heatEl.innerHTML = cells;
-  }
-}
 
 // ═══════════════════════════════════════════════════════
 // WIDGET SYSTEM
@@ -1969,8 +1684,6 @@ var WIDGET_DEFS = [
   {id:'week-sum',   name:'Podsumowanie tygodnia',icon:'📅',size:'full'},
   {id:'recent-tx',  name:'Ostatnie transakcje',icon:'⇄',  size:'full'},
   {id:'goals',      name:'Cele finansowe',     icon:'◎',  size:'full'},
-  {id:'habits',     name:'Nawyki dziś',        icon:'◈',  size:'full'},
-  {id:,      name:'Długi / Pożyczki',   icon:'⇋',  size:'normal'},
   {id:'chart',      name:'Wykres miesięczny',  icon:'▲',  size:'full'},
 ];
 
