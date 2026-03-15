@@ -357,7 +357,13 @@ select.inp option{background:var(--surf2)}
 </head>
 <body>
 
-<div id="loader"><div class="spin"></div><div class="load-txt">Ładowanie Aura...</div></div>
+<div id="loader">
+  <div style="text-align:center">
+    <div style="font-family:'Fraunces',serif;font-size:2.8rem;font-weight:700;background:linear-gradient(135deg,#7c5cfc,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;letter-spacing:-1px">✦ Aura</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:28px;letter-spacing:.02em">Twój planer życia i finansów</div>
+    <div class="spin"></div>
+  </div>
+</div>
 
 <!-- AUTH -->
 <div id="auth">
@@ -404,7 +410,6 @@ select.inp option{background:var(--surf2)}
       <button class="ni on" onclick="nav('dashboard')"><span class="ni-ic">◫</span>Pulpit</button>
       <button class="ni" onclick="nav('calendar')"><span class="ni-ic">◷</span>Kalendarz</button>
       <button class="ni" onclick="nav('tasks')"><span class="ni-ic">✓</span>Zadania</button>
-      <button class="ni" onclick="nav('habits')"><span class="ni-ic">◈</span>Nawyki</button>
       <button class="ni" onclick="nav('notes')"><span class="ni-ic">≡</span>Notatki</button>
     </div>
     <div class="nav-sec">
@@ -414,12 +419,8 @@ select.inp option{background:var(--surf2)}
       <button class="ni" onclick="nav('goals')"><span class="ni-ic">◎</span>Cele</button>
       <button class="ni" onclick="nav('stats')"><span class="ni-ic">▲</span>Statystyki</button>
       <button class="ni" onclick="nav('recurring')"><span class="ni-ic">↺</span>Cykliczne</button>
-      <button class="ni" onclick="nav('rule503020')"><span class="ni-ic">%</span>50/30/20</button>
-      <button class="ni" onclick="nav('calculator')"><span class="ni-ic">#</span>Kalkulator</button>
     </div>
     <div class="nav-sec">
-    </div>
-    div class="nav-sec">
       <div class="nav-lbl">Konto</div>
       <button class="ni" onclick="nav('settings')"><span class="ni-ic">⚙</span>Ustawienia</button>
     </div>
@@ -575,19 +576,6 @@ select.inp option{background:var(--surf2)}
       </div>
     </div>
 
-    <!-- HABITS -->
-    <div class="page" id="page-habits">
-      <div class="ph"><div class="pt">Nawyki</div><div class="ps">Buduj pozytywne nawyki dzień po dniu</div></div>
-      <div class="card mb14">
-        <div class="if">
-          <div class="ifg" style="flex:1;min-width:170px"><label>Nawyk</label><input class="inp" id="hb-name" placeholder="np. Poranna medytacja" style="width:100%"></div>
-          <div class="ifg"><label>Ikona</label><select class="inp" id="hb-icon"><option>🧘</option><option>🏃</option><option>📚</option><option>💧</option><option>🥗</option><option>😴</option><option>🎨</option><option>✍️</option><option>💪</option></select></div>
-          <div class="ifg" style="justify-content:flex-end"><button class="btn btn-a" onclick="addHabit()">+ Dodaj</button></div>
-        </div>
-      </div>
-      <div class="card"><div class="sh mb14"><div class="st">Nawyki tego tygodnia</div><div class="sc2" id="hb-range"></div></div><div id="hb-list"></div></div>
-    </div>
-
     <!-- CALENDAR -->
     <div class="page" id="page-calendar">
       <div class="ph"><div class="pt">Kalendarz</div><div class="ps">Planuj i śledź swoje wydarzenia</div></div>
@@ -634,67 +622,6 @@ select.inp option{background:var(--surf2)}
           <div class="sh mb14"><div class="st" id="note-edit-title">Wybierz notatkę</div><div style="display:flex;gap:6px"><button class="btn btn-a" id="note-save-btn" onclick="saveNote()" style="display:none">Zapisz</button><button class="btn btn-d" id="note-del-btn" onclick="delNote()" style="display:none">Usuń</button></div></div>
           <div id="note-editor-wrap" style="color:var(--muted);font-size:13px;padding:16px 0">Kliknij notatkę po lewej lub utwórz nową, aby zacząć pisać.</div>
         </div>
-      </div>
-    </div>
-
-    <!-- CALCULATOR -->
-    <div class="page" id="page-calculator">
-      <div class="ph"><div class="pt">Kalkulator</div><div class="ps">Szybkie obliczenia finansowe</div></div>
-      <div class="g2" style="gap:14px">
-        <div class="card">
-          <div class="calc-display">
-            <div class="calc-expr" id="calc-expr"></div>
-            <div class="calc-result" id="calc-result">0</div>
-          </div>
-          <div class="calc-grid">
-            <button class="calc-btn clr" onclick="calcClear()">AC</button>
-            <button class="calc-btn op" onclick="calcOp('±')">±</button>
-            <button class="calc-btn op" onclick="calcOp('%')">%</button>
-            <button class="calc-btn op" onclick="calcOp('/')">÷</button>
-            <button class="calc-btn" onclick="calcNum('7')">7</button>
-            <button class="calc-btn" onclick="calcNum('8')">8</button>
-            <button class="calc-btn" onclick="calcNum('9')">9</button>
-            <button class="calc-btn op" onclick="calcOp('*')">×</button>
-            <button class="calc-btn" onclick="calcNum('4')">4</button>
-            <button class="calc-btn" onclick="calcNum('5')">5</button>
-            <button class="calc-btn" onclick="calcNum('6')">6</button>
-            <button class="calc-btn op" onclick="calcOp('-')">−</button>
-            <button class="calc-btn" onclick="calcNum('1')">1</button>
-            <button class="calc-btn" onclick="calcNum('2')">2</button>
-            <button class="calc-btn" onclick="calcNum('3')">3</button>
-            <button class="calc-btn op" onclick="calcOp('+')">+</button>
-            <button class="calc-btn zero" onclick="calcNum('0')">0</button>
-            <button class="calc-btn" onclick="calcNum('.')">.</button>
-            <button class="calc-btn eq" onclick="calcEq()">=</button>
-          </div>
-        </div>
-        <div class="card">
-          <div class="st mb14">Kalkulator finansowy</div>
-          <div class="fg"><label>Kwota bazowa (zł)</label><input class="inp" type="number" id="fc-base" placeholder="1000" oninput="calcFinance()"></div>
-          <div class="fg"><label>Oprocentowanie roczne (%)</label><input class="inp" type="number" id="fc-rate" placeholder="5" oninput="calcFinance()"></div>
-          <div class="fg"><label>Okres (lata)</label><input class="inp" type="number" id="fc-years" placeholder="10" oninput="calcFinance()"></div>
-          <div style="background:var(--surf2);border-radius:10px;padding:16px;margin-top:8px" id="fc-result">
-            <div class="sc2">Wpisz dane aby zobaczyć wynik</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 50/30/20 -->
-    <div class="page" id="page-rule503020">
-      <div class="ph"><div class="pt">Reguła 50/30/20</div><div class="ps">Prosty sposób na zdrowy budżet</div></div>
-      <div class="card mb14">
-        <div class="fg" style="max-width:300px"><label>Miesięczny dochód netto (zł)</label><input class="inp" type="number" id="rule-income" placeholder="5000" oninput="calcRule()" style="width:100%"></div>
-        <div class="sc2 mt14">Reguła 50/30/20 to sprawdzona metoda zarządzania budżetem: <strong>50%</strong> na potrzeby, <strong>30%</strong> na zachcianki, <strong>20%</strong> na oszczędności.</div>
-      </div>
-      <div class="budget-rule" id="rule-cards">
-        <div class="br-card needs"><div class="br-pct">50%</div><div class="br-label">Potrzeby</div><div class="br-sub">Czynsz, jedzenie, rachunki, transport</div><div class="br-amount" id="rule-needs" style="color:var(--green)">— zł</div></div>
-        <div class="br-card wants"><div class="br-pct">30%</div><div class="br-label">Zachcianki</div><div class="br-sub">Rozrywka, restauracje, zakupy, hobby</div><div class="br-amount" id="rule-wants" style="color:var(--acc2)">— zł</div></div>
-        <div class="br-card save"><div class="br-pct">20%</div><div class="br-label">Oszczędności</div><div class="br-sub">Poduszka finansowa, inwestycje, cele</div><div class="br-amount" id="rule-save" style="color:var(--acc3)">— zł</div></div>
-      </div>
-      <div class="card">
-        <div class="st mb14">Twój aktualny budżet vs reguła</div>
-        <div id="rule-comparison"><div class="empty">Wpisz dochód i dodaj transakcje, aby zobaczyć porównanie</div></div>
       </div>
     </div>
 
@@ -890,22 +817,21 @@ select.inp option{background:var(--surf2)}
   <div class="more-drawer" id="more-drawer">
     <div class="more-drawer-grip"></div>
     <div class="more-grid">
-      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:2px">Główne</div>
+      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px">Główne</div>
       <button class="more-item" onclick="nav('dashboard');closeMore()"><span class="more-ic">⊞</span>Pulpit</button>
       <button class="more-item" onclick="nav('calendar');closeMore()"><span class="more-ic">◷</span>Kalendarz</button>
       <button class="more-item" onclick="nav('tasks');closeMore()"><span class="more-ic">✓</span>Zadania</button>
       <button class="more-item" onclick="nav('notes');closeMore()"><span class="more-ic">≡</span>Notatki</button>
-      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;margin-bottom:2px">Finanse</div>
+      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px;margin-top:8px">Finanse</div>
       <button class="more-item" onclick="nav('transactions');closeMore()"><span class="more-ic">⇄</span>Transakcje</button>
       <button class="more-item" onclick="nav('budget');closeMore()"><span class="more-ic">◉</span>Budżet</button>
       <button class="more-item" onclick="nav('goals');closeMore()"><span class="more-ic">◎</span>Cele</button>
       <button class="more-item" onclick="nav('stats');closeMore()"><span class="more-ic">▲</span>Statystyki</button>
-      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:8px;margin-bottom:2px">Konto</div>
-      <button class="more-item" onclick="nav('habits');closeMore()"><span class="more-ic">◈</span>Nawyki</button>
+      <button class="more-item" onclick="nav('recurring');closeMore()"><span class="more-ic">↺</span>Cykliczne</button>
+      <div style="grid-column:1/-1;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px;margin-top:8px">Konto</div>
       <button class="more-item" onclick="nav('settings');closeMore()"><span class="more-ic">⚙</span>Ustawienia</button>
     </div>
   </div>
-
 </div><!-- /#app -->
 
 <div class="saving" id="saving">✓ Zapisano</div>
@@ -974,10 +900,34 @@ function checkAlerts(){
 }
 
 // INIT
+
+function showAuthMsg(msg,type){
+  let el=document.getElementById('auth-msg');
+  if(!el){el=document.createElement('div');el.id='auth-msg';el.style.cssText='margin-top:10px;padding:10px 14px;border-radius:10px;font-size:13px;text-align:center';document.querySelector('.auth-card')?.appendChild(el);}
+  el.textContent=msg;
+  el.style.background=type==='err'?'rgba(248,113,113,.15)':'rgba(34,201,138,.15)';
+  el.style.color=type==='err'?'var(--red)':'var(--green)';
+}
 async function init(){
   initTheme();loadSettings();
+  // Handle Supabase auth callback errors in URL hash
+  const hash=window.location.hash;
+  if(hash.includes('error=access_denied')||hash.includes('error_code=otp_expired')){
+    history.replaceState(null,'',window.location.pathname);
+    document.getElementById('loader').style.display='none';
+    document.getElementById('auth').style.display='flex';
+    showAuthMsg('Link wygasł lub jest nieprawidłowy. Zaloguj się ponownie.','err');
+    return;
+  }
+  if(hash.includes('access_token')){
+    await SB.auth.getSession();
+    history.replaceState(null,'',window.location.pathname);
+  }
   const{data:{session}}=await SB.auth.getSession();
-  document.getElementById('loader').style.display='none';
+  // Animate splash out
+  const loader=document.getElementById('loader');
+  loader.style.opacity='0';loader.style.transition='opacity .4s';
+  setTimeout(()=>{loader.style.display='none';},400);
   if(session){U=session.user;await loadP();await loadAll();showApp();}
   else document.getElementById('auth').style.display='flex';
 }
@@ -1050,7 +1000,7 @@ function fillTags(){const e=document.getElementById('t-tag');if(e)e.innerHTML='<
 function fillStatsYear(){const e=document.getElementById('stats-year');if(!e)return;const ys=new Set(C.tx.map(t=>new Date(t.date).getFullYear()));ys.add(new Date().getFullYear());e.innerHTML=[...ys].sort((a,b)=>b-a).map(y=>`<option value="${y}">${y}</option>`).join('')}
 
 // NAV
-const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','rule503020':'mn-fin','calculator':'mn-fin','tasks':'mn-main','habits':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
+const MOB_NAV_PAGES={'dashboard':'mn-main','transactions':'mn-fin','budget':'mn-fin','goals':'mn-fin','stats':'mn-fin','recurring':'mn-fin','tasks':'mn-main','habits':'mn-acc','calendar':'mn-main','notes':'mn-main','settings':'mn-acc'};
 const MOB_GROUPS={
   main:['dashboard','calendar','tasks','notes'],
   fin:['transactions','budget','goals','stats','recurring','rule503020','calculator'],
